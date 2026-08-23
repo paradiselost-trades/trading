@@ -4585,3 +4585,32 @@ body.drawer-open #cart-toggle-btn {
     max-height: 2500px !important; /* Expands height so all 9 circles show */
   }
 }
+/* ========================================================= */
+/* HARDWARE ACCELERATION & LOW-SPEC DEPC STUTTER FIX          */
+/* ========================================================= */
+
+/* 1. Force GPU acceleration for smooth scrolling */
+.card, .bootleg-card, .palette-compact, .rules-box {
+  will-change: transform;
+  transform: translateZ(0); /* Promotes elements to separate layer */
+  backface-visibility: hidden;
+}
+
+/* 2. Flatten expensive backdrop filters for instant frame rate */
+.rules-box, .palette-compact, .circle-sector, .trade-drawer {
+  backdrop-filter: none !important; /* Huge performance win on older PCs */
+}
+
+/* 3. Optimize animation painting */
+.palette-compact {
+  contain: content;
+}
+
+/* 4. Disable heavy glow effects on hardware that struggles */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+}
