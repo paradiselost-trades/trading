@@ -4493,3 +4493,36 @@ body.drawer-open #cart-toggle-btn {
   transform: translateY(20px) !important;
   transition: all 0.3s ease !important;
 }
+/* ========================================================= */
+/* MOBILE PERFORMANCE & LAG ELIMINATOR                      */
+/* ========================================================= */
+@media (max-width: 768px) {
+  
+  /* Disable heavy ember canvas loop on small screens */
+  #ember-canvas {
+    display: none !important;
+  }
+
+  /* Reduce costly blur and glow calculations */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Keep essential borders clean without glowing intensity */
+  .votive-glow, .rules-box, .circle-sector, .worst-sector {
+    border-color: #ff3300 !important;
+  }
+
+  /* Optimize layout rendering speed */
+  .card, .bootleg-card {
+    contain: content; /* Isolates card rendering so scrolling doesn't recalculate full page */
+  }
+
+  /* Simplify palette drawer animation on mobile */
+  .palette-compact {
+    transition: max-height 0.4s ease, opacity 0.3s ease !important;
+    transform: none !important; /* Disables heavy 3D GPU rotations on phone */
+  }
+}
