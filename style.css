@@ -4526,3 +4526,56 @@ body.drawer-open #cart-toggle-btn {
     transform: none !important; /* Disables heavy 3D GPU rotations on phone */
   }
 }
+/* ========================================================= */
+/* FIX PALETTE DROP-CAPS & MOBILE CONTAINER OVERFLOW         */
+/* ========================================================= */
+
+/* Reset inline labels in Nine Circles so letters stay normal size */
+.circle-sector p strong,
+.circle-sector p strong::first-letter {
+  font-size: inherit !important;
+  font-weight: bold !important;
+  float: none !important;
+  display: inline !important;
+  line-height: normal !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.circle-sector p {
+  font-size: 0.85rem !important;
+  line-height: 1.4 !important;
+  margin: 4px 0 !important;
+}
+
+/* Mobile responsive constraints for the palette compact */
+@media (max-width: 768px) {
+  .infernal-palette-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 5px !important;
+    box-sizing: border-box !important;
+  }
+
+  .palette-compact {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .palette-inner {
+    padding: 12px 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  .circles-grid {
+    grid-template-columns: 1fr !important; /* Stack vertically on phones */
+    gap: 8px !important;
+  }
+
+  /* Prevent page horizontal scrolling/slicing borders */
+  body, html {
+    overflow-x: hidden !important;
+  }
+}
