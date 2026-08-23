@@ -4579,3 +4579,9 @@ body.drawer-open #cart-toggle-btn {
     overflow-x: hidden !important;
   }
 }
+/* FIX MOBILE PALETTE MAX-HEIGHT CUTOFF */
+@media (max-width: 768px) {
+  .palette-compact.open {
+    max-height: 2500px !important; /* Expands height so all 9 circles show */
+  }
+}
