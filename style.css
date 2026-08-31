@@ -4568,3 +4568,92 @@ body.drawer-open #cart-toggle-btn {
     box-shadow: none !important;
   }
 }
+/* ========================================================= */
+/* INFERNAL CHAIN & TEMPTATION OVERLAY                       */
+/* ========================================================= */
+
+/* Container wrapper setup */
+.card-thumb-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 1. Darken and intensify the hidden item beneath */
+.card-thumb-wrapper:has(.chain-overlay) img {
+  filter: brightness(0.4) contrast(1.3) sepia(0.8) hue-rotate(-50deg) saturate(3) !important;
+  transition: filter 0.3s ease;
+}
+
+/* 2. Main overlay backdrop */
+.chain-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(20, 0, 0, 0.4) 0%, rgba(5, 0, 0, 0.85) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* 3. Crisscross Infernal Chains Effect */
+.chain-overlay::before,
+.chain-overlay::after {
+  content: "";
+  position: absolute;
+  width: 140%;
+  height: 24px;
+  /* Seamless CSS chain-link pattern */
+  background-image: repeating-linear-gradient(
+    90deg,
+    #111 0px, #111 8px,
+    #555 8px, #777 12px,
+    #111 12px, #111 20px,
+    #aa2200 20px, #ff4400 24px
+  );
+  border-top: 2px solid #000;
+  border-bottom: 2px solid #ff3300;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+  opacity: 0.85;
+}
+
+/* Diagonal crossed chains */
+.chain-overlay::before {
+  transform: rotate(-30deg);
+}
+
+.chain-overlay::after {
+  transform: rotate(30deg);
+}
+
+/* 4. Glowing Center Lock Icon */
+.chain-overlay .lock-icon {
+  font-size: 2rem;
+  z-index: 6;
+  filter: drop-shadow(0 0 10px #ff2200) drop-shadow(0 0 4px #ffaa00);
+  animation: pulseLock 3s infinite ease-in-out;
+}
+
+/* 5. Infernal Forbidden Badge */
+.nft-badge {
+  z-index: 6;
+  font-family: inherit;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #ffcc00;
+  background: #0d0000;
+  padding: 3px 8px;
+  border: 1px solid #ff3300;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 51, 0, 0.5);
+  text-transform: uppercase;
+}
+
+/* Slow demonic pulse for the lock */
+@keyframes pulseLock {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px #ff2200); }
+  50% { transform: scale(1.1); filter: drop-shadow(0 0 16px #ff6600); }
+}
