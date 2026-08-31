@@ -4569,84 +4569,70 @@ body.drawer-open #cart-toggle-btn {
   }
 }
 /* ========================================================= */
-/* FULL TEXT-CARD CHAIN BOUND STYLES                         */
+/* PURE CSS INFERNAL CHAINED CARDS (ZERO JS / ZERO LAG)      */
 /* ========================================================= */
 
-.nft-locked-card {
+/* Target cards containing active NFT markers */
+.card:has([class*="nft"]), 
+.bootleg-card:has([class*="nft"]),
+.card:has(:contains("NFT UNTIL")),
+.bootleg-card:has(:contains("NFT UNTIL")) {
   position: relative !important;
   overflow: hidden !important;
-  border-color: #ff2200 !important;
-  background: linear-gradient(135deg, #120202 0%, #080000 100%) !important;
+  border-color: #ff3300 !important;
+  background: linear-gradient(135deg, #180303 0%, #080000 100%) !important;
 }
 
-/* Dim & redden text underneath to create the bound/temptation effect */
-.nft-locked-card p, 
-.nft-locked-card div, 
-.nft-locked-card span {
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
+/* Dim text underneath chains */
+.card:has([class*="nft"]) p,
+.bootleg-card:has([class*="nft"]) p {
+  opacity: 0.6;
 }
 
 /* Diagonal Chain 1 */
-.nft-locked-card::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -20%;
-  width: 140%;
-  height: 18px;
+.card:has([class*="nft"])::before,
+.bootleg-card:has([class*="nft"])::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: -20% !important;
+  width: 140% !important;
+  height: 16px !important;
   background: repeating-linear-gradient(
     90deg,
     #111 0px, #111 6px,
     #444 6px, #888 10px,
     #111 10px, #111 16px,
     #aa2200 16px, #ff4400 18px
-  );
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #ff3300;
-  transform: translateY(-50%) rotate(-25deg);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
-  pointer-events: none;
-  z-index: 4;
+  ) !important;
+  border-top: 2px solid #000 !important;
+  border-bottom: 2px solid #ff3300 !important;
+  transform: translateY(-50%) rotate(-20deg) !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9) !important;
+  pointer-events: none !important;
+  z-index: 4 !important;
 }
 
 /* Diagonal Chain 2 */
-.nft-locked-card::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -20%;
-  width: 140%;
-  height: 18px;
+.card:has([class*="nft"])::after,
+.bootleg-card:has([class*="nft"])::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: -20% !important;
+  width: 140% !important;
+  height: 16px !important;
   background: repeating-linear-gradient(
     90deg,
     #111 0px, #111 6px,
     #444 6px, #888 10px,
     #111 10px, #111 16px,
     #aa2200 16px, #ff4400 18px
-  );
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #ff3300;
-  transform: translateY(-50%) rotate(25deg);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* Center glowing chain emblem */
-.card-chain-lock {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.4rem;
-  z-index: 5;
-  pointer-events: none;
-  filter: drop-shadow(0 0 10px #ff2200) drop-shadow(0 0 4px #ffaa00);
-}
-
-/* Hover effect: text lights up behind the chains */
-.nft-locked-card:hover p,
-.nft-locked-card:hover div {
-  opacity: 0.85;
+  ) !important;
+  border-top: 2px solid #000 !important;
+  border-bottom: 2px solid #ff3300 !important;
+  transform: translateY(-50%) rotate(20deg) !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9) !important;
+  pointer-events: none !important;
+  z-index: 4 !important;
 }
