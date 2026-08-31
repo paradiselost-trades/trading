@@ -2024,3 +2024,69 @@ if (paletteBtn && infernalPalette) {
     }
   });
 }
+/* ========================================================= */
+/* INFERNAL NFT CHAIN OVERLAY AUTOMATION                     */
+/* ========================================================= */
+(function initNFTChains() {
+  const TODAY = new Date().toISOString().split('T')[0]; // Current date YYYY-MM-DD
+
+  function applyChainsToCards() {
+    // Select all cards currently on screen that haven't been checked yet
+    const cards = document.querySelectorAll('.card:not([data-nft-checked]), .bootleg-card:not([data-nft-checked])');
+
+    cards.forEach(card => {
+      card.setAttribute('data-nft-checked', 'true'); // Prevent re-processing
+
+      // Extract text content or dataset attributes matching your CSV headers
+      const text = card.textContent || '';
+      const nftForever = card.dataset.nftForever === 'true' || /NFT Forever/i.test(text);
+      const notForSale = card.dataset.notForSale === 'true' || /Not For Sale/i.test(text);
+      
+      // Check for NFT Date pattern (e.g., "NFT Date: 2026-10-01" or raw YYYY-MM-DD)
+      const dateMatch = text.match(/NFT (?:Date:?\s*)?(\d{4}-\d{2}-\d{2})/i) || card.dataset.nftDate;
+      const nftDate = Array.isArray(dateMatch) ? dateMatch[1] : dateMatch;
+      const isDateActive = nftDate && nftDate > TODAY;
+
+      const isLocked = nftForever || isNotForSale || isDateActive;
+
+      if (isLocked) {
+        // Target your image wrapper or thumbnail container
+        const thumbWrapper = card.querySelector('.card-thumb-wrapper') || card.querySelector('.card-image') || card;
+        
+        // Ensure container position is relative for absolute layering
+        if (window.getComputedStyle(thumbWrapper).position === 'static') {
+          thumbWrapper.style.position = 'relative';
+        }
+
+        // Determine badge text
+        let badgeLabel = 'RESTRICTED';
+        if (nftForever) badgeLabel = 'NFT FOREVER';
+        else if (isDateActive) badgeLabel = `NFT UNTIL ${nftDate}`;
+        else if (notForSale) badgeLabel = 'NOT FOR SALE';
+
+        // Create and append overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'chain-overlay';
+        overlay.title = 'NFT / Non-Tradeable';
+        overlay.innerHTML = `
+          <span class="lock-icon">⛓️</span>
+          <span class="nft-badge">${badgeLabel}</span>
+        `;
+
+        thumbWrapper.appendChild(overlay);
+      }
+    });
+  }
+
+  // Run on initial page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyChainsToCards);
+  } else {
+    applyChainsToCards();
+  }
+
+  // Automatically watch for infinite scroll or search filter updates
+  const cardContainer = document.getElementById('card-container') || document.body;
+  const observer = new MutationObserver(() => applyChainsToCards());
+  observer.observe(cardContainer, { childList: true, subtree: true });
+})();
