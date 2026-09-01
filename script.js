@@ -1605,17 +1605,23 @@ function copySingleItemSummary(item, buttonElement) {
   if (master) text += ` | Master: ${master}`;
 
   navigator.clipboard.writeText(text).then(() => {
-    const originalText = buttonElement.innerText;
-    buttonElement.innerText = "✅ Copied!";
-    buttonElement.classList.add("copied");
+    // Trigger custom toast notification if available, falling back to button text updates
+    if (typeof showToast === "function") {
+      showToast("📋 Item summary copied to clipboard!");
+    } else if (typeof triggerToast === "function") {
+      triggerToast("📋 Item summary copied to clipboard!");
+    } else {
+      const originalText = buttonElement.innerText;
+      buttonElement.innerText = "✅ Copied!";
+      buttonElement.classList.add("copied");
 
-    setTimeout(() => {
-      buttonElement.innerText = originalText;
-      buttonElement.classList.remove("copied");
-    }, 2000);
+      setTimeout(() => {
+        buttonElement.innerText = originalText;
+        buttonElement.classList.remove("copied");
+      }, 2000);
+    }
   });
 }
-
 /* ============================================================
    ANALOG HORROR EASTER EGG & VHS CASSETTE TRANSFORMER
 ============================================================ */
