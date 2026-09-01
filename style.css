@@ -4569,29 +4569,18 @@ body.drawer-open #cart-toggle-btn {
   }
 }
 /* ========================================================= */
-/* PURE CSS INFERNAL CHAINED CARDS (ZERO JS / ZERO LAG)      */
+/* NFT CHAIN OVERLAY FOR DYNAMIC CARDS                       */
 /* ========================================================= */
 
-/* Target cards containing active NFT markers */
-.card:has([class*="nft"]), 
-.bootleg-card:has([class*="nft"]),
-.card:has(:contains("NFT UNTIL")),
-.bootleg-card:has(:contains("NFT UNTIL")) {
+.nft-card-locked {
   position: relative !important;
   overflow: hidden !important;
   border-color: #ff3300 !important;
-  background: linear-gradient(135deg, #180303 0%, #080000 100%) !important;
-}
-
-/* Dim text underneath chains */
-.card:has([class*="nft"]) p,
-.bootleg-card:has([class*="nft"]) p {
-  opacity: 0.6;
+  background: linear-gradient(135deg, #180303 0%, #050000 100%) !important;
 }
 
 /* Diagonal Chain 1 */
-.card:has([class*="nft"])::before,
-.bootleg-card:has([class*="nft"])::before {
+.nft-card-locked::before {
   content: "" !important;
   position: absolute !important;
   top: 50% !important;
@@ -4614,8 +4603,7 @@ body.drawer-open #cart-toggle-btn {
 }
 
 /* Diagonal Chain 2 */
-.card:has([class*="nft"])::after,
-.bootleg-card:has([class*="nft"])::after {
+.nft-card-locked::after {
   content: "" !important;
   position: absolute !important;
   top: 50% !important;
