@@ -1157,28 +1157,30 @@ function appendNextBatch(count = BATCH_SIZE) {
       nftDateStr.toLowerCase().includes("forever") || nftDateStr.toLowerCase() === "nftf"
     );
 
-    const locationParts = [tour, venue].filter(Boolean).join(" - ");
-    let nftBadgeHTML = '';
-    let isNFTActive = false;
+   // AFTER (Updated)
+const locationParts = [tour, venue].filter(Boolean).join(" - ");
+let nftBadgeHTML = '';
+let isNFTActive = false;
 
-    if (nftForever) {
-      isNFTActive = true;
-      nftBadgeHTML = `<br><span class="nft-active">⛔ NFT FOREVER</span>`;
-    } else if (nftDateStr !== "") {
-      if (isNftStillActive(nftDateStr)) {
-        isNFTActive = true;
-        nftBadgeHTML = `<br><span class="nft-active">⛔ NFT UNTIL: ${nftDateStr}</span>`;
-      } else {
-        isNFTActive = false;
-        nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
-      }
-    }
+if (nftForever) {
+  isNFTActive = true;
+  nftBadgeHTML = `<br><span class="nft-active">⛔ NFT FOREVER</span>`;
+} else if (nftDateStr !== "") {
+  if (isNftStillActive(nftDateStr)) {
+    isNFTActive = true;
+    nftBadgeHTML = `<br><span class="nft-active">⛔ NFT UNTIL: ${nftDateStr}</span>`;
+  } else {
+    isNFTActive = false;
+    nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
+  }
+}
 
-    const cardClass = `item-card ${isNFTActive ? 'card-nft-active' : 'card-standard'}`;
-    const itemInCart = isInCart(item);
+// Append nft-card-locked to the class list when NFT status is active
+const cardClass = `item-card ${isNFTActive ? 'card-nft-active nft-card-locked' : 'card-standard'}`;
+const itemInCart = isInCart(item);
 
-    const card = document.createElement("div");
-    card.className = cardClass;
+const card = document.createElement("div");
+card.className = cardClass;
     card.innerHTML = `
       <div class="card-header">
         <div class="card-title">${show}</div>
