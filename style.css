@@ -4615,3 +4615,96 @@ body.drawer-open #cart-toggle-btn {
   text-shadow: 0 0 8px #ff4400 !important;
   white-space: nowrap !important;
 }
+/* ========================================================= */
+/* GOTHIC TOAST MODAL & NFT CART BADGE                       */
+/* ========================================================= */
+
+#gothic-toast {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.3s ease;
+}
+
+.gothic-toast-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gothic-toast-content {
+  background: radial-gradient(circle, #220303 0%, #080000 100%);
+  border: 2px solid #ff3300;
+  outline: 1px solid #d4af37;
+  outline-offset: -5px;
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(255, 51, 0, 0.5);
+  color: #e0d0c0;
+  font-family: "Cinzel", "Georgia", serif;
+}
+
+.gothic-toast-header {
+  color: #ffcc66;
+  font-size: 1.05rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  text-shadow: 0 0 8px #ff3300;
+}
+
+.gothic-toast-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.gothic-btn {
+  background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%);
+  border: 1px solid #d4af37;
+  color: #fff8e7;
+  padding: 10px;
+  font-family: "Cinzel", "Georgia", serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gothic-btn:hover {
+  background: #ff3300;
+  color: #000;
+  box-shadow: 0 0 10px #ff3300;
+}
+
+.gothic-btn.btn-secondary {
+  border-color: #884444;
+}
+
+.gothic-btn.btn-close {
+  background: transparent;
+  border: 1px solid #444;
+  color: #888;
+}
+
+/* NFT Badge inside Trade Cart */
+.cart-item-nft-tag {
+  display: inline-block;
+  background: #ff1100;
+  color: #000;
+  font-weight: bold;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+  margin-left: 6px;
+  box-shadow: 0 0 6px #ff3300;
+  vertical-align: middle;
+}
