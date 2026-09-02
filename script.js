@@ -46,13 +46,14 @@ function ensureCartButtonInBody() {
 document.addEventListener("DOMContentLoaded", () => {
   setupIntersectionObserver();
   ensureCartButtonInBody();
+  setupPaletteDrawer();
 
   // Initialize theme based on local storage
   const savedTheme = localStorage.getItem('paradiseThemeActive');
   if (savedTheme === 'true') {
     document.documentElement.setAttribute('data-theme', 'paradise-lost');
-    document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
-    document.body.classList.add('paradise-lost', 'paradise-lost-mode');
+    document.documentElement.classList.add('paradise-lost');
+    document.body.classList.add('paradise-lost');
   }
   updateButtonLabel();
 
@@ -81,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Parse Collection Data
   Papa.parse("./list.csv", {
     download: true,
     header: true,
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       applyFiltersAndRender();
       updateCartUI();
     },
-    error: function(err) {
+    error: function() {
       const stats = document.getElementById('stats');
       if (stats) stats.innerText = "Upload your 'list.csv' file to display your collection!";
     }
@@ -182,7 +184,12 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const clearCartBtn = document.getElementById("clear-cart-btn");
   if (clearCartBtn) {
-    clearClearCartBtn();
+    clearCartBtn.addEventListener("click", () => {
+      tradeCart = [];
+      saveCartToStorage();
+      updateCartUI();
+      applyFiltersAndRender();
+    });
   }
 
   const copyTradeBtn = document.getElementById("copy-trade-btn");
@@ -197,39 +204,33 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const recipient = "tradingtreelost@gmail.com";
-      const subject = `Trade Request (${tradeCart.length} Items)`;
       const bodyText = generateFormattedText();
-      
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
-      const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
-
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(bodyText).catch(() => {});
       }
 
-      setTimeout(() => {
-        const useGmail = confirm(
-          "📋 Request COPIED to clipboard!\n\n" +
-          "• Click 'OK' to open Gmail Web.\n" +
-          "• Click 'Cancel' for Default Mail App."
-        );
-        if (useGmail) window.open(gmailUrl, "_blank");
-        else window.location.href = mailtoUrl;
-      }, 10);
+      openGothicToast();
     });
   }
 });
 
-function clearClearCartBtn() {
-  const clearCartBtn = document.getElementById("clear-cart-btn");
-  if (!clearCartBtn) return;
-  clearCartBtn.addEventListener("click", () => {
-    tradeCart = [];
-    saveCartToStorage();
-    updateCartUI();
-    applyFiltersAndRender();
-  });
+/* ============================================================
+   INFERNAL NINE CIRCLES PALETTE TOGGLE
+============================================================ */
+function setupPaletteDrawer() {
+  const toggleBtn = document.getElementById("palette-toggle-btn");
+  const palette = document.getElementById("infernal-palette");
+
+  if (toggleBtn && palette) {
+    toggleBtn.addEventListener("click", () => {
+      palette.classList.toggle("closed");
+      const isClosed = palette.classList.contains("closed");
+      const label = toggleBtn.querySelector(".sigil-label");
+      if (label) {
+        label.textContent = isClosed ? "UNVEIL THE NINE CIRCLES" : "CONCEAL THE NINE CIRCLES";
+      }
+    });
+  }
 }
 
 /* ============================================================
@@ -258,7 +259,7 @@ function applyFiltersAndRender() {
   const searchEl = document.getElementById("search-input");
   const query = searchEl ? searchEl.value.toLowerCase().trim() : "";
   currentRenderToken++;
-   
+    
   currentFilteredItems = allData.filter(item => {
     const displayType = getMediaType(item);
     if (currentFilter !== 'all' && displayType.toLowerCase() !== currentFilter.toLowerCase()) {
@@ -582,6 +583,44 @@ function copyTradeRequest() {
   });
 }
 
+/* ============================================================
+   GOTHIC TOAST & MODAL ENGINE
+============================================================ */
+function openGothicToast() {
+  const toast = document.getElementById("gothic-toast");
+  if (!toast) return;
+
+  toast.classList.remove("gothic-toast-hidden");
+  toast.classList.add("gothic-toast-visible");
+
+  const recipient = "tradingtreelost@gmail.com";
+  const subject = `Trade Request (${tradeCart.length} Items)`;
+  const bodyText = generateFormattedText();
+
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+  const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+
+  document.getElementById("toast-gmail-btn").onclick = () => {
+    window.open(gmailUrl, "_blank");
+    closeGothicToast();
+  };
+
+  document.getElementById("toast-mail-btn").onclick = () => {
+    window.location.href = mailtoUrl;
+    closeGothicToast();
+  };
+
+  document.getElementById("toast-close-btn").onclick = closeGothicToast;
+}
+
+function closeGothicToast() {
+  const toast = document.getElementById("gothic-toast");
+  if (toast) {
+    toast.classList.remove("gothic-toast-visible");
+    toast.classList.add("gothic-toast-hidden");
+  }
+}
+
 function getValByName(item, ...names) {
   if (!item) return "";
   const keys = Object.keys(item);
@@ -734,20 +773,14 @@ function copySingleItemSummary(item, buttonElement) {
   if (master) text += ` | Master: ${master}`;
 
   navigator.clipboard.writeText(text).then(() => {
-    if (typeof showToast === "function") {
-      showToast("📋 Item summary copied to clipboard!");
-    } else if (typeof triggerToast === "function") {
-      triggerToast("📋 Item summary copied to clipboard!");
-    } else {
-      const originalText = buttonElement.innerText;
-      buttonElement.innerText = "✅ Copied!";
-      buttonElement.classList.add("copied");
+    const originalText = buttonElement.innerText;
+    buttonElement.innerText = "✅ Copied!";
+    buttonElement.classList.add("copied");
 
-      setTimeout(() => {
-        buttonElement.innerText = originalText;
-        buttonElement.classList.remove("copied");
-      }, 2000);
-    }
+    setTimeout(() => {
+      buttonElement.innerText = originalText;
+      buttonElement.classList.remove("copied");
+    }, 2000);
   });
 }
 
@@ -759,13 +792,13 @@ function triggerParadiseLost() {
 
   if (isParadise) {
     document.documentElement.removeAttribute('data-theme');
-    document.documentElement.classList.remove('paradise-lost', 'paradise-lost-mode');
-    document.body.classList.remove('paradise-lost', 'paradise-lost-mode');
+    document.documentElement.classList.remove('paradise-lost');
+    document.body.classList.remove('paradise-lost');
     localStorage.setItem('paradiseThemeActive', 'false');
   } else {
     document.documentElement.setAttribute('data-theme', 'paradise-lost');
-    document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
-    document.body.classList.add('paradise-lost', 'paradise-lost-mode');
+    document.documentElement.classList.add('paradise-lost');
+    document.body.classList.add('paradise-lost');
     localStorage.setItem('paradiseThemeActive', 'true');
   }
 
