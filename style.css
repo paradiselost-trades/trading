@@ -1642,3 +1642,53 @@ body.paradise-lost-mode {
     border: 2px solid #b30000 !important;
   }
 }
+/* ============================================================
+   PARADISE LOST BUG FIXES (OVERLAY & BUTTON RESTORATION)
+============================================================ */
+
+/* 1. Fix "Unveil the Nine Circles" Button */
+body.paradise-lost #toggle-circles-btn,
+body[data-theme="paradise-lost"] #toggle-circles-btn,
+body.paradise-lost .unveil-btn,
+body[data-theme="paradise-lost"] .unveil-btn {
+  display: block !important;
+  width: 100% !important;
+  max-width: 450px !important;
+  margin: 15px auto !important;
+  padding: 12px 20px !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+  font-size: 0.95rem !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+}
+
+/* 2. Fix Container Shrinking & Width Collapsing */
+body.paradise-lost #nine-circles-box,
+body[data-theme="paradise-lost"] #nine-circles-box,
+body.paradise-lost .nine-circles-container,
+body[data-theme="paradise-lost"] .nine-circles-container {
+  width: 100% !important;
+  max-width: 900px !important;
+  height: auto !important;
+  min-height: fit-content !important;
+  overflow: visible !important;
+  margin: 20px auto !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* 3. Strip Drop Caps from List Items (Fixes huge 'O' and 'S' overlapping text) */
+body.paradise-lost #nine-circles-box ::first-letter,
+body[data-theme="paradise-lost"] #nine-circles-box ::first-letter,
+body.paradise-lost div[class*="rules"] li::first-letter,
+body[data-theme="paradise-lost"] div[class*="rules"] li::first-letter {
+  font-size: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+  line-height: inherit !important;
+  color: inherit !important;
+  text-shadow: none !important;
+}
