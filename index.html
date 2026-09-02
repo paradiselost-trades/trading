@@ -20,7 +20,7 @@
     })();
   </script>
 
-  <!-- Foolproof JS Text-Targeting Script for Dynamic Cards -->
+  <!-- JS Text-Targeting Script for Dynamic Cards -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const observer = new MutationObserver(() => {
@@ -51,7 +51,7 @@
   <!-- Load PapaParse to read CSV files -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   
-  <!-- Cache-buster update -->
+  <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css?v=8.0" />
 </head>
 <body>
@@ -61,14 +61,6 @@
   <!-- Golden Ascend Flash Overlay -->
   <div id="ascend-flash" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 215, 0, 0.35); pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.8s ease;"></div>
 
-  <!-- VHS On-Screen Display Overlay -->
-  <div id="vhs-osd-overlay">
-    <div class="osd-top-left">PLAY ▶</div>
-    <div class="osd-top-right" id="vhs-timestamp">00:00:00:00</div>
-    <div class="osd-bottom-left">SP 120 MIN</div>
-    <div class="osd-bottom-right">AUTO-TRACKING...</div>
-  </div>
-
   <header class="container">
     <div class="header-top-row">
       <!-- PARADISE LOST GATEWAY TRIGGER -->
@@ -77,7 +69,7 @@
       </button>
     </div>
 
-    <h1 class="votive-glow"><span class="header-emoji" title="SYSTEM: Signal unstable (x2)...">🎭</span> My Trading Collection</h1>
+    <h1 class="votive-glow"><span class="header-emoji">🎭</span> My Trading Collection</h1>
     
     <div class="rules-box">
       <div class="rules-box-inner">
@@ -101,7 +93,7 @@
           <li>Respect all NFT dates and master restrictions.</li>
           <li>Bikinibottomday's bootlegs are only to be traded via email.</li>
           <li><strong>Follow-Up Policy:</strong> Please wait at least 7 days before sending follow-up emails for trades or gift requests. Life and hardware issues happen!</li>
-          <li>Will not gift Heathers or Six bootlegs at all</li>
+          <li>Will not gift Heathers or Six bootlegs at all.</li>
         </ul>
 
         <!-- CIRCULAR INFERNAL PALETTE DRAWER -->
@@ -211,7 +203,7 @@
       </div>
     </div>
 
-    <!-- Visual Abyss Divider: Splits Empyrean (Rules/Search) from Pandemonium (Bootlegs) -->
+    <!-- Visual Abyss Divider -->
     <div class="abyss-divider" style="display: flex; align-items: center; justify-content: center; margin: 40px 0 20px 0; gap: 15px;">
       <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(255,215,0,0.8), rgba(255,69,0,0.8), transparent);"></div>
       <span class="abyss-label" style="font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 2px; color: #ffaa00; text-shadow: 0 0 8px #ff4500; text-transform: uppercase;">
@@ -262,25 +254,6 @@
   
   <div id="drawer-overlay" class="drawer-overlay"></div>
 
-  <!-- NATIVE NFT HORROR INTERCEPTOR MODAL -->
-  <dialog id="nft-horror-modal" class="nft-horror-overlay">
-    <div class="nft-horror-content">
-      <div class="nft-horror-header">
-        <span class="warning-symbol">⚠️</span>
-        <span id="nft-modal-tag" class="modal-tag">ERR_TEMPORAL_RESTRICTION</span>
-      </div>
-      
-      <div id="nft-glitch-text-container" class="glitch-text-box">
-        <p id="nft-horror-primary-text" class="horror-text-phase1"></p>
-      </div>
-
-      <div class="nft-horror-actions">
-        <button type="button" id="nft-force-access-btn" class="force-access-btn">[ FORCE ACCESS ]</button>
-        <button type="button" id="nft-abort-btn" class="abort-access-btn">[ ABORT SELECTION ]</button>
-      </div>
-    </div>
-  </dialog>
-
   <button id="toggle-eyestrain-btn" type="button" onclick="toggleEyestrainMode()" class="fixed-eyestrain-btn">
     👁️ Toggle No-Eyestrain Mode
   </button>
@@ -291,17 +264,18 @@
   </footer>
 
   <script src="script.js?v=8.0"></script>
+
   <!-- GOTHIC TOAST MODAL -->
-<div id="gothic-toast" class="gothic-toast-hidden">
-  <div class="gothic-toast-content">
-    <div class="gothic-toast-header">✦ RECORD INSCRIBED TO CLIPBOARD ✦</div>
-    <p>Select your destination to dispatch this request:</p>
-    <div class="gothic-toast-actions">
-      <button id="toast-gmail-btn" class="gothic-btn">OPEN GMAIL WEB</button>
-      <button id="toast-mail-btn" class="gothic-btn btn-secondary">DEFAULT MAIL APP</button>
-      <button id="toast-close-btn" class="gothic-btn btn-close">DISMISS</button>
+  <div id="gothic-toast" class="gothic-toast-hidden">
+    <div class="gothic-toast-content">
+      <div class="gothic-toast-header">✦ RECORD INSCRIBED TO CLIPBOARD ✦</div>
+      <p>Select your destination to dispatch this request:</p>
+      <div class="gothic-toast-actions">
+        <button id="toast-gmail-btn" class="gothic-btn">OPEN GMAIL WEB</button>
+        <button id="toast-mail-btn" class="gothic-btn btn-secondary">DEFAULT MAIL APP</button>
+        <button id="toast-close-btn" class="gothic-btn btn-close">DISMISS</button>
+      </div>
     </div>
   </div>
-</div>
 </body>
 </html>
