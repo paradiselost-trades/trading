@@ -59,20 +59,23 @@ document.addEventListener("DOMContentLoaded", () => {
   // ------------------------------------------------------------
   // UNVEIL / CONCEAL NINE CIRCLES TOGGLE
   // ------------------------------------------------------------
-  const unveilBtn = document.querySelector(".unveil-btn") || document.getElementById("unveil-btn");
-  const nineCirclesSection = document.querySelector(".nine-circles") || document.getElementById("nine-circles");
+  const paletteToggleBtn = document.getElementById("palette-toggle-btn");
+  const infernalPalette = document.getElementById("infernal-palette");
 
-  if (unveilBtn && nineCirclesSection) {
-    unveilBtn.addEventListener("click", (e) => {
+  if (paletteToggleBtn && infernalPalette) {
+    paletteToggleBtn.addEventListener("click", (e) => {
       e.preventDefault();
       
-      // Toggle hidden state
-      const isHidden = nineCirclesSection.classList.toggle("hidden");
+      // Toggle the 'closed' CSS class on the drawer container
+      const isClosed = infernalPalette.classList.toggle("closed");
       
-      // Update button text
-      unveilBtn.innerText = isHidden 
-        ? "‡ UNVEIL THE NINE CIRCLES ‡" 
-        : "‡ CONCEAL THE NINE CIRCLES ‡";
+      // Update the text label span inside the trigger button
+      const labelSpan = paletteToggleBtn.querySelector(".sigil-label");
+      if (labelSpan) {
+        labelSpan.innerText = isClosed 
+          ? "UNVEIL THE NINE CIRCLES" 
+          : "CONCEAL THE NINE CIRCLES";
+      }
     });
   }
 
@@ -278,7 +281,7 @@ function applyFiltersAndRender() {
   const searchEl = document.getElementById("search-input");
   const query = searchEl ? searchEl.value.toLowerCase().trim() : "";
   currentRenderToken++;
-   
+    
   currentFilteredItems = allData.filter(item => {
     const displayType = getMediaType(item);
     if (currentFilter !== 'all' && displayType.toLowerCase() !== currentFilter.toLowerCase()) {
