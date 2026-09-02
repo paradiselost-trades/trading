@@ -583,7 +583,7 @@ h1 {
   border-radius: 8px;
   padding: 20px 25px;
   width: 90%;             /* Allows fluid scaling */
-  max-width: 1100px;      /* Increases maximum width from 600px to 1100px */
+  max-width: 1400px;      /* Increases maximum width from 600px to 1100px */
   margin: 0 auto 20px auto;
   box-shadow: 0 0 15px rgba(112, 0, 255, 0.3);
   text-align: left;
