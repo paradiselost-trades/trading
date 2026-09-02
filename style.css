@@ -1692,3 +1692,29 @@ body[data-theme="paradise-lost"] div[class*="rules"] li::first-letter {
   color: inherit !important;
   text-shadow: none !important;
 }
+/* Fix target classes added to button and sectors */
+button#palette-toggle-btn.sigil-trigger {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  width: auto !important;
+  min-width: 280px !important;
+  margin: 20px auto !important;
+  padding: 12px 24px !important;
+  background: #0d060a !important;
+  border: 1px solid #735a22 !important;
+  color: #ffaa00 !important;
+  font-family: 'Cinzel', serif !important;
+  cursor: pointer !important;
+}
+
+/* Disable drop caps on list items & offenses */
+.circle-sector p::first-letter,
+.circle-sector p.offense::first-letter,
+.circle-sector p.sentence::first-letter {
+  font-size: inherit !important;
+  float: none !important;
+  margin: 0 !important;
+  display: inline !important;
+}
