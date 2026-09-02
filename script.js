@@ -804,17 +804,7 @@ function ensureCartButtonInBody() {
 document.addEventListener("DOMContentLoaded", () => {
   setupIntersectionObserver();
   ensureCartButtonInBody();
-
-  // Initialize theme based on local storage
-  const savedTheme = localStorage.getItem('paradiseThemeActive');
-  if (savedTheme !== 'false') {
-    document.documentElement.setAttribute('data-theme', 'paradise-lost');
-    document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
-    document.body.classList.add('paradise-lost', 'paradise-lost-mode');
-  }
-  updateButtonLabel();
-
-  // ------------------------------------------------------------
+   // ------------------------------------------------------------
   // NO-EYESTRAIN TOGGLE ENGINE
   // ------------------------------------------------------------
   const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
@@ -918,7 +908,7 @@ document.addEventListener("DOMContentLoaded", () => {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         applyFiltersAndRender();
-      }, 120);
+      }, 80);
     });
   }
 
@@ -990,7 +980,15 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const clearCartBtn = document.getElementById("clear-cart-btn");
   if (clearCartBtn) {
-    clearClearCartBtn();
+    clearCartBtn.addEventListener("click", () => {
+      if (document.body.classList.contains("analog-horror-mode")) {
+        VCRAudio.playClack();
+      }
+      tradeCart = [];
+      saveCartToStorage();
+      updateCartUI();
+      applyFiltersAndRender();
+    });
   }
 
   const copyTradeBtn = document.getElementById("copy-trade-btn");
@@ -1031,20 +1029,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
-function clearClearCartBtn() {
-  const clearCartBtn = document.getElementById("clear-cart-btn");
-  if (!clearCartBtn) return;
-  clearCartBtn.addEventListener("click", () => {
-    if (document.body.classList.contains("analog-horror-mode")) {
-      VCRAudio.playClack();
-    }
-    tradeCart = [];
-    saveCartToStorage();
-    updateCartUI();
-    applyFiltersAndRender();
-  });
-}
 
 /* ============================================================
    INTERSECTION OBSERVER (INFINITE SCROLL ENGINE)
@@ -1173,28 +1157,30 @@ function appendNextBatch(count = BATCH_SIZE) {
       nftDateStr.toLowerCase().includes("forever") || nftDateStr.toLowerCase() === "nftf"
     );
 
-    const locationParts = [tour, venue].filter(Boolean).join(" - ");
-    let nftBadgeHTML = '';
-    let isNFTActive = false;
+   // AFTER (Updated)
+const locationParts = [tour, venue].filter(Boolean).join(" - ");
+let nftBadgeHTML = '';
+let isNFTActive = false;
 
-    if (nftForever) {
-      isNFTActive = true;
-      nftBadgeHTML = `<br><span class="nft-active">⛔ NFT FOREVER</span>`;
-    } else if (nftDateStr !== "") {
-      if (isNftStillActive(nftDateStr)) {
-        isNFTActive = true;
-        nftBadgeHTML = `<br><span class="nft-active">⛔ NFT UNTIL: ${nftDateStr}</span>`;
-      } else {
-        isNFTActive = false;
-        nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
-      }
-    }
+if (nftForever) {
+  isNFTActive = true;
+  nftBadgeHTML = `<br><span class="nft-active">⛔ NFT FOREVER</span>`;
+} else if (nftDateStr !== "") {
+  if (isNftStillActive(nftDateStr)) {
+    isNFTActive = true;
+    nftBadgeHTML = `<br><span class="nft-active">⛔ NFT UNTIL: ${nftDateStr}</span>`;
+  } else {
+    isNFTActive = false;
+    nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
+  }
+}
 
-    const cardClass = `item-card ${isNFTActive ? 'card-nft-active nft-card-locked' : 'card-standard'}`;
-    const itemInCart = isInCart(item);
+// Append nft-card-locked to the class list when NFT status is active
+const cardClass = `item-card ${isNFTActive ? 'card-nft-active nft-card-locked' : 'card-standard'}`;
+const itemInCart = isInCart(item);
 
-    const card = document.createElement("div");
-    card.className = cardClass;
+const card = document.createElement("div");
+card.className = cardClass;
     card.innerHTML = `
       <div class="card-header">
         <div class="card-title">${show}</div>
@@ -1619,20 +1605,14 @@ function copySingleItemSummary(item, buttonElement) {
   if (master) text += ` | Master: ${master}`;
 
   navigator.clipboard.writeText(text).then(() => {
-    if (typeof showToast === "function") {
-      showToast("📋 Item summary copied to clipboard!");
-    } else if (typeof triggerToast === "function") {
-      triggerToast("📋 Item summary copied to clipboard!");
-    } else {
-      const originalText = buttonElement.innerText;
-      buttonElement.innerText = "✅ Copied!";
-      buttonElement.classList.add("copied");
+    const originalText = buttonElement.innerText;
+    buttonElement.innerText = "✅ Copied!";
+    buttonElement.classList.add("copied");
 
-      setTimeout(() => {
-        buttonElement.innerText = originalText;
-        buttonElement.classList.remove("copied");
-      }, 2000);
-    }
+    setTimeout(() => {
+      buttonElement.innerText = originalText;
+      buttonElement.classList.remove("copied");
+    }, 2000);
   });
 }
 
@@ -1848,6 +1828,7 @@ function initVhsOsdToggle() {
     if (newState.bodyClass) document.body.classList.add(newState.bodyClass);
     if (newState.osdClass) playBtn.classList.add(newState.osdClass);
 
+    // Dynamic Degradation and Audio Control State Handling
     if (newState.text.includes("PAUSE")) {
       isVhsPaused = true;
       stopTapeDegradation();
@@ -1869,14 +1850,17 @@ if (document.readyState === "loading") {
 } else {
   initVhsOsdToggle();
 }
+// ===================================================
+// MULTIVERSE THEME ENGINE (Cyberpunk / Analog / Paradise Lost)
+// ===================================================
 
-/* ============================================================
-   MULTIVERSE THEME ENGINE (Cyberpunk / Analog / Paradise Lost)
-============================================================ */
+// 1. Initialize Theme on Load
 let currentTheme = localStorage.getItem("siteTheme") || "cyberpunk";
 document.body.setAttribute("data-theme", currentTheme);
 
+// 2. Analog Horror Double-Click Trigger (Left Intact)
 window.addEventListener("dblclick", (e) => {
+  // Prevent double-clicking the button from triggering analog mode
   if (e.target.closest("#paradise-btn")) return;
 
   if (currentTheme !== "analog") {
@@ -1886,6 +1870,16 @@ window.addEventListener("dblclick", (e) => {
   }
 });
 
+// 3. Paradise Lost Button Trigger ("Abandon All Hope")
+function triggerParadiseLost() {
+  if (currentTheme !== "paradise-lost") {
+    setTheme("paradise-lost");
+  } else {
+    setTheme("cyberpunk");
+  }
+}
+
+// 4. Global Theme Setter Function
 function setTheme(themeName) {
   currentTheme = themeName;
   document.body.setAttribute("data-theme", themeName);
@@ -1893,12 +1887,15 @@ function setTheme(themeName) {
   updateUI();
 }
 
+// 5. Dynamic Button Text Updates & UI States
 function updateUI() {
   const btn = document.getElementById("paradise-btn");
   if (!btn) return;
 
   if (currentTheme === "paradise-lost") {
     btn.innerText = "ASCEND TO CYBERSPACE";
+  } else if (currentTheme === "analog") {
+    btn.innerText = "ABANDON ALL HOPE";
   } else {
     btn.innerText = "ABANDON ALL HOPE";
   }
@@ -1908,11 +1905,13 @@ function triggerParadiseLost() {
   const isParadise = document.documentElement.getAttribute('data-theme') === 'paradise-lost';
 
   if (isParadise) {
+    // Switch to Legacy Cyberpunk Mode
     document.documentElement.removeAttribute('data-theme');
     document.documentElement.classList.remove('paradise-lost', 'paradise-lost-mode');
     document.body.classList.remove('paradise-lost', 'paradise-lost-mode');
     localStorage.setItem('paradiseThemeActive', 'false');
   } else {
+    // Switch back to Paradise Lost Mode
     document.documentElement.setAttribute('data-theme', 'paradise-lost');
     document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
     document.body.classList.add('paradise-lost', 'paradise-lost-mode');
@@ -1931,61 +1930,80 @@ function updateButtonLabel() {
   }
 }
 
-/* ============================================================
-   FLOATING INFERNAL EMBERS ANIMATION
-============================================================ */
+// Sync on load
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('paradiseThemeActive');
+  
+  if (savedTheme !== 'false') {
+    document.documentElement.setAttribute('data-theme', 'paradise-lost');
+    document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
+    document.body.classList.add('paradise-lost', 'paradise-lost-mode');
+  }
+  
+  updateButtonLabel();
+});
+// Floating Infernal Embers Animation
 const canvas = document.getElementById('ember-canvas');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d');
 
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+let width = (canvas.width = window.innerWidth);
+let height = (canvas.height = window.innerHeight);
 
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+});
+
+const embers = Array.from({ length: 45 }, () => ({
+  x: Math.random() * width,
+  y: Math.random() * height + height * 0.4, // Focus embers on lower section (Pandemonium)
+  radius: Math.random() * 2 + 0.8,
+  speedY: -(Math.random() * 0.7 + 0.2),
+  speedX: (Math.random() - 0.5) * 0.4,
+  opacity: Math.random() * 0.7 + 0.3,
+  color: Math.random() > 0.4 ? '#ff4500' : '#ffaa00'
+}));
+
+function animateEmbers() {
+  ctx.clearRect(0, 0, width, height);
+
+  embers.forEach((ember) => {
+    ember.y += ember.speedY;
+    ember.x += ember.speedX;
+
+    // Fade out as embers rise toward Heaven
+    if (ember.y < height * 0.35) {
+      ember.opacity -= 0.005;
+    }
+
+    // Reset embers back to the bottom when they fade or go offscreen
+    if (ember.y < height * 0.2 || ember.opacity <= 0) {
+      ember.y = height + Math.random() * 50;
+      ember.x = Math.random() * width;
+      ember.opacity = Math.random() * 0.7 + 0.3;
+    }
+
+    ctx.beginPath();
+    ctx.arc(ember.x, ember.y, ember.radius, 0, Math.PI * 2);
+    ctx.fillStyle = ember.color;
+    ctx.globalAlpha = ember.opacity;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = ember.color;
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animateEmbers);
+}
+// Only run the heavy particle loop on desktop screens
+if (window.innerWidth > 768) {
+  animateEmbers();
+}
+const searchInput = document.getElementById("search-input");
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      applyFiltersAndRender();
+    }, 120);
   });
-
-  const embers = Array.from({ length: 45 }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height + height * 0.4,
-    radius: Math.random() * 2 + 0.8,
-    speedY: -(Math.random() * 0.7 + 0.2),
-    speedX: (Math.random() - 0.5) * 0.4,
-    opacity: Math.random() * 0.7 + 0.3,
-    color: Math.random() > 0.4 ? '#ff4500' : '#ffaa00'
-  }));
-
-  function animateEmbers() {
-    ctx.clearRect(0, 0, width, height);
-
-    embers.forEach((ember) => {
-      ember.y += ember.speedY;
-      ember.x += ember.speedX;
-
-      if (ember.y < height * 0.35) {
-        ember.opacity -= 0.005;
-      }
-
-      if (ember.y < height * 0.2 || ember.opacity <= 0) {
-        ember.y = height + Math.random() * 50;
-        ember.x = Math.random() * width;
-        ember.opacity = Math.random() * 0.7 + 0.3;
-      }
-
-      ctx.beginPath();
-      ctx.arc(ember.x, ember.y, ember.radius, 0, Math.PI * 2);
-      ctx.fillStyle = ember.color;
-      ctx.globalAlpha = ember.opacity;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = ember.color;
-      ctx.fill();
-    });
-
-    requestAnimationFrame(animateEmbers);
-  }
-
-  if (window.innerWidth > 768) {
-    animateEmbers();
-  }
 }
