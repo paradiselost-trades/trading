@@ -57,6 +57,26 @@ document.addEventListener("DOMContentLoaded", () => {
   updateButtonLabel();
 
   // ------------------------------------------------------------
+  // UNVEIL / CONCEAL NINE CIRCLES TOGGLE
+  // ------------------------------------------------------------
+  const unveilBtn = document.querySelector(".unveil-btn") || document.getElementById("unveil-btn");
+  const nineCirclesSection = document.querySelector(".nine-circles") || document.getElementById("nine-circles");
+
+  if (unveilBtn && nineCirclesSection) {
+    unveilBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      // Toggle hidden state
+      const isHidden = nineCirclesSection.classList.toggle("hidden");
+      
+      // Update button text
+      unveilBtn.innerText = isHidden 
+        ? "‡ UNVEIL THE NINE CIRCLES ‡" 
+        : "‡ CONCEAL THE NINE CIRCLES ‡";
+    });
+  }
+
+  // ------------------------------------------------------------
   // NO-EYESTRAIN TOGGLE ENGINE
   // ------------------------------------------------------------
   const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
