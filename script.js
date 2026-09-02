@@ -14,8 +14,6 @@ let observer = null;
 const STORAGE_KEY = "bootleg_trade_cart";
 let tradeCart = loadCartFromStorage();
 
-let originalDocumentTitle = document.title;
-
 /* ============================================================
    FLOATING CART BUTTON MOUNT GUARANTEE
 ============================================================ */
@@ -48,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ensureCartButtonInBody();
   setupPaletteDrawer();
 
-  // Initialize theme based on local storage
+  // Initialize saved theme & maintain visual glow
   const savedTheme = localStorage.getItem('paradiseThemeActive');
   if (savedTheme === 'true') {
     document.documentElement.setAttribute('data-theme', 'paradise-lost');
@@ -57,11 +55,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   updateButtonLabel();
 
-  // ------------------------------------------------------------
-  // NO-EYESTRAIN TOGGLE ENGINE
-  // ------------------------------------------------------------
-  const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
+  const paradiseBtn = document.getElementById("paradise-btn");
+  if (paradiseBtn) {
+    paradiseBtn.addEventListener("click", triggerParadiseLost);
+  }
 
+  // No-Eyestrain toggle engine
+  const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
   if (eyestrainBtn) {
     if (localStorage.getItem("no_eyestrain_mode") === "enabled") {
       document.body.classList.add("no-eyestrain");
@@ -71,40 +71,33 @@ document.addEventListener("DOMContentLoaded", () => {
     eyestrainBtn.addEventListener("click", () => {
       document.body.classList.toggle("no-eyestrain");
       const isNoEyestrain = document.body.classList.contains("no-eyestrain");
-
-      if (isNoEyestrain) {
-        localStorage.setItem("no_eyestrain_mode", "enabled");
-        eyestrainBtn.innerText = "📺 Enable CRT Effects";
-      } else {
-        localStorage.setItem("no_eyestrain_mode", "disabled");
-        eyestrainBtn.innerText = "👁️ Toggle No-Eyestrain Mode";
-      }
+      localStorage.setItem("no_eyestrain_mode", isNoEyestrain ? "enabled" : "disabled");
+      eyestrainBtn.innerText = isNoEyestrain ? "📺 Enable CRT Effects" : "👁️ Toggle No-Eyestrain Mode";
     });
   }
 
-  // Parse Collection Data
-  Papa.parse("./list.csv", {
-    download: true,
-    header: true,
-    skipEmptyLines: "greedy",
-    delimiter: "",
-    transformHeader: function(header) {
-      return header.replace(/[\ufeff\u200b\r\n]/g, '').trim();
-    },
-    complete: function(results) {
-      allData = results.data.map(item => {
-        item._searchIndex = `${getValByName(item, "Show")} ${getValByName(item, "Date")} ${getValByName(item, "Cast")} ${getValByName(item, "Master")} ${getValByName(item, "Tour", "Location")} ${getValByName(item, "Venue")}`.toLowerCase();
-        return item;
-      });
-      
-      applyFiltersAndRender();
-      updateCartUI();
-    },
-    error: function() {
-      const stats = document.getElementById('stats');
-      if (stats) stats.innerText = "Upload your 'list.csv' file to display your collection!";
-    }
-  });
+  // Parse Collection CSV
+  if (window.Papa) {
+    Papa.parse("./list.csv", {
+      download: true,
+      header: true,
+      skipEmptyLines: "greedy",
+      transformHeader: h => h.trim(),
+      complete: function(results) {
+        allData = results.data.map(item => {
+          item._searchIndex = `${getValByName(item, "Show")} ${getValByName(item, "Date")} ${getValByName(item, "Cast")} ${getValByName(item, "Master")} ${getValByName(item, "Tour", "Location")} ${getValByName(item, "Venue")}`.toLowerCase();
+          return item;
+        });
+        
+        applyFiltersAndRender();
+        updateCartUI();
+      },
+      error: function() {
+        const stats = document.getElementById('stats');
+        if (stats) stats.innerText = "Upload your 'list.csv' file to display your collection!";
+      }
+    });
+  }
 
   const searchInput = document.getElementById("search-input");
   if (searchInput) {
@@ -123,12 +116,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (filterBtn) {
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
       filterBtn.classList.add("active");
-      currentFilter = filterBtn.getAttribute("data-filter");
+      currentFilter = filterBtn.getAttribute("data-filter") || 'all';
       applyFiltersAndRender();
     } else if (catBtn) {
       document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
       catBtn.classList.add("active");
-      currentCategory = catBtn.getAttribute("data-category");
+      currentCategory = catBtn.getAttribute("data-category") || 'all';
       applyFiltersAndRender();
     }
   });
@@ -153,19 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const scrollTopBtn = document.getElementById("scroll-top-btn");
   if (scrollTopBtn) {
-    let ticking = false;
     window.addEventListener("scroll", () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          if (window.scrollY > 300) {
-            scrollTopBtn.classList.add("visible");
-          } else {
-            scrollTopBtn.classList.remove("visible");
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
+      scrollTopBtn.classList.toggle("visible", window.scrollY > 300);
     }, { passive: true });
 
     scrollTopBtn.addEventListener("click", () => {
@@ -174,12 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const overlay = document.getElementById("drawer-overlay");
-  const cartToggleBtn = document.getElementById("cart-toggle-btn");
-  if (cartToggleBtn) cartToggleBtn.addEventListener("click", openDrawer);
-  
   const closeDrawerBtn = document.getElementById("close-drawer-btn");
   if (closeDrawerBtn) closeDrawerBtn.addEventListener("click", closeDrawer);
-  
   if (overlay) overlay.addEventListener("click", closeDrawer);
   
   const clearCartBtn = document.getElementById("clear-cart-btn");
@@ -203,12 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Your trade request is empty! Add items to your list first.");
         return;
       }
-
-      const bodyText = generateFormattedText();
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(bodyText).catch(() => {});
-      }
-
       openGothicToast();
     });
   }
@@ -241,16 +213,10 @@ function setupIntersectionObserver() {
   if (!sentinel) return;
 
   observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      if (displayedCount < currentFilteredItems.length) {
-        appendNextBatch();
-      }
+    if (entries[0].isIntersecting && displayedCount < currentFilteredItems.length) {
+      appendNextBatch();
     }
-  }, {
-    root: null,
-    rootMargin: "400px",
-    threshold: 0.1
-  });
+  }, { rootMargin: "400px", threshold: 0.1 });
 
   observer.observe(sentinel);
 }
@@ -271,21 +237,12 @@ function applyFiltersAndRender() {
       const venue = getValByName(item, "Venue", "Theater", "Theatre").toLowerCase();
       const locationText = `${tour} ${venue}`;
 
-      if (currentCategory === 'off-broadway') {
-        if (!locationText.includes("off-broadway") && !locationText.includes("off broadway")) return false;
-      } else if (currentCategory === 'broadway') {
-        if (locationText.includes("off-broadway") || locationText.includes("off broadway")) return false;
-        if (!locationText.includes("broadway")) return false;
-      } else if (currentCategory === 'west end') {
-        if (!locationText.includes("west end")) return false;
-      }
+      if (currentCategory === 'off-broadway' && !locationText.includes("off-broadway") && !locationText.includes("off broadway")) return false;
+      if (currentCategory === 'broadway' && (locationText.includes("off-broadway") || !locationText.includes("broadway"))) return false;
+      if (currentCategory === 'west end' && !locationText.includes("west end")) return false;
     }
 
-    if (query && !item._searchIndex.includes(query)) {
-      return false;
-    }
-
-    return true;
+    return !(query && !item._searchIndex.includes(query));
   });
 
   const stats = document.getElementById('stats');
@@ -295,7 +252,6 @@ function applyFiltersAndRender() {
   if (container) {
     container.innerHTML = "";
     displayedCount = 0;
-
     if (currentFilteredItems.length > 0) {
       appendNextBatch(30);
     }
@@ -320,15 +276,7 @@ function appendNextBatch(count = BATCH_SIZE) {
     
     const format = getFormat(item);
     const sizeVal = getFileSize(item);
-
-    let displayFormatStr = "";
-    if (format && sizeVal) {
-      displayFormatStr = `${format} [${sizeVal}]`;
-    } else if (format) {
-      displayFormatStr = format;
-    } else if (sizeVal) {
-      displayFormatStr = sizeVal;
-    }
+    const displayFormatStr = format && sizeVal ? `${format} [${sizeVal}]` : (format || sizeVal);
 
     const tour = getValByName(item, "Tour", "Location", "City");
     const venue = getValByName(item, "Venue", "Theater", "Theatre");
@@ -336,19 +284,17 @@ function appendNextBatch(count = BATCH_SIZE) {
     const cast = getValByName(item, "Cast");
     const masterNotes = getValByName(item, "Master Notes");
     const tradingNotes = getValByName(item, "Trading Notes");
-    const myNotes = getValByName(item, "My Notes");
+    const myNotes = getValByName(item, "Notes", "My Notes");
 
     const displayType = getMediaType(item);
     const formatBadgeHTML = displayFormatStr ? `<span class="badge badge-format">${displayFormatStr}</span>` : '';
-    const safeTypeClass = displayType.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    const typeBadgeHTML = `<span class="badge badge-${safeTypeClass}">${displayType}</span>`;
+    const typeBadgeHTML = `<span class="badge badge-${displayType.toLowerCase().replace(/[^a-z0-9]/g, '-')}">${displayType}</span>`;
     
     const nftDateStr = getValByName(item, "NFT Date");
     const nftForeverVal = getValByName(item, "NFT Forever").toLowerCase();
     
-    let nftForever = (
+    const nftForever = (
       nftForeverVal === "true" || nftForeverVal === "yes" || nftForeverVal === "1" || 
-      nftForeverVal === "nftf" || nftForeverVal.includes("forever") ||
       nftDateStr.toLowerCase().includes("forever") || nftDateStr.toLowerCase() === "nftf"
     );
 
@@ -359,12 +305,11 @@ function appendNextBatch(count = BATCH_SIZE) {
     if (nftForever) {
       isNFTActive = true;
       nftBadgeHTML = `<br><span class="nft-active">⛔ NFT FOREVER</span>`;
-    } else if (nftDateStr !== "") {
+    } else if (nftDateStr) {
       if (isNftStillActive(nftDateStr)) {
         isNFTActive = true;
         nftBadgeHTML = `<br><span class="nft-active">⛔ NFT UNTIL: ${nftDateStr}</span>`;
       } else {
-        isNFTActive = false;
         nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
       }
     }
@@ -441,8 +386,7 @@ function closeDrawer() {
 }
 
 function getItemKey(item) {
-  const fmt = getFormat(item) || getFileSize(item) || getMediaType(item);
-  return `${getValByName(item, "Show")}|${getValByName(item, "Date")}|${getValByName(item, "Master")}|${fmt}`.toLowerCase();
+  return `${getValByName(item, "Show")}|${getValByName(item, "Date")}|${getValByName(item, "Master")}`.toLowerCase();
 }
 
 function isInCart(item) {
@@ -460,17 +404,17 @@ function toggleCartItem(item, buttonEl) {
       buttonEl.innerText = "+ Add to Trade";
       buttonEl.classList.remove("in-cart");
     }
-    saveCartToStorage();
-    updateCartUI();
   } else {
     executeAddToCart(item, buttonEl);
   }
+  saveCartToStorage();
+  updateCartUI();
 }
 
 function executeAddToCart(item, buttonEl) {
   const fmt = getFormat(item);
   const sz = getFileSize(item);
-  let displayFmt = (fmt && sz) ? `${fmt} [${sz}]` : (fmt || sz || getMediaType(item));
+  const displayFmt = (fmt && sz) ? `${fmt} [${sz}]` : (fmt || sz || getMediaType(item));
 
   tradeCart.push({
     key: getItemKey(item),
@@ -487,9 +431,6 @@ function executeAddToCart(item, buttonEl) {
     buttonEl.innerText = "✓ In Request";
     buttonEl.classList.add("in-cart");
   }
-
-  saveCartToStorage();
-  updateCartUI();
 }
 
 function generateFormattedText() {
@@ -501,54 +442,30 @@ function generateFormattedText() {
     return line;
   }).join("\n");
 
-  return [
-    "Hi!",
-    "I would like to initiate a trade for the following items from your collection:",
-    "",
-    itemsText,
-    "",
-    "My Trading List / Link: [INSERT YOUR LINK HERE]",
-    "",
-    "Thanks!"
-  ].join("\n");
+  return `Hi!\n\nI would like to initiate a trade for the following items:\n\n${itemsText}\n\nMy Trading List: [INSERT LINK HERE]\n\nThanks!`;
 }
 
 function updateCartUI() {
   ensureCartButtonInBody();
   const container = document.getElementById("cart-items-container");
   const countEl = document.getElementById("cart-count");
-  const videoCountEl = document.getElementById("cart-video-count");
-  const audioCountEl = document.getElementById("cart-audio-count");
-
   if (countEl) countEl.innerText = tradeCart.length;
-
-  let videos = 0;
-  let audios = 0;
 
   if (!container) return;
 
   if (tradeCart.length === 0) {
-    container.innerHTML = `<p class="empty-cart-msg">No items added yet. Click "+ Add to Trade" on any item card!</p>`;
-    if (videoCountEl) videoCountEl.innerText = "0";
-    if (audioCountEl) audioCountEl.innerText = "0";
+    container.innerHTML = `<p class="empty-cart-msg">No items added yet.</p>`;
     return;
   }
 
   const fragment = document.createDocumentFragment();
-
   tradeCart.forEach(item => {
-    if (item.type.includes("VIDEO")) videos++;
-    if (item.type.includes("AUDIO")) audios++;
-
-    const location = [item.tour, item.venue].filter(Boolean).join(" - ");
-    
     const cartCard = document.createElement("div");
     cartCard.className = "cart-item-row";
-
     cartCard.innerHTML = `
       <div class="cart-item-details">
         <strong>${item.show}</strong>
-        <span>📅 ${item.date} (${item.format}) ${location ? `| 📍 ${location}` : ''}</span>
+        <span>📅 ${item.date} (${item.format})</span>
       </div>
       <button type="button" class="remove-cart-item" data-key="${item.key}">&times;</button>
     `;
@@ -563,18 +480,13 @@ function updateCartUI() {
     fragment.appendChild(cartCard);
   });
 
-  requestAnimationFrame(() => {
-    container.innerHTML = "";
-    container.appendChild(fragment);
-    if (videoCountEl) videoCountEl.innerText = videos;
-    if (audioCountEl) audioCountEl.innerText = audios;
-  });
+  container.innerHTML = "";
+  container.appendChild(fragment);
 }
 
 function copyTradeRequest() {
   if (!tradeCart.length) return;
-  const text = generateFormattedText();
-  navigator.clipboard.writeText(text).then(() => {
+  navigator.clipboard.writeText(generateFormattedText()).then(() => {
     const btn = document.getElementById("copy-trade-btn");
     if (btn) {
       btn.innerText = "✅ Copied Request!";
@@ -600,17 +512,24 @@ function openGothicToast() {
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
   const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
 
-  document.getElementById("toast-gmail-btn").onclick = () => {
-    window.open(gmailUrl, "_blank");
-    closeGothicToast();
-  };
+  const gmailBtn = document.getElementById("toast-gmail-btn");
+  if (gmailBtn) {
+    gmailBtn.onclick = () => {
+      window.open(gmailUrl, "_blank");
+      closeGothicToast();
+    };
+  }
 
-  document.getElementById("toast-mail-btn").onclick = () => {
-    window.location.href = mailtoUrl;
-    closeGothicToast();
-  };
+  const mailBtn = document.getElementById("toast-mail-btn");
+  if (mailBtn) {
+    mailBtn.onclick = () => {
+      window.location.href = mailtoUrl;
+      closeGothicToast();
+    };
+  }
 
-  document.getElementById("toast-close-btn").onclick = closeGothicToast;
+  const closeBtn = document.getElementById("toast-close-btn");
+  if (closeBtn) closeBtn.onclick = closeGothicToast;
 }
 
 function closeGothicToast() {
@@ -623,16 +542,11 @@ function closeGothicToast() {
 
 function getValByName(item, ...names) {
   if (!item) return "";
-  const keys = Object.keys(item);
   for (const name of names) {
-    const target = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    for (const key of keys) {
-      if (key.toLowerCase().replace(/[^a-z0-9]/g, '') === target) {
+    for (const key in item) {
+      if (key.trim().toLowerCase() === name.toLowerCase()) {
         const val = item[key];
-        if (val !== undefined && val !== null) {
-          const str = val.toString().trim();
-          if (str) return str;
-        }
+        if (val !== undefined && val !== null) return val.toString().trim();
       }
     }
   }
@@ -640,156 +554,54 @@ function getValByName(item, ...names) {
 }
 
 function getFileSize(item) {
-  if (!item) return "";
-
-  const sizeFields = ["File Size", "Size", "Filesize"];
-  for (const f of sizeFields) {
-    const val = getValByName(item, f);
-    if (val) {
-      const match = val.match(/\b\d+(\.\d+)?\s*(gb|mb|kb|tb)\b/i);
-      if (match) return match[0].toUpperCase();
-    }
+  const val = getValByName(item, "File Size", "Size");
+  if (val) {
+    const match = val.match(/\b\d+(\.\d+)?\s*(gb|mb|kb|tb)\b/i);
+    if (match) return match[0].toUpperCase();
   }
-
-  for (const key in item) {
-    const val = item[key];
-    if (typeof val === 'string' && val) {
-      const match = val.match(/\b\d+(\.\d+)?\s*(gb|mb|kb|tb)\b/i);
-      if (match) return match[0].toUpperCase();
-    }
-  }
-
   return "";
 }
 
 function getFormat(item) {
-  if (!item) return "";
-
-  const candidateKeys = [
-    "Trader Format", "Release Format", "File Format", 
-    "Media Format", "Format", "Container", "Extension", 
-    "Video Format", "Audio Format"
-  ];
-
-  let rawFormat = candidateKeys.map(k => getValByName(item, k)).find(v => Boolean(v)) || "";
-
-  if (!rawFormat) {
-    const formatRegex = /\b(vob|mp4|mkv|mov|avi|iso|mp3|m4a|flac|wav|ts|m2ts|wmv|mpg|mpeg|tracked|untracked)\b/i;
-    for (const key in item) {
-      const val = item[key];
-      if (typeof val === 'string' && formatRegex.test(val)) {
-        const match = val.match(formatRegex);
-        if (match) {
-          rawFormat = match[0].toUpperCase();
-          break;
-        }
-      }
-    }
-  }
-
-  if (!rawFormat) return "";
-
-  let cleaned = rawFormat.replace(/\b\d+(\.\d+)?\s*(gb|mb|kb|tb)\b/gi, "");
-  cleaned = cleaned.replace(/\b(video|audio|both|mixed)\b/gi, "");
-  cleaned = cleaned
-    .replace(/[\(\[\{\)\]\}]/g, " ")
-    .replace(/[-–—/,\.\:]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return cleaned;
+  const fmt = getValByName(item, "Trader Format", "Release Format", "Format", "Media Format");
+  if (fmt) return fmt.toUpperCase();
+  return "";
 }
 
 function getMediaType(item) {
-  const audioVideo = getValByName(item, "Audio / Video", "Audio/Video").toLowerCase();
-  const typeRaw = getValByName(item, "Type").toLowerCase();
-  
-  const rawFmt = (
-    getValByName(item, "Trader Format") + " " + 
-    getValByName(item, "Release Format") + " " + 
-    getValByName(item, "Format")
-  ).toLowerCase();
-
-  const isAudio = audioVideo.includes("audio") || typeRaw.includes("audio") || rawFmt.match(/\b(audio|mp3|m4a|wav|flac|tracked|cd)\b/);
-  const isVideo = audioVideo.includes("video") || typeRaw.includes("video") || rawFmt.match(/\b(video|mp4|vob|mov|mkv|avi|iso)\b/);
-
-  if (audioVideo.includes("both") || audioVideo.includes("mixed") || audioVideo.includes("&") || audioVideo.includes("/") || (isAudio && isVideo)) {
-    return "VIDEO / AUDIO";
-  }
-  if (isAudio) return "AUDIO";
+  const audioVideo = getValByName(item, "Audio / Video", "Audio/Video", "Type").toLowerCase();
+  if (audioVideo.includes("both") || (audioVideo.includes("audio") && audioVideo.includes("video"))) return "VIDEO / AUDIO";
+  if (audioVideo.includes("audio")) return "AUDIO";
   return "VIDEO";
 }
 
 function parseEncoraDate(dateStr) {
   if (!dateStr) return null;
-  const clean = dateStr.trim().replace(/\./g, '-');
-  const parts = clean.split(/[-/]/);
-
-  if (parts.length === 3) {
-    let day, month, year;
-    if (parts[0].length === 4) {
-      year = parseInt(parts[0], 10);
-      month = parseInt(parts[1], 10) - 1;
-      day = parseInt(parts[2], 10);
-    } else if (parts[2].length === 4) {
-      year = parseInt(parts[2], 10);
-      day = parseInt(parts[0], 10);
-      month = parseInt(parts[1], 10) - 1;
-    }
-    if (year && month !== undefined && day) return new Date(year, month, day);
-  }
-
-  const d = new Date(clean);
+  const d = new Date(dateStr.trim().replace(/\./g, '-'));
   return isNaN(d.getTime()) ? null : d;
 }
 
 function isNftStillActive(dateStr) {
   if (!dateStr) return false;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const lower = dateStr.toLowerCase();
-  if (lower.includes("forever") || lower === "nftf" || lower.includes("master")) return true;
-
   const parsedDate = parseEncoraDate(dateStr);
-  return parsedDate ? parsedDate >= today : false;
+  return parsedDate ? parsedDate >= new Date().setHours(0,0,0,0) : false;
 }
 
 function copySingleItemSummary(item, buttonElement) {
   const show = getValByName(item, "Show") || "Unknown Show";
   const date = getValByName(item, "Date") || "Unknown Date";
-  const tour = getValByName(item, "Tour", "Location", "City");
-  const venue = getValByName(item, "Venue", "Theater", "Theatre");
   const master = getValByName(item, "Master") || "Unknown Master";
-  
-  const fmt = getFormat(item);
-  const sz = getFileSize(item);
-  const formatStr = (fmt && sz) ? `${fmt} [${sz}]` : (fmt || sz || getMediaType(item));
-
-  const location = [tour, venue].filter(Boolean).join(" - ");
-
-  let text = `${show} - ${date} (${formatStr})`;
-  if (location) text += ` | ${location}`;
-  if (master) text += ` | Master: ${master}`;
+  const text = `${show} - ${date} | Master: ${master}`;
 
   navigator.clipboard.writeText(text).then(() => {
     const originalText = buttonElement.innerText;
     buttonElement.innerText = "✅ Copied!";
-    buttonElement.classList.add("copied");
-
-    setTimeout(() => {
-      buttonElement.innerText = originalText;
-      buttonElement.classList.remove("copied");
-    }, 2000);
+    setTimeout(() => { buttonElement.innerText = originalText; }, 2000);
   });
 }
 
-/* ============================================================
-   THEME HELPER FUNCTIONS
-============================================================ */
 function triggerParadiseLost() {
   const isParadise = document.documentElement.getAttribute('data-theme') === 'paradise-lost';
-
   if (isParadise) {
     document.documentElement.removeAttribute('data-theme');
     document.documentElement.classList.remove('paradise-lost');
@@ -801,74 +613,13 @@ function triggerParadiseLost() {
     document.body.classList.add('paradise-lost');
     localStorage.setItem('paradiseThemeActive', 'true');
   }
-
   updateButtonLabel();
 }
 
 function updateButtonLabel() {
   const btn = document.getElementById('paradise-btn');
   const isParadise = document.documentElement.getAttribute('data-theme') === 'paradise-lost';
-  
   if (btn) {
     btn.textContent = isParadise ? '❖ Legacy Model (Cyberpunk)' : '❖ Ascend to Paradise';
-  }
-}
-
-/* ============================================================
-   BACKGROUND EMBERS ANIMATION
-============================================================ */
-const canvas = document.getElementById('ember-canvas');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
-
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
-
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-
-  const embers = Array.from({ length: 45 }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height + height * 0.4,
-    radius: Math.random() * 2 + 0.8,
-    speedY: -(Math.random() * 0.7 + 0.2),
-    speedX: (Math.random() - 0.5) * 0.4,
-    opacity: Math.random() * 0.7 + 0.3,
-    color: Math.random() > 0.4 ? '#ff4500' : '#ffaa00'
-  }));
-
-  function animateEmbers() {
-    ctx.clearRect(0, 0, width, height);
-
-    embers.forEach((ember) => {
-      ember.y += ember.speedY;
-      ember.x += ember.speedX;
-
-      if (ember.y < height * 0.35) {
-        ember.opacity -= 0.005;
-      }
-
-      if (ember.y < height * 0.2 || ember.opacity <= 0) {
-        ember.y = height + Math.random() * 50;
-        ember.x = Math.random() * width;
-        ember.opacity = Math.random() * 0.7 + 0.3;
-      }
-
-      ctx.beginPath();
-      ctx.arc(ember.x, ember.y, ember.radius, 0, Math.PI * 2);
-      ctx.fillStyle = ember.color;
-      ctx.globalAlpha = ember.opacity;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = ember.color;
-      ctx.fill();
-    });
-
-    requestAnimationFrame(animateEmbers);
-  }
-
-  if (window.innerWidth > 768) {
-    animateEmbers();
   }
 }
