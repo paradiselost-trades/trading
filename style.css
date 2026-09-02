@@ -1702,3 +1702,7 @@ body.paradise-lost-mode {
     box-shadow: 0 0 20px rgba(255, 87, 34, 0.9) !important;
   }
 }
+/* Hide the Nine Circles drawer when closed */
+#infernal-palette.closed {
+  display: none !important;
+}
