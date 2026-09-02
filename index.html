@@ -4,23 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
-  <!-- Set browser tab title -->
   <title>Better to Reign in Hell than Serve in Heaven</title>
-  <!-- Transparent PNG Favicon -->
   <link rel="icon" type="image/png" href="snake-apple.png" />
 
-  <!-- Prevent theme-flash on load (Defaults to Paradise Lost) -->
+  <!-- Prevent theme-flash on load -->
   <script>
     (function() {
       const savedTheme = localStorage.getItem('paradiseThemeActive');
       if (savedTheme !== 'false') {
         document.documentElement.setAttribute('data-theme', 'paradise-lost');
-        document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
+        document.documentElement.classList.add('paradise-lost');
       }
     })();
   </script>
 
-  <!-- Foolproof JS Text-Targeting Script for Dynamic Cards -->
+  <!-- JS Text-Targeting Script for Dynamic Cards -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const observer = new MutationObserver(() => {
@@ -42,42 +40,32 @@
     });
   </script>
 
-  <!-- Non-blocking typography preloads for Paradise Lost -->
+  <!-- Typography Preloads -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   
-  <!-- Load PapaParse to read CSV files -->
+  <!-- PapaParse for CSVs -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   
-  <!-- Cache-buster update -->
+  <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css?v=8.0" />
 </head>
-<body>
+<body class="paradise-lost">
   <!-- Canvas Overlay for Infernal Embers -->
   <canvas id="ember-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1;"></canvas>
 
   <!-- Golden Ascend Flash Overlay -->
   <div id="ascend-flash" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(255, 215, 0, 0.35); pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.8s ease;"></div>
 
-  <!-- VHS On-Screen Display Overlay -->
-  <div id="vhs-osd-overlay">
-    <div class="osd-top-left">PLAY ▶</div>
-    <div class="osd-top-right" id="vhs-timestamp">00:00:00:00</div>
-    <div class="osd-bottom-left">SP 120 MIN</div>
-    <div class="osd-bottom-right">AUTO-TRACKING...</div>
-  </div>
-
   <header class="container">
     <div class="header-top-row">
-      <!-- PARADISE LOST GATEWAY TRIGGER -->
       <button id="paradise-btn" type="button" class="abandon-btn" onclick="triggerParadiseLost()">
         ❖ Legacy Model
       </button>
     </div>
 
-    <h1 class="votive-glow"><span class="header-emoji" title="SYSTEM: Signal unstable (x2)...">🎭</span> My Trading Collection</h1>
+    <h1 class="votive-glow"><span class="header-emoji">🎭</span> My Trading Collection</h1>
     
     <div class="rules-box">
       <div class="rules-box-inner">
@@ -93,20 +81,20 @@
         
         <div class="latin-epigraph">✦ In Principio Erat Verbum ✦</div>
 
-        <p><strong>Contact:</strong> <code>tradingtreelost@gmail.com</code></p>
+        <p class="contact-info"><strong>Contact:</strong> <code>tradingtreelost@gmail.com</code></p>
         
-        <ul>
+        <ul class="rules-list">
           <li>Standard trading ratios apply (1 Video = 2 Audios).</li>
           <li>Updated every 3-4 days.</li>
           <li>Respect all NFT dates and master restrictions.</li>
           <li>Bikinibottomday's bootlegs are only to be traded via email.</li>
           <li><strong>Follow-Up Policy:</strong> Please wait at least 7 days before sending follow-up emails for trades or gift requests. Life and hardware issues happen!</li>
-          <li>Will not gift Heathers or Six bootlegs at all</li>
+          <li>Will not gift Heathers or Six bootlegs at all.</li>
         </ul>
 
         <!-- CIRCULAR INFERNAL PALETTE DRAWER -->
         <div class="infernal-palette-wrapper">
-          <button id="palette-toggle-btn" class="sigil-trigger" type="button" aria-label="Toggle Nine Circles">
+          <button id="palette-toggle-btn" class="sigil-trigger unveil-btn" type="button" aria-label="Toggle Nine Circles">
             <span class="sigil-icon">🜏</span>
             <span class="sigil-label">UNVEIL THE NINE CIRCLES</span>
           </button>
@@ -115,62 +103,62 @@
             <div class="palette-inner">
               <div class="palette-header">
                 <h3>🜏 THE NINE CIRCLES OF TRADING HELL 🜏</h3>
-                <p>Instant block criteria for bad-faith traders</p>
+                <p class="subtitle">Instant block criteria for bad-faith traders</p>
               </div>
 
               <div class="circles-grid">
                 <div class="circle-sector">
                   <h4>I. LIMBO (THE UNFORMATTED)</h4>
-                  <p><strong>Offense:</strong> Zero-effort emails missing basic show dates, cast details, or trade lists.</p>
+                  <p class="offense"><strong>Offense:</strong> Zero-effort emails missing basic show dates, cast details, or trade lists.</p>
                   <p class="sentence"><strong>Sentence:</strong> Trapped forever writing draft emails that never send.</p>
                 </div>
 
                 <div class="circle-sector">
                   <h4>II. LUST (THE LISTLESS BEGGAR)</h4>
-                  <p><strong>Offense:</strong> Entitled "I don't have a list but give me this or I'll die" begging emails.</p>
+                  <p class="offense"><strong>Offense:</strong> Entitled "I don't have a list but give me this or I'll die" begging emails.</p>
                   <p class="sentence"><strong>Sentence:</strong> Endless auto-reply notifications reading Request Denied.</p>
                 </div>
 
                 <div class="circle-sector">
                   <h4>III. GLUTTONY (THE FORMAT BUTCHER)</h4>
-                  <p><strong>Offense:</strong> Stripping VOB menus/Smalls, hiding file sizes, and dumping unorganized files.</p>
+                  <p class="offense"><strong>Offense:</strong> Stripping VOB menus/Smalls, hiding file sizes, and dumping unorganized files.</p>
                   <p class="sentence"><strong>Sentence:</strong> Manually rebuilding corrupted folder trees in freezing mud.</p>
                 </div>
 
                 <div class="circle-sector">
                   <h4>IV. GREED (THE RATIO HOG)</h4>
-                  <p><strong>Offense:</strong> Demanding absurd ratios for common bootlegs while hiding trade details.</p>
+                  <p class="offense"><strong>Offense:</strong> Demanding absurd ratios for common bootlegs while hiding trade details.</p>
                   <p class="sentence"><strong>Sentence:</strong> Pushing dead hard drives uphill forever.</p>
                 </div>
 
                 <div class="circle-sector">
                   <h4>V. WRATH (THE HARASSER)</h4>
-                  <p><strong>Offense:</strong> Sending impatient pings under 7 days, spamming DMs, or emailing threats.</p>
+                  <p class="offense"><strong>Offense:</strong> Sending impatient pings under 7 days, spamming DMs, or emailing threats.</p>
                   <p class="sentence"><strong>Sentence:</strong> Submerged in the Styx while progress bars freeze forever at 99%.</p>
                 </div>
 
                 <div class="circle-sector">
                   <h4>VI. HERESY (THE NFT IGNORER)</h4>
-                  <p><strong>Offense:</strong> Harassing non-masters for active NFT/NFT(F) recordings or bypassing dates.</p>
+                  <p class="offense"><strong>Offense:</strong> Harassing non-masters for active NFT/NFT(F) recordings or bypassing dates.</p>
                   <p class="sentence"><strong>Sentence:</strong> Encased in burning iron tombs lined with degraded magnetic tape.</p>
                 </div>
 
                 <div class="circle-sector">
                   <h4>VII. VIOLENCE (THE LEAKER)</h4>
-                  <p><strong>Offense:</strong> Posting master-restricted files to social media, driving masters to quit.</p>
+                  <p class="offense"><strong>Offense:</strong> Posting master-restricted files to social media, driving masters to quit.</p>
                   <p class="sentence"><strong>Sentence:</strong> Plunged into boiling blood where every link triggers a copyright strike.</p>
                 </div>
 
                 <div class="circle-sector">
                   <h4>VIII. FRAUD (THE SLIME IMPOSTER)</h4>
-                  <p><strong>Offense:</strong> Using "slime tutorial" slang, screen recordings, or public YouTube links.</p>
+                  <p class="offense"><strong>Offense:</strong> Using "slime tutorial" slang, screen recordings, or public YouTube links.</p>
                   <p class="sentence"><strong>Sentence:</strong> Cast into boiling pitch and prodded by demons with snapped cables.</p>
                 </div>
 
-               <div class="circle-sector worst-sector">
-                 <h4>IX. TREACHERY (THE BETRAYER)</h4>
-                 <p><strong>Offense:</strong> Taking high-quality lossless master files and knowingly sending back dead links, re-encoded YouTube garbage, or corrupted archives in return.</p>
-                 <p class="sentence"><strong>Sentence:</strong> Encased to the chin in frozen Cocytus, permanently blacklisted with 0 kb/s transfer speeds across all private networks.</p>
+                <div class="circle-sector worst-sector">
+                  <h4>IX. TREACHERY (THE BETRAYER)</h4>
+                  <p class="offense"><strong>Offense:</strong> Taking high-quality lossless master files and knowingly sending back dead links, re-encoded YouTube garbage, or corrupted archives in return.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Encased to the chin in frozen Cocytus, permanently blacklisted with 0 kb/s transfer speeds across all private networks.</p>
                 </div>
               </div>
             </div>
@@ -185,7 +173,6 @@
     <div class="controls">
       <input type="text" id="search-input" placeholder="Search the Hall of Pandemonium (show, cast, date)..." />
       
-      <!-- Encora CSV Comparison Tool -->
       <div class="encora-compare-box">
         <label for="encora-file-input" class="encora-upload-btn">
           📜 Compare Encora CSV
@@ -195,14 +182,12 @@
         <button type="button" id="clear-encora-btn" class="clear-encora-btn" style="display: none;">✕ Reset Filter</button>
       </div>
       
-      <!-- Primary Format Filters -->
       <div class="filters">
         <button type="button" class="filter-btn active" data-filter="all">All Formats</button>
         <button type="button" class="filter-btn" data-filter="Video">Videos</button>
         <button type="button" class="filter-btn" data-filter="Audio">Audios</button>
       </div>
 
-      <!-- Category Location Filters -->
       <div class="filters category-filters">
         <button type="button" class="cat-btn active" data-category="all">All Locations</button>
         <button type="button" class="cat-btn" data-category="broadway">Broadway</button>
@@ -211,7 +196,6 @@
       </div>
     </div>
 
-    <!-- Visual Abyss Divider: Splits Empyrean (Rules/Search) from Pandemonium (Bootlegs) -->
     <div class="abyss-divider" style="display: flex; align-items: center; justify-content: center; margin: 40px 0 20px 0; gap: 15px;">
       <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(255,215,0,0.8), rgba(255,69,0,0.8), transparent);"></div>
       <span class="abyss-label" style="font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 2px; color: #ffaa00; text-shadow: 0 0 8px #ff4500; text-transform: uppercase;">
@@ -223,19 +207,15 @@
     <div id="stats">Loading collection...</div>
     <div id="card-container"></div>
 
-    <!-- Scroll Sentinel for Infinite Loading -->
     <div id="scroll-sentinel" style="height: 20px; margin-top: 20px;"></div>
   </main>
 
-  <!-- Scroll to Top Floating Button -->
   <button type="button" id="scroll-top-btn" title="Back to Top">⬆ ASCEND</button>
 
-  <!-- Floating Trade Cart Trigger Button -->
   <button type="button" id="cart-toggle-btn" class="cart-toggle-btn">
     🏛️ Trade Request (<span id="cart-count">0</span>)
   </button>
 
-  <!-- Slide-out Trade Drawer -->
   <div id="trade-drawer" class="trade-drawer">
     <div class="drawer-header">
       <h2>🎭 Your Trade Request</h2>
@@ -262,25 +242,6 @@
   
   <div id="drawer-overlay" class="drawer-overlay"></div>
 
-  <!-- NATIVE NFT HORROR INTERCEPTOR MODAL -->
-  <dialog id="nft-horror-modal" class="nft-horror-overlay">
-    <div class="nft-horror-content">
-      <div class="nft-horror-header">
-        <span class="warning-symbol">⚠️</span>
-        <span id="nft-modal-tag" class="modal-tag">ERR_TEMPORAL_RESTRICTION</span>
-      </div>
-      
-      <div id="nft-glitch-text-container" class="glitch-text-box">
-        <p id="nft-horror-primary-text" class="horror-text-phase1"></p>
-      </div>
-
-      <div class="nft-horror-actions">
-        <button type="button" id="nft-force-access-btn" class="force-access-btn">[ FORCE ACCESS ]</button>
-        <button type="button" id="nft-abort-btn" class="abort-access-btn">[ ABORT SELECTION ]</button>
-      </div>
-    </div>
-  </dialog>
-
   <button id="toggle-eyestrain-btn" type="button" onclick="toggleEyestrainMode()" class="fixed-eyestrain-btn">
     👁️ Toggle No-Eyestrain Mode
   </button>
@@ -291,17 +252,17 @@
   </footer>
 
   <script src="script.js?v=8.0"></script>
-  <!-- GOTHIC TOAST MODAL -->
-<div id="gothic-toast" class="gothic-toast-hidden">
-  <div class="gothic-toast-content">
-    <div class="gothic-toast-header">✦ RECORD INSCRIBED TO CLIPBOARD ✦</div>
-    <p>Select your destination to dispatch this request:</p>
-    <div class="gothic-toast-actions">
-      <button id="toast-gmail-btn" class="gothic-btn">OPEN GMAIL WEB</button>
-      <button id="toast-mail-btn" class="gothic-btn btn-secondary">DEFAULT MAIL APP</button>
-      <button id="toast-close-btn" class="gothic-btn btn-close">DISMISS</button>
+
+  <div id="gothic-toast" class="gothic-toast-hidden">
+    <div class="gothic-toast-content">
+      <div class="gothic-toast-header">✦ RECORD INSCRIBED TO CLIPBOARD ✦</div>
+      <p>Select your destination to dispatch this request:</p>
+      <div class="gothic-toast-actions">
+        <button id="toast-gmail-btn" class="gothic-btn">OPEN GMAIL WEB</button>
+        <button id="toast-mail-btn" class="gothic-btn btn-secondary">DEFAULT MAIL APP</button>
+        <button id="toast-close-btn" class="gothic-btn btn-close">DISMISS</button>
+      </div>
     </div>
   </div>
-</div>
 </body>
 </html>
