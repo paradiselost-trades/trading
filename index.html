@@ -1,1740 +1,271 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap');
-
-/* Gentle Translucent Quarter-Sun Light (Top-Right) */
-html {
-  background-color: #030305 !important;
-  background-image: radial-gradient(
-    circle at 100% 0%, 
-    rgba(255, 245, 180, 0.18) 0%,   /* Faint golden core at exact top-right corner */
-    rgba(255, 215, 0, 0.06) 30%,    /* Soft celestial aura */
-    transparent 65%                 /* Fades seamlessly into dark background */
-  ) !important;
-  background-attachment: fixed !important;
-  min-height: 100vh;
-}
-/* ============================================================
-   Y2K NEON CYBER AESTHETIC - GLOBAL STYLES
-============================================================ */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  scrollbar-width: thin;
-  scrollbar-color: #7000ff #0b0c10;
-}
-
-html {
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Disable smooth scrolling when the alert is open to stop automatic jump-scrolling */
-html.modal-open {
-  scroll-behavior: auto !important;
-  overflow: hidden !important;
-}
-
-body.modal-open {
-  overflow: hidden !important;
-  touch-action: none;
-}
-
-html, body {
-  overflow-x: hidden;
-  max-width: 100vw;
-}
-
-body {
-  background-color: #0b0c10;
-  background-image: 
-    radial-gradient(circle at 15% 15%, rgba(112, 0, 255, 0.25) 0%, transparent 45%),
-    radial-gradient(circle at 85% 85%, rgba(0, 240, 255, 0.2) 0%, transparent 45%);
-  color: #e0e0e0;
-  font-family: 'Courier New', Courier, monospace, sans-serif;
-  min-height: 100vh;
-  padding: 20px;
-  padding-bottom: 100px; /* Space for floating buttons */
-}
-
-/* ============================================================
-   CRT MONITOR OVERLAY & SCANLINES
-============================================================ */
-
-/* Scanline Grid Pattern Overlay */
-body::before {
-  content: " ";
-  display: block;
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    rgba(18, 16, 16, 0) 50%, 
-    rgba(0, 0, 0, 0.35) 50%
-  );
-  background-size: 100% 4px;
-  z-index: 10;
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-/* Subtle CRT Screen Flicker */
-body::after {
-  content: " ";
-  display: block;
-  position: fixed;
-  inset: 0;
-  background: rgba(18, 16, 16, 0.03);
-  opacity: 0;
-  z-index: 11;
-  pointer-events: none;
-  animation: crt-flicker 0.15s infinite;
-}
-
-@keyframes crt-flicker {
-  0% { opacity: 0.02; }
-  50% { opacity: 0.06; }
-  100% { opacity: 0.02; }
-}
-
-/* ============================================================
-   REUSABLE NEON GLOW & PULSE ANIMATIONS
-============================================================ */
-
-/* Cyber Title Neon Glow Pulse */
-.cyber-glow-pulse {
-  animation: cyber-text-pulse 2s ease-in-out infinite alternate;
-}
-
-@keyframes cyber-text-pulse {
-  0% {
-    text-shadow: 
-      0 0 4px #ffffff,
-      0 0 10px #00f0ff,
-      0 0 20px #00f0ff;
-  }
-  50% {
-    text-shadow: 
-      0 0 8px #ffffff,
-      0 0 20px #00f0ff,
-      0 0 35px #00f0ff,
-      0 0 50px #7000ff;
-  }
-  100% {
-    text-shadow: 
-      0 0 4px #ffffff,
-      0 0 12px #00f0ff,
-      0 0 25px #00f0ff,
-      0 0 40px #00f0ff;
-  }
-}
-
-/* Pulsing Cyber Border Glow */
-.cyber-box-pulse {
-  animation: cyber-box-glow 1.8s ease-in-out infinite alternate;
-}
-
-@keyframes cyber-box-glow {
-  0% {
-    border-color: #00f0ff;
-    box-shadow: 0 0 8px rgba(0, 240, 255, 0.5), inset 0 0 5px rgba(0, 240, 255, 0.3);
-  }
-  100% {
-    border-color: #ff007f;
-    box-shadow: 0 0 18px #ff007f, 0 0 30px rgba(255, 0, 127, 0.6), inset 0 0 10px rgba(255, 0, 127, 0.4);
-  }
-}
-
-/* Rapid Neon Flicker Effect */
-.neon-flicker {
-  animation: neon-flicker-anim 3s infinite;
-}
-
-@keyframes neon-flicker-anim {
-  0%, 100% { opacity: 1; }
-  3% { opacity: 0.4; }
-  6% { opacity: 1; }
-  7% { opacity: 0.4; }
-  8% { opacity: 1; }
-  9% { opacity: 0.9; }
-  10% { opacity: 1; }
-  89% { opacity: 1; }
-  90% { opacity: 0.2; }
-  91% { opacity: 1; }
-}
-
-/* --- HEADER & CONTROLS --- */
-header {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-h1 {
-  color: #00f0ff;
-  font-size: 2.2rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 
-    0 0 8px #ffffff,
-    0 0 15px #00f0ff,
-    0 0 30px #00f0ff,
-    0 0 50px #00f0ff;
-  margin-bottom: 15px;
-}
-
-.controls {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  margin-bottom: 10px !important;
-  width: 100% !important;
-}
-
-#search-input {
-  background: rgba(18, 18, 22, 0.85);
-  border: 1px solid #7000ff;
-  color: #ffffff;
-  padding: 10px 15px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  border-radius: 4px;
-  width: 100% !important;
-  outline: none;
-  box-shadow: 0 0 8px rgba(112, 0, 255, 0.4), inset 0 0 8px rgba(112, 0, 255, 0.3);
-  transition: all 0.3s ease;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  box-sizing: border-box !important;
-}
-
-#search-input:focus {
-  border-color: #00f0ff;
-  box-shadow: 0 0 15px #00f0ff, inset 0 0 10px rgba(0, 240, 255, 0.5);
-}
-
-.filters, 
-.category-filters {
-  display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 8px !important;
-  width: 100% !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  padding: 0 !important;
-}
-
-.filter-btn {
-  background: rgba(18, 18, 22, 0.85);
-  border: 1px solid #7000ff;
-  color: #b8b8b8;
-  padding: 10px 18px;
-  font-family: inherit;
-  font-size: 0.9rem;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 0 6px rgba(112, 0, 255, 0.3);
-  touch-action: manipulation;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 !important;
-  white-space: nowrap !important;
-  vertical-align: middle !important;
-}
-
-.filter-btn:hover {
-  color: #ffffff;
-  border-color: #00f0ff;
-  box-shadow: 0 0 14px #00f0ff;
-}
-
-.filter-btn.active {
-  background: #7000ff;
-  color: #ffffff;
-  border-color: #00f0ff;
-  box-shadow: 0 0 18px #7000ff, 0 0 30px rgba(0, 240, 255, 0.8);
-  font-weight: bold;
-}
-
-#stats {
-  font-size: 0.85rem;
-  color: #00f0ff;
-  letter-spacing: 1px;
-  margin-top: 8px;
-  text-shadow: 0 0 8px #00f0ff;
-}
-
-/* --- CATEGORY FILTERS --- */
-.cat-btn {
-  background: rgba(18, 18, 22, 0.85);
-  border: 1px solid #ff007f;
-  color: #b8b8b8;
-  padding: 8px 14px;
-  font-family: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 0 6px rgba(255, 0, 127, 0.3);
-  touch-action: manipulation;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 !important;
-  white-space: nowrap !important;
-  vertical-align: middle !important;
-}
-
-.cat-btn:hover {
-  color: #ffffff;
-  border-color: #00f0ff;
-  box-shadow: 0 0 12px #ff007f;
-}
-
-.cat-btn.active {
-  background: #ff007f;
-  color: #ffffff;
-  border-color: #ffffff;
-  box-shadow: 0 0 16px #ff007f, 0 0 25px rgba(255, 0, 127, 0.8);
-  font-weight: bold;
-}
-
-/* --- CARD CONTAINER & LAYOUT --- */
-#card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 22px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* --- BASE ITEM CARD --- */
-.item-card {
-  background: rgba(18, 18, 22, 0.85);
-  backdrop-filter: blur(10px);
-  border-radius: 8px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  contain-intrinsic-size: 1px 220px;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  will-change: transform, opacity;
-}
-
-.item-card:hover {
-  transform: translateY(-4px);
-}
-
-/* --- CARD HEADER & BADGES --- */
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.card-title {
-  color: #ffffff;
-  font-size: 1.15rem;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  line-height: 1.3;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-}
-
-.card-badges {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: 100%;
-}
-
-.badge {
-  font-size: 0.75rem;
-  padding: 3px 8px;
-  border-radius: 3px;
-  text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 1px;
-  max-width: 100%;
-  word-break: break-word;
-  white-space: normal;
-  box-sizing: border-box;
-}
-
-.badge-video {
-  background: rgba(112, 0, 255, 0.4);
-  color: #e0b3ff;
-  border: 1px solid #7000ff;
-  box-shadow: 0 0 8px rgba(112, 0, 255, 0.6);
-}
-
-.badge-audio {
-  background: rgba(0, 240, 255, 0.3);
-  color: #a6f8ff;
-  border: 1px solid #00f0ff;
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
-}
-
-.badge-video---audio,
-.badge-video-audio {
-  background-color: #9c27b0;
-  color: #ffffff;
-  border: 1px solid #e040fb;
-  box-shadow: 0 0 8px rgba(224, 64, 251, 0.4);
-}
-
-.badge-format {
-  background: rgba(255, 230, 0, 0.2) !important;
-  color: #ffe600 !important;
-  border: 1px solid #ffe600 !important;
-  box-shadow: 0 0 6px rgba(255, 230, 0, 0.4) !important;
-}
-
-/* --- CARD METADATA & NOTES --- */
-.card-meta {
-  font-size: 0.88rem;
-  color: #a0a0a0;
-  line-height: 1.5;
-}
-
-.card-cast, .card-notes {
-  font-size: 0.85rem;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 8px;
-  border-radius: 4px;
-  border-left: 2px solid #7000ff;
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-.card-cast strong, .card-notes strong {
-  color: #00f0ff;
-  text-shadow: 0 0 6px rgba(0, 240, 255, 0.6);
-}
-
-/* --- CARD ACTIONS --- */
-.card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 10px;
-  justify-content: flex-end;
-}
-
-.add-cart-btn, .copy-card-btn {
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-family: inherit;
-  font-size: 0.78rem;
-  font-weight: bold;
-  cursor: pointer;
-  border: 1px solid #00f0ff;
-  background: rgba(0, 240, 255, 0.1);
-  color: #00f0ff;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  box-shadow: 0 0 6px rgba(0, 240, 255, 0.3);
-  transition: all 0.15s ease;
-  touch-action: manipulation;
-}
-
-.add-cart-btn:hover, .copy-card-btn:hover {
-  background: #00f0ff;
-  color: #000000;
-  box-shadow: 0 0 14px #00f0ff;
-}
-
-.add-cart-btn.in-cart {
-  background-color: #10b981 !important;
-  color: #ffffff !important;
-  border-color: #10b981 !important;
-  box-shadow: 0 0 12px #10b981 !important;
-}
-
-.copy-card-btn.copied {
-  background: #00ff66 !important;
-  color: #000000 !important;
-  border-color: #00ff66 !important;
-  box-shadow: 0 0 15px #00ff66 !important;
-}
-
-.add-cart-btn:active, .copy-card-btn:active {
-  transform: scale(0.96);
-}
-
-/* --- STANDARD BASE MODE NFT BADGES & CARDS --- */
-.nft-active {
-  color: #ffffff;
-  font-weight: bold;
-  background: rgba(220, 0, 30, 0.45);
-  padding: 4px 10px;
-  border: 2px solid #ff1a3c;
-  display: inline-block;
-  margin-top: 8px;
-  letter-spacing: 1.5px;
-  text-shadow: 
-    0 0 4px #ffffff,
-    0 0 10px #ff0033,
-    0 0 20px #C4001A,
-    0 0 30px #ff0033;
-  animation: badge-hyper-glow 1.2s ease-in-out infinite alternate;
-}
-
-@keyframes badge-hyper-glow {
-  0% {
-    border-color: #C4001A;
-    box-shadow: 0 0 8px #C4001A, 0 0 15px rgba(255, 0, 51, 0.6), inset 0 0 8px rgba(255, 0, 51, 0.4);
-  }
-  100% {
-    border-color: #ff4d6d;
-    box-shadow: 0 0 15px #ff0033, 0 0 30px #ff0033, 0 0 45px #C4001A, inset 0 0 12px #ff0033;
-  }
-}
-
-.nft-passed {
-  color: #d8d8d8;
-  font-size: 0.82rem;
-  padding: 3px 6px;
-  border: 1px solid #C0C0C0;
-  background: rgba(192, 192, 192, 0.12);
-  display: inline-block;
-  margin-top: 6px;
-  opacity: 0.9;
-  box-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
-}
-
-.item-card.card-nft-active {
-  border: 2px solid #ff0033;
-  animation: ultra-nft-pulse 1.4s ease-in-out infinite alternate;
-}
-
-.item-card.card-nft-active:hover {
-  animation: none;
-  border-color: #ff007f;
-  box-shadow: 0 0 20px #ff007f, 0 0 40px #ff007f, 0 0 60px #ff0033, inset 0 0 15px #ff007f;
-}
-
-@keyframes ultra-nft-pulse {
-  0% {
-    border-color: #C4001A;
-    box-shadow: 0 0 10px rgba(196, 0, 26, 0.7), 0 0 20px rgba(196, 0, 26, 0.4), inset 0 0 8px rgba(196, 0, 26, 0.3);
-  }
-  50% {
-    border-color: #ff1a3c;
-    box-shadow: 0 0 20px #ff0033, 0 0 35px rgba(255, 0, 51, 0.8), inset 0 0 14px rgba(255, 0, 51, 0.5);
-  }
-  100% {
-    border-color: #ff6680;
-    box-shadow: 0 0 25px #ff0033, 0 0 50px #C4001A, 0 0 70px rgba(255, 0, 51, 0.9), inset 0 0 18px #ff3355;
-  }
-}
-
-/* --- BASE SITE RAINBOW HOVER GLOW --- */
-.item-card.card-standard {
-  border: 2px solid #00f0ff;
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-  animation: ultra-standard-pulse 2.8s ease-in-out infinite alternate;
-}
-
-.item-card.card-standard:hover {
-  animation: rainbow-hover-glow 1.5s linear infinite;
-}
-
-@keyframes ultra-standard-pulse {
-  0% {
-    border-color: #00f0ff;
-    box-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 20px rgba(0, 240, 255, 0.3);
-  }
-  50% {
-    border-color: #a100ff;
-    box-shadow: 0 0 20px #a100ff, 0 0 35px rgba(161, 0, 255, 0.7);
-  }
-  100% {
-    border-color: #00f0ff;
-    box-shadow: 0 0 25px #00f0ff, 0 0 45px rgba(0, 240, 255, 0.8);
-  }
-}
-
-@keyframes rainbow-hover-glow {
-  0% { border-color: #00ff66; box-shadow: 0 0 15px #00ff66, 0 0 30px #00ff66; }
-  25% { border-color: #ffe600; box-shadow: 0 0 15px #ffe600, 0 0 30px #ffe600; }
-  50% { border-color: #ff007f; box-shadow: 0 0 15px #ff007f, 0 0 30px #ff007f; }
-  75% { border-color: #00f0ff; box-shadow: 0 0 15px #00f0ff, 0 0 30px #00f0ff; }
-  100% { border-color: #00ff66; box-shadow: 0 0 15px #00ff66, 0 0 30px #00ff66; }
-}
-
-/* --- RULES BOX STYLING --- */
-.rules-box {
-  background: rgba(18, 18, 22, 0.85);
-  border: 1px solid #7000ff;
-  border-radius: 8px;
-  padding: 15px 20px;
-  max-width: 600px;
-  margin: 0 auto 20px auto;
-  box-shadow: 0 0 15px rgba(112, 0, 255, 0.3);
-  text-align: left;
-}
-
-.rules-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
-  margin-bottom: 12px !important;
-}
-
-.rules-header h2, .rules-box h2 {
-  color: #00f0ff;
-  font-size: 1.1rem;
-  margin: 0 !important;
-  padding: 0 !important;
-  line-height: 1.2 !important;
-  text-transform: uppercase;
-  text-shadow: 0 0 5px #00f0ff;
-}
-
-.rules-box p, .rules-box li {
-  font-size: 0.85rem;
-  color: #d0d0d0;
-  line-height: 1.5;
-}
-
-.rules-box ul {
-  margin-top: 8px;
-  padding-left: 20px;
-}
-
-.rules-box code {
-  color: #ff007f;
-  background: rgba(255, 0, 127, 0.15);
-  padding: 2px 6px;
-  border-radius: 3px;
-  border: 1px solid rgba(255, 0, 127, 0.4);
-}
-
-/* ============================================================
-   FLOATING BUTTONS (STANDARD & BASE STATE)
-============================================================ */
-
-#scroll-top-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: fixed !important;
-  bottom: 80px !important; /* Stacked directly above the Trade Request button */
-  right: 20px !important;
-  z-index: 99999 !important; /* Higher than drawer & overlay */
-  padding: 8px 14px !important;
-  font-family: 'Courier New', monospace !important;
-  font-weight: bold !important;
-  font-size: 0.8rem !important;
-  color: #00f0ff !important;
-  background: #0f0f1a !important;
-  border: 2px solid #00f0ff !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5) !important;
-  cursor: pointer !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
-
-#scroll-top-btn:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.9) !important;
-  background: #1a1a2e !important;
-}
-
-#cart-toggle-btn, .cart-toggle-btn, .floating-cart-btn, .trade-request-btn {
-  position: fixed !important;
-  bottom: 20px !important;
-  right: 20px !important;
-  z-index: 9998 !important;
-  transform: translateZ(0);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 50%, #06b6d4 100%);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 12px 22px;
-  border-radius: 50px;
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4), 0 0 15px rgba(99, 102, 241, 0.3);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+  <!-- Set browser tab title -->
+  <title>Better to Reign in Hell than Serve in Heaven</title>
+  <!-- Transparent PNG Favicon -->
+  <link rel="icon" type="image/png" href="snake-apple.png" />
 
-.cart-toggle-btn:hover {
-  transform: translateY(-4px) scale(1.03) translateZ(0);
-  box-shadow: 0 12px 25px rgba(59, 130, 246, 0.6), 0 0 25px rgba(6, 182, 212, 0.5);
-}
+  <!-- Prevent theme-flash on load (Defaults to Paradise Lost) -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('paradiseThemeActive');
+      if (savedTheme !== 'false') {
+        document.documentElement.setAttribute('data-theme', 'paradise-lost');
+        document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
+      }
+    })();
+  </script>
 
-.cart-toggle-btn .cart-badge {
-  background: #ffffff;
-  color: #4f46e5;
-  border-radius: 999px;
-  padding: 2px 9px;
-  font-size: 0.85rem;
-  font-weight: 800;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
+  <!-- Foolproof JS Text-Targeting Script for Dynamic Cards -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new MutationObserver(() => {
+        if (document.documentElement.getAttribute('data-theme') === 'paradise-lost') {
+          document.querySelectorAll('.card p, .bootleg-card p').forEach(p => {
+            if (p.innerHTML.includes('CAST:') && !p.innerHTML.includes('infernal-label-cast')) {
+              p.innerHTML = p.innerHTML.replace('CAST:', '<span class="infernal-label-cast">CAST:</span>');
+            }
+            if (p.innerHTML.includes('MASTER NOTES:') && !p.innerHTML.includes('infernal-label-notes')) {
+              p.innerHTML = p.innerHTML.replace('MASTER NOTES:', '<span class="infernal-label-notes">MASTER NOTES:</span>');
+            }
+            if (p.innerHTML.includes('TRADING NOTES:') && !p.innerHTML.includes('infernal-label-notes')) {
+              p.innerHTML = p.innerHTML.replace('TRADING NOTES:', '<span class="infernal-label-notes">TRADING NOTES:</span>');
+            }
+          });
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  </script>
 
-/* ============================================================
-   TRADE REQUEST DRAWER & OVERLAY
-============================================================ */
-
-.drawer-overlay {
-  position: fixed;
-  inset: 0;
-  backdrop-filter: blur(4px);
-  background-color: rgba(15, 23, 42, 0.6);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 1000;
-}
-
-.drawer-overlay.open {
-  opacity: 1;
-  visibility: visible;
-}
-
-#cart-drawer, .cart-drawer, #cart-panel, .cart-panel, #trade-request-panel, .trade-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  max-height: 100vh;
-  width: 380px;
-  max-width: 85vw;
-  background: #12131C;
-  color: #E2E8F0;
-  z-index: 1001;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease-in-out;
-  box-shadow: -15px 0 35px rgba(0, 0, 0, 0.6);
-  box-sizing: border-box;
-}
-
-#cart-drawer:not(.open), 
-.cart-drawer:not(.open), 
-#cart-panel:not(.open), 
-.cart-panel:not(.open),
-.trade-drawer:not(.open) {
-  transform: translateX(100%);
-}
-
-#cart-drawer.open, 
-.cart-drawer.open, 
-#cart-panel.open, 
-.cart-panel.open,
-.trade-drawer.open {
-  transform: translateX(0);
-}
-
-.trade-drawer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 5px;
-  height: 100%;
-  background: linear-gradient(180deg, #6366f1, #ec4899, #3b82f6);
-  box-shadow: 0 0 12px rgba(236, 72, 153, 0.8);
-}
-
-.drawer-header {
-  padding: 20px 24px;
-  background-color: #1A1C29;
-  border-bottom: 1px solid #2D3748;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.drawer-header h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #F7FAFC;
-}
-
-.close-drawer-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #A0AEC0;
-}
-
-.close-drawer-btn:hover {
-  color: #FFFFFF;
-}
-
-.cart-summary {
-  padding: 10px 24px;
-  background-color: #171923;
-  border-bottom: 1px solid #2D3748;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #A0AEC0;
-  display: flex;
-  gap: 16px;
-}
-
-.drawer-body,
-.cart-items-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px 20px;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-}
-
-.drawer-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-.drawer-body::-webkit-scrollbar-track {
-  background: #0f0f1a;
-}
-
-.drawer-body::-webkit-scrollbar-thumb {
-  background: #00f0ff;
-  border-radius: 4px;
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
-}
-
-.drawer-body::-webkit-scrollbar-thumb:hover {
-  background: #ff007f;
-}
-
-.empty-cart-msg {
-  color: #A0AEC0;
-  text-align: center;
-  margin-top: 40px;
-  font-size: 0.95rem;
-}
-
-.cart-item-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-  background-color: #1A1C2A;
-  border-radius: 10px;
-  border: 1px solid #2D3748;
-  border-left: 4px solid #6366F1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-}
-
-.cart-item-row:hover {
-  transform: translateX(-3px);
-  border-left-color: #ec4899;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
-}
-
-.cart-item-details {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.cart-item-details strong {
-  color: #EDF2F7;
-  font-size: 0.95rem;
-}
-
-.cart-item-details span {
-  color: #A0AEC0;
-  font-size: 0.8rem;
-}
-
-.remove-cart-item {
-  background: #2D1A24;
-  border: 1px solid #4A1D24;
-  color: #ef4444;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.remove-cart-item:hover {
-  background: #ef4444;
-  color: #ffffff;
-  transform: scale(1.1);
-}
-
-.drawer-footer {
-  flex-shrink: 0;
-  background-color: #171923;
-  border-top: 1px solid #2D3748;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.drawer-footer .btn,
-.drawer-footer button,
-.drawer-footer a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 14px;
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 0.85rem;
-  font-weight: 700;
-  white-space: nowrap;
-  text-decoration: none;
-  cursor: pointer;
-  margin: 0;
-}
-
-.email-trade-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-  transition: all 0.2s ease;
-}
-
-.email-trade-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
-}
-
-.copy-trade-btn {
-  background: #2D3748;
-  color: #EDF2F7;
-  border: 1px solid #4A5568;
-}
-
-.copy-trade-btn:hover {
-  background: #3A475C;
-}
-
-.clear-cart-btn {
-  background: transparent;
-  color: #FC8181;
-  border: 1px solid transparent;
-}
-
-.clear-cart-btn:hover {
-  background: rgba(254, 178, 178, 0.1);
-}
-
-/* ============================================================
-   CYBERPUNK NEON SCROLLBAR
-============================================================ */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0b0c10;
-  border-left: 1px solid rgba(112, 0, 255, 0.3);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #7000ff;
-  border-radius: 2px;
-  box-shadow: 0 0 10px #7000ff;
-  border: 1px solid #00f0ff;
-  transition: all 0.2s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #00f0ff;
-  box-shadow: 0 0 15px #00f0ff, 0 0 25px #00f0ff;
-}
-
-::-webkit-scrollbar-thumb:active {
-  background: #ff007f;
-  box-shadow: 0 0 15px #ff007f, 0 0 30px #ff007f;
-}
-
-/* ==========================================
-   Y2K "LASAGNA APPROVED" BADGE
-   ========================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
-
-.y2k-approved-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 18px;
-  font-family: 'Orbitron', 'Arial Black', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #ffffff;
+  <!-- Non-blocking typography preloads for Paradise Lost -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap"></noscript>
   
-  /* Metallic Gel / Chrome Background */
-  background: linear-gradient(135deg, #11111d 0%, #220033 50%, #001122 100%);
-  border: 2px solid #00f0ff;
-  border-radius: 20px; /* Bubble capsule shape */
+  <!-- Load PapaParse to read CSV files -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   
-  /* Y2K Holographic Neon Glow & Shadow */
-  box-shadow: 
-    0 0 10px rgba(0, 240, 255, 0.6),
-    0 0 20px rgba(255, 0, 128, 0.4),
-    inset 0 0 8px rgba(255, 255, 255, 0.3);
+  <!-- Cache-buster update -->
+  <link rel="stylesheet" href="style.css?v=8.0" />
+</head>
+<body>
+  <header class="container">
+    <div class="header-top-row">
+      <!-- PARADISE LOST GATEWAY TRIGGER -->
+      <button id="paradise-btn" type="button" class="abandon-btn" onclick="triggerParadiseLost()">
+        ❖ Legacy Model
+      </button>
+    </div>
+
+    <h1 class="votive-glow"><span class="header-emoji">🎭</span> My Trading Collection</h1>
+    
+    <div class="rules-box">
+      <div class="rules-box-inner">
+        
+        <div class="rules-header">
+          <h2>Trading Rules & Contact</h2>
+          <div class="lasagna-relic-seal y2k-approved-badge">
+            <span>✦</span>
+            LASAGNA APPROVED
+            <span>✦</span>
+          </div>
+        </div>
+        
+        <div class="latin-epigraph">✦ In Principio Erat Verbum ✦</div>
+
+        <p><strong>Contact:</strong> <code>tradingtreelost@gmail.com</code></p>
+        
+        <ul>
+          <li>Standard trading ratios apply (1 Video = 2 Audios).</li>
+          <li>Updated every 3-4 days.</li>
+          <li>Respect all NFT dates and master restrictions.</li>
+          <li>Bikinibottomday's bootlegs are only to be traded via email.</li>
+          <li><strong>Follow-Up Policy:</strong> Please wait at least 7 days before sending follow-up emails for trades or gift requests. Life and hardware issues happen!</li>
+          <li>Will not gift Heathers or Six bootlegs at all</li>
+        </ul>
+
+        <!-- CIRCULAR INFERNAL PALETTE DRAWER -->
+        <div class="infernal-palette-wrapper">
+          <button id="palette-toggle-btn" class="sigil-trigger" type="button" aria-label="Toggle Nine Circles">
+            <span class="sigil-icon">🜏</span>
+            <span class="sigil-label">UNVEIL THE NINE CIRCLES</span>
+          </button>
+
+          <div id="infernal-palette" class="palette-compact closed">
+            <div class="palette-inner">
+              <div class="palette-header">
+                <h3>🜏 THE NINE CIRCLES OF TRADING HELL 🜏</h3>
+                <p>Instant block criteria for bad-faith traders</p>
+              </div>
+
+              <div class="circles-grid">
+                <div class="circle-sector">
+                  <h4>I. LIMBO (THE UNFORMATTED)</h4>
+                  <p><strong>Offense:</strong> Zero-effort emails missing basic show dates, cast details, or trade lists.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Trapped forever writing draft emails that never send.</p>
+                </div>
+
+                <div class="circle-sector">
+                  <h4>II. LUST (THE LISTLESS BEGGAR)</h4>
+                  <p><strong>Offense:</strong> Entitled "I don't have a list but give me this or I'll die" begging emails.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Endless auto-reply notifications reading Request Denied.</p>
+                </div>
+
+                <div class="circle-sector">
+                  <h4>III. GLUTTONY (THE FORMAT BUTCHER)</h4>
+                  <p><strong>Offense:</strong> Stripping VOB menus/Smalls, hiding file sizes, and dumping unorganized files.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Manually rebuilding corrupted folder trees in freezing mud.</p>
+                </div>
+
+                <div class="circle-sector">
+                  <h4>IV. GREED (THE RATIO HOG)</h4>
+                  <p><strong>Offense:</strong> Demanding absurd ratios for common bootlegs while hiding trade details.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Pushing dead hard drives uphill forever.</p>
+                </div>
+
+                <div class="circle-sector">
+                  <h4>V. WRATH (THE HARASSER)</h4>
+                  <p><strong>Offense:</strong> Sending impatient pings under 7 days, spamming DMs, or emailing threats.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Submerged in the Styx while progress bars freeze forever at 99%.</p>
+                </div>
+
+                <div class="circle-sector">
+                  <h4>VI. HERESY (THE NFT IGNORER)</h4>
+                  <p><strong>Offense:</strong> Harassing non-masters for active NFT/NFT(F) recordings or bypassing dates.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Encased in burning iron tombs lined with degraded magnetic tape.</p>
+                </div>
+
+                <div class="circle-sector">
+                  <h4>VII. VIOLENCE (THE LEAKER)</h4>
+                  <p><strong>Offense:</strong> Posting master-restricted files to social media, driving masters to quit.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Plunged into boiling blood where every link triggers a copyright strike.</p>
+                </div>
+
+                <div class="circle-sector">
+                  <h4>VIII. FRAUD (THE SLIME IMPOSTER)</h4>
+                  <p><strong>Offense:</strong> Using "slime tutorial" slang, screen recordings, or public YouTube links.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Cast into boiling pitch and prodded by demons with snapped cables.</p>
+                </div>
+
+                <div class="circle-sector worst-sector">
+                  <h4>IX. TREACHERY (THE BETRAYER)</h4>
+                  <p><strong>Offense:</strong> Taking high-quality lossless master files and knowingly sending back dead links, re-encoded YouTube garbage, or corrupted archives in return.</p>
+                  <p class="sentence"><strong>Sentence:</strong> Encased to the chin in frozen Cocytus, permanently blacklisted with 0 kb/s transfer speeds across all private networks.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="controls">
+      <input type="text" id="search-input" placeholder="Search the Hall of Pandemonium (show, cast, date)..." />
+      
+      <!-- Encora CSV Comparison Tool -->
+      <div class="encora-compare-box">
+        <label for="encora-file-input" class="encora-upload-btn">
+          📜 Compare Encora CSV
+        </label>
+        <input type="file" id="encora-file-input" accept=".csv" style="display: none;" />
+        <span id="encora-status-msg" class="encora-status"></span>
+        <button type="button" id="clear-encora-btn" class="clear-encora-btn" style="display: none;">✕ Reset Filter</button>
+      </div>
+      
+      <!-- Primary Format Filters -->
+      <div class="filters">
+        <button type="button" class="filter-btn active" data-filter="all">All Formats</button>
+        <button type="button" class="filter-btn" data-filter="Video">Videos</button>
+        <button type="button" class="filter-btn" data-filter="Audio">Audios</button>
+      </div>
+
+      <!-- Category Location Filters -->
+      <div class="filters category-filters">
+        <button type="button" class="cat-btn active" data-category="all">All Locations</button>
+        <button type="button" class="cat-btn" data-category="broadway">Broadway</button>
+        <button type="button" class="cat-btn" data-category="off-broadway">Off-Broadway</button>
+        <button type="button" class="cat-btn" data-category="west end">West End</button>
+      </div>
+    </div>
+
+    <!-- Visual Divider -->
+    <div class="abyss-divider" style="display: flex; align-items: center; justify-content: center; margin: 40px 0 20px 0; gap: 15px;">
+      <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(255,215,0,0.8), rgba(255,69,0,0.8), transparent);"></div>
+      <span class="abyss-label" style="font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 2px; color: #ffaa00; text-shadow: 0 0 8px #ff4500; text-transform: uppercase;">
+        ✦ THE GREAT CHASM — ENTER PANDEMONIUM ✦
+      </span>
+      <div style="flex-grow: 1; height: 1px; background: linear-gradient(-90deg, rgba(255,215,0,0.8), rgba(255,69,0,0.8), transparent);"></div>
+    </div>
+
+    <div id="stats">Loading collection...</div>
+    <div id="card-container"></div>
+
+    <!-- Scroll Sentinel for Infinite Loading -->
+    <div id="scroll-sentinel" style="height: 20px; margin-top: 20px;"></div>
+  </main>
+
+  <!-- Scroll to Top Floating Button -->
+  <button type="button" id="scroll-top-btn" title="Back to Top">⬆ ASCEND</button>
+
+  <!-- Floating Trade Cart Trigger Button -->
+  <button type="button" id="cart-toggle-btn" class="cart-toggle-btn">
+    🏛️ Trade Request (<span id="cart-count">0</span>)
+  </button>
+
+  <!-- Slide-out Trade Drawer -->
+  <div id="trade-drawer" class="trade-drawer">
+    <div class="drawer-header">
+      <h2>🎭 Your Trade Request</h2>
+      <button type="button" id="close-drawer-btn" class="close-btn">&times;</button>
+    </div>
+    
+    <div class="drawer-body">
+      <div id="cart-items-container">
+        <p class="empty-cart-msg">No items added yet. Click "+ Add to Trade" on any item card!</p>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <div id="cart-summary-stats" class="cart-summary-stats">
+        Videos: <span id="cart-video-count">0</span> | Audios: <span id="cart-audio-count">0</span>
+      </div>
+      <div class="drawer-actions">
+        <button type="button" id="copy-trade-btn" class="action-btn">📋 Copy Request</button>
+        <button type="button" id="email-trade-btn" class="action-btn email-btn">✉️ Email Request</button>
+        <button type="button" id="clear-cart-btn" class="clear-btn">Clear All</button>
+      </div>
+    </div>
+  </div>
   
-  position: relative;
-  overflow: hidden;
-  cursor: default;
-  user-select: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  <div id="drawer-overlay" class="drawer-overlay"></div>
+
+  <footer class="y2k-watermark">
+    <div class="latin-epigraph">Descendit Ad Infernos • Facta Est Lux</div>
+    made by <span>paradise lost</span> (fka ananas)
+  </footer>
+
+  <script src="script.js?v=8.0"></script>
   
-  /* Floating Animation */
-  animation: y2k-float 3s ease-in-out infinite alternate;
-}
-
-/* Chrome Gradient Text */
-.y2k-approved-badge span {
-  background: linear-gradient(180deg, #ffffff 0%, #00f0ff 45%, #ff007f 80%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.8));
-}
-
-/* Y2K Star / Sparkle Icon */
-.y2k-approved-badge::before {
-  content: '★';
-  font-size: 1rem;
-  color: #ff007f;
-  text-shadow: 0 0 5px #ff007f, 0 0 10px #00f0ff;
-}
-
-.y2k-approved-badge::after {
-  content: '★';
-  font-size: 1rem;
-  color: #00f0ff;
-  text-shadow: 0 0 5px #00f0ff, 0 0 10px #ff007f;
-}
-
-/* Hover Effect */
-.y2k-approved-badge:hover {
-  transform: scale(1.08) rotate(-1deg);
-  box-shadow: 
-    0 0 15px rgba(0, 240, 255, 0.9),
-    0 0 30px rgba(255, 0, 128, 0.7),
-    inset 0 0 12px rgba(255, 255, 255, 0.6);
-}
-
-/* Floating Keyframe Animation */
-@keyframes y2k-float {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-4px);
-  }
-}
-
-/* ==========================================
-   Y2K WATERMARK (FOOTER)
-   ========================================== */
-
-.y2k-watermark {
-  text-align: center;
-  padding: 25px 0 15px 0;
-  font-family: 'Courier New', monospace;
-  font-size: 0.8rem;
-  font-weight: bold;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #666688;
-  opacity: 0.75;
-  user-select: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Glowing accent on 'ananas' */
-.y2k-watermark span {
-  color: #00f0ff;
-  text-shadow: 0 0 5px rgba(0, 240, 255, 0.6);
-}
-
-/* Subtle glow up when hovered */
-.y2k-watermark:hover {
-  opacity: 1;
-}
-
-/* ==========================================
-   ENCORA & UTILITY COMPONENTS
-   ========================================== */
-
-.encora-compare-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 15px 0;
-}
-
-.encora-upload-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border: 1px solid #ff007f; /* Neon pink border matching your filter buttons */
-  border-radius: 6px;
-  background-color: transparent;
-  color: #ff007f;
-  font-family: inherit;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 0 5px rgba(255, 0, 127, 0.3);
-}
-
-.encora-upload-btn:hover {
-  background-color: rgba(255, 0, 127, 0.15);
-  box-shadow: 0 0 10px rgba(255, 0, 127, 0.7);
-}
-
-/* Eyestrain Toggle Button Style */
-.eyestrain-toggle-btn {
-  background: #111;
-  color: #00ff41;
-  border: 1px solid #00ff41;
-  padding: 6px 12px;
-  font-family: monospace;
-  cursor: pointer;
-  margin-top: 10px;
-  border-radius: 4px;
-}
-
-.eyestrain-toggle-btn:hover {
-  background: #00ff41;
-  color: #000;
-}
-
-/* NO EYESTRAIN / ACCESSIBILITY MODE OVERRIDES */
-body.no-eyestrain {
-  animation: none !important;
-  text-shadow: none !important;
-}
-
-/* Disable flickering, scanlines, and high-frequency effects */
-body.no-eyestrain .crt-scanlines,
-body.no-eyestrain .glitch-effect,
-body.no-eyestrain ::before,
-body.no-eyestrain ::after {
-  animation: none !important;
-  opacity: 0.1 !important;
-  text-shadow: none !important;
-  box-shadow: none !important;
-}
-
-/* Keep text clear and easy to read */
-body.no-eyestrain * {
-  text-shadow: none !important;
-  animation: none !important;
-}
-
-#toggle-eyestrain-btn {
-  position: absolute;
-  top: 15px;
-  left: 20px;
-  background: rgba(10, 10, 20, 0.85);
-  color: #00f3ff;
-  border: 1px solid #00f3ff;
-  border-radius: 4px;
-  padding: 6px 12px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
-  transition: all 0.2s ease-in-out;
-  z-index: 1000;
-}
-
-#toggle-eyestrain-btn:hover {
-  background: #00f3ff;
-  color: #05050a;
-  box-shadow: 0 0 15px rgba(0, 243, 255, 0.8);
-}
-
-/* ===================================================
-   PARADISE LOST (STRICTLY SCOPED - LEAVES CYBERPUNK INTACT)
-   =================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=IM+Fell+English:ital,wght@0,400;0,700;1,400&display=swap');
-
-/* 1. CANVAS & FONTS */
-body.paradise-lost,
-body[data-theme="paradise-lost"] {
-  --bg-main: #030203 !important;
-  --text-main: #bfae99 !important;
-  --accent-color: #8c1414 !important;
-  --gold-accent: #c29b38 !important;
-  --border-color: #3b0a0a !important;
-  --font-family: 'IM Fell English', 'Times New Roman', serif !important;
-
-  background-color: #030203 !important;
-  background-image: 
-    radial-gradient(circle at 50% 10%, #2b070a 0%, #0a0304 50%, #020102 95%),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E") !important;
-  background-attachment: fixed !important;
-  color: #bfae99 !important;
-  font-family: 'IM Fell English', 'Times New Roman', serif !important;
-}
-
-/* Strip glows globally in Paradise Lost */
-body[data-theme="paradise-lost"] *,
-body.paradise-lost * {
-  text-shadow: none !important;
-  box-shadow: none !important;
-  filter: none !important;
-}
-
-/* 2. HEADINGS & TITLES */
-body.paradise-lost h1,
-body.paradise-lost h2,
-body.paradise-lost h3,
-body.paradise-lost [class*="title"],
-body[data-theme="paradise-lost"] h1,
-body[data-theme="paradise-lost"] h2,
-body[data-theme="paradise-lost"] h3,
-body[data-theme="paradise-lost"] [class*="title"] {
-  font-family: 'Cinzel Decorative', serif !important;
-  color: #c29b38 !important;
-  letter-spacing: 2px !important;
-  text-shadow: none !important;
-}
-
-/* 3. CONTAINERS, BOXES & CARDS */
-body.paradise-lost fieldset,
-body.paradise-lost div[class*="rules"],
-body.paradise-lost div[class*="contact"],
-body.paradise-lost div[class*="box"],
-body.paradise-lost .trade-card,
-body.paradise-lost div[class*="card"],
-body[data-theme="paradise-lost"] fieldset,
-body[data-theme="paradise-lost"] div[class*="rules"],
-body[data-theme="paradise-lost"] div[class*="contact"],
-body[data-theme="paradise-lost"] div[class*="box"],
-body[data-theme="paradise-lost"] .trade-card,
-body[data-theme="paradise-lost"] div[class*="card"] {
-  background: linear-gradient(180deg, #0a0406 0%, #050203 100%) !important;
-  border: 1px solid #3b0a0a !important;
-  outline: 2px double #c29b38 !important;
-  outline-offset: -5px !important;
-  box-shadow: none !important;
-  border-radius: 0px !important;
-  padding: 18px !important;
-  transition: all 0.3s ease !important;
-}
-
-body.paradise-lost .trade-card:hover,
-body.paradise-lost div[class*="card"]:hover,
-body[data-theme="paradise-lost"] .trade-card:hover,
-body[data-theme="paradise-lost"] div[class*="card"]:hover {
-  border-color: #8c1414 !important;
-  outline-color: #c29b38 !important;
-  box-shadow: 0 4px 20px rgba(140, 20, 20, 0.3) !important;
-}
-
-/* Strip inner child borders and outlines inside cards */
-body.paradise-lost .trade-card *,
-body.paradise-lost div[class*="card"] *,
-body[data-theme="paradise-lost"] .trade-card *,
-body[data-theme="paradise-lost"] div[class*="card"] * {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-}
-
-/* Restore Badges / Tags inside Cards for Paradise Lost */
-body.paradise-lost .trade-card .badge,
-body.paradise-lost .trade-card .format-tag,
-body.paradise-lost .trade-card span,
-body.paradise-lost .trade-card [class*="tag"],
-body[data-theme="paradise-lost"] .trade-card .badge,
-body[data-theme="paradise-lost"] .trade-card .format-tag,
-body[data-theme="paradise-lost"] .trade-card span,
-body[data-theme="paradise-lost"] [class*="tag"] {
-  background: #170507 !important;
-  color: #c29b38 !important;
-  border: 1px solid #3b0a0a !important;
-  font-family: 'Cinzel Decorative', serif !important;
-  font-size: 0.65rem !important;
-  letter-spacing: 0.5px !important;
-  padding: 3px 8px !important;
-}
-
-/* 4. OVERRIDE FLOATING BUTTONS, BADGES & SEALS IN PARADISE LOST */
-body.paradise-lost button, 
-body.paradise-lost .btn, 
-body.paradise-lost [class*="btn"], 
-body.paradise-lost [class*="badge"], 
-body.paradise-lost [class*="approved"], 
-body.paradise-lost .lasagna-relic-seal,
-body.paradise-lost #top-btn, 
-body.paradise-lost [class*="top"],
-body.paradise-lost [class*="trade-request"],
-body[data-theme="paradise-lost"] button, 
-body[data-theme="paradise-lost"] .btn, 
-body[data-theme="paradise-lost"] [class*="btn"], 
-body[data-theme="paradise-lost"] [class*="badge"], 
-body[data-theme="paradise-lost"] [class*="approved"], 
-body[data-theme="paradise-lost"] .lasagna-relic-seal,
-body[data-theme="paradise-lost"] #top-btn, 
-body[data-theme="paradise-lost"] [class*="top"],
-body[data-theme="paradise-lost"] [class*="trade-request"] {
-  background: #080305 !important;
-  color: #c29b38 !important;
-  border: 1px solid #735a22 !important;
-  outline: 1px solid #c29b38 !important;
-  outline-offset: -3px !important;
-  border-radius: 0px !important;
-  font-family: 'Cinzel Decorative', serif !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-
-body.paradise-lost [class*="approved"] *,
-body.paradise-lost [class*="top"] *,
-body[data-theme="paradise-lost"] [class*="approved"] *,
-body[data-theme="paradise-lost"] [class*="top"] * {
-  color: #c29b38 !important;
-  text-shadow: none !important;
-}
-
-/* Stats Counter Override */
-body.paradise-lost #stats,
-body.paradise-lost .stats-count,
-body[data-theme="paradise-lost"] #stats,
-body[data-theme="paradise-lost"] .stats-count {
-  color: #c29b38 !important;
-  text-shadow: none !important;
-}
-
-/* 5. SEARCH BAR & TYPOGRAPHY POLISH IN PARADISE LOST */
-body.paradise-lost input[type="text"], 
-body.paradise-lost #search-input,
-body[data-theme="paradise-lost"] input[type="text"], 
-body[data-theme="paradise-lost"] #search-input {
-  background: #060304 !important;
-  border: 1px solid #735a22 !important;
-  color: #bfae99 !important;
-  font-family: 'IM Fell English', serif !important;
-  font-style: italic !important;
-  letter-spacing: 0.5px !important;
-  box-shadow: none !important;
-}
-
-body.paradise-lost input[type="text"]::placeholder,
-body[data-theme="paradise-lost"] input[type="text"]::placeholder {
-  color: #63503d !important;
-}
-
-/* Drop Cap on Rules Box */
-body.paradise-lost div[class*="rules"] p::first-letter,
-body.paradise-lost fieldset p::first-letter,
-body[data-theme="paradise-lost"] div[class*="rules"] p::first-letter,
-body[data-theme="paradise-lost"] fieldset p::first-letter {
-  font-family: 'Cinzel Decorative', serif !important;
-  font-size: 2.2rem !important;
-  color: #c29b38 !important;
-  float: left !important;
-  line-height: 0.8 !important;
-  margin-right: 8px !important;
-  margin-top: 2px !important;
-}
-
-/* Selection & Links */
-body.paradise-lost ::selection,
-body[data-theme="paradise-lost"] ::selection {
-  background: #8c1414 !important;
-  color: #fff2d9 !important;
-}
-
-body.paradise-lost a,
-body[data-theme="paradise-lost"] a {
-  color: #c29b38 !important;
-  text-decoration: none !important;
-  border-bottom: 1px dotted #8c1414 !important;
-  transition: color 0.2s ease !important;
-}
-
-body.paradise-lost a:hover,
-body[data-theme="paradise-lost"] a:hover {
-  color: #e6b845 !important;
-  border-bottom-style: solid !important;
-}
-/* ============================================================
-   PARADISE LOST THEME ONLY: SCOPED OVERRIDES
-   ============================================================ */
-
-/* Theme Colors & Base Font */
-[data-theme="paradise-lost"],
-body.paradise-lost-mode {
-  background-color: #080305 !important;
-  color: #d4af37 !important;
-  font-family: 'IM Fell English', serif !important;
-}
-
-/* Headings & Gothic Engravings */
-[data-theme="paradise-lost"] h1, 
-[data-theme="paradise-lost"] h2, 
-[data-theme="paradise-lost"] h3, 
-.paradise-lost-mode h1,
-.paradise-lost-mode h2,
-.paradise-lost-mode h3 {
-  font-family: 'Cinzel Decorative', serif !important;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #e5c158 !important;
-  text-shadow: 0 0 8px rgba(139, 0, 0, 0.6);
-}
-
-/* Dark Abyss Borders & Frames */
-[data-theme="paradise-lost"] .card-container, 
-[data-theme="paradise-lost"] #trading-rules-box, 
-[data-theme="paradise-lost"] .item-card,
-.paradise-lost-mode .card-container,
-.paradise-lost-mode #trading-rules-box,
-.paradise-lost-mode .item-card {
-  border: 2px solid #8b6d21 !important;
-  outline: 1px solid #4a0000 !important;
-  outline-offset: -5px;
-  background: radial-gradient(circle, rgba(20,5,7,0.95) 0%, rgba(5,1,2,0.98) 100%) !important;
-  box-shadow: 0 0 20px rgba(139, 0, 0, 0.35), inset 0 0 15px rgba(0, 0, 0, 0.9) !important;
-}
-
-/* Infernal Interactive Buttons */
-[data-theme="paradise-lost"] button, 
-[data-theme="paradise-lost"] .btn-action, 
-[data-theme="paradise-lost"] #top-button,
-.paradise-lost-mode button,
-.paradise-lost-mode .btn-action,
-.paradise-lost-mode #top-button {
-  background: linear-gradient(180deg, #2b0000 0%, #0f0000 100%) !important;
-  border: 1px solid #b8860b !important;
-  color: #e5c158 !important;
-  font-family: 'Cinzel Decorative', serif !important;
-  box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
-  transition: all 0.3s ease;
-}
-
-[data-theme="paradise-lost"] button:hover, 
-[data-theme="paradise-lost"] .btn-action:hover,
-.paradise-lost-mode button:hover,
-.paradise-lost-mode .btn-action:hover {
-  background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%) !important;
-  border-color: #ffd700 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 15px rgba(255, 69, 0, 0.7);
-}
-
-/* Serpent & Fallen Wing Background Watermark */
-[data-theme="paradise-lost"]::before,
-body.paradise-lost-mode::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23d4af37' d='M50 5 C25 25 10 50 50 95 C90 50 75 25 50 5 Z'/%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 600px;
-}
-/* ============================================================
-   PARADISE LOST: HEAVEN (TOP) vs. HELL (CARDS)
-   ============================================================ */
-
-/* --- 1. HEAVEN: TOP SECTION (Empyrean Gold & Celestial Blue) --- */
-
-/* Celestial Header & Upper Banner Container */
-[data-theme="paradise-lost"] header,
-[data-theme="paradise-lost"] #trading-rules-box,
-[data-theme="paradise-lost"] .top-banner,
-body.paradise-lost-mode header,
-body.paradise-lost-mode #trading-rules-box,
-body.paradise-lost-mode .top-banner {
-  background: radial-gradient(circle, #0b1a30 0%, #030814 100%) !important;
-  border: 2px solid #ffd700 !important;
-  outline: 1px solid #4169e1 !important;
-  outline-offset: -5px;
-  color: #f0e68c !important;
-  box-shadow: 0 0 25px rgba(65, 105, 225, 0.4), inset 0 0 15px rgba(255, 215, 0, 0.2) !important;
-}
-
-/* Heavenly Headings (Gold Text Glow) */
-[data-theme="paradise-lost"] header h1,
-[data-theme="paradise-lost"] #trading-rules-box h2,
-body.paradise-lost-mode header h1,
-body.paradise-lost-mode #trading-rules-box h2 {
-  font-family: 'Cinzel Decorative', serif !important;
-  color: #ffe87c !important;
-  text-shadow: 0 0 12px rgba(255, 215, 0, 0.8), 0 0 5px rgba(65, 105, 225, 0.6) !important;
-}
-
-/* Celestial Buttons & Accent Badges in Top Area */
-[data-theme="paradise-lost"] #trading-rules-box button,
-[data-theme="paradise-lost"] .top-banner .trading-badge,
-body.paradise-lost-mode #trading-rules-box button,
-body.paradise-lost-mode .top-banner .trading-badge {
-  background: linear-gradient(180deg, #102a45 0%, #050e1a 100%) !important;
-  border: 1px solid #ffd700 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
-}
-
-[data-theme="paradise-lost"] #trading-rules-box button:hover,
-body.paradise-lost-mode #trading-rules-box button:hover {
-  background: linear-gradient(180deg, #1e4875 0%, #0a1c30 100%) !important;
-  box-shadow: 0 0 15px rgba(135, 206, 250, 0.8) !important;
-}
-
-
-/* --- 2. HELL: ITEM CARDS (Infernal Crimson & Obsidian Abyss) --- */
-
-/* Dark Infernal Cards */
-[data-theme="paradise-lost"] .item-card,
-[data-theme="paradise-lost"] .card-container,
-body.paradise-lost-mode .item-card,
-body.paradise-lost-mode .card-container {
-  background: radial-gradient(circle, rgba(25, 4, 7, 0.95) 0%, rgba(5, 1, 2, 0.98) 100%) !important;
-  border: 2px solid #8b0000 !important;
-  outline: 1px solid #ff4500 !important;
-  outline-offset: -5px;
-  color: #d4af37 !important;
-  box-shadow: 0 0 20px rgba(139, 0, 0, 0.5), inset 0 0 15px rgba(0, 0, 0, 0.9) !important;
-}
-
-/* Infernal Card Titles & Headings */
-[data-theme="paradise-lost"] .item-card h3,
-body.paradise-lost-mode .item-card h3 {
-  font-family: 'Cinzel Decorative', serif !important;
-  color: #ff6347 !important;
-  text-shadow: 0 0 8px rgba(139, 0, 0, 0.8) !important;
-}
-
-/* Fiery Card Action Buttons */
-[data-theme="paradise-lost"] .item-card button,
-body.paradise-lost-mode .item-card button {
-  background: linear-gradient(180deg, #3a0000 0%, #0f0000 100%) !important;
-  border: 1px solid #b8860b !important;
-  color: #e5c158 !important;
-  box-shadow: 0 0 10px rgba(139, 0, 0, 0.6) !important;
-}
-
-[data-theme="paradise-lost"] .item-card button:hover,
-body.paradise-lost-mode .item-card button:hover {
-  background: linear-gradient(180deg, #5e0000 0%, #1f0000 100%) !important;
-  border-color: #ff4500 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 15px rgba(255, 69, 0, 0.9) !important;
-}
-/* ============================================================
-   PARADISE LOST: GARDEN OF EDEN ARTWORK BACKGROUND
-   ============================================================ */
-
-/* Add Eden Artwork as a Faint Background to the Header/Rules Area */
-[data-theme="paradise-lost"] #trading-rules-box,
-body.paradise-lost-mode #trading-rules-box {
-  background-image: 
-    linear-gradient(rgba(11, 26, 48, 0.85), rgba(3, 8, 20, 0.92)), 
-    url("https://themasterstable.blog/wp-content/uploads/2012/07/adam-eve-serpent.jpg") !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-blend-mode: overlay !important;
-}
-/* ============================================================
-   PARADISE LOST: ENHANCED ANGELIC / EMPYREAN TOP SECTION
-   ============================================================ */
-
-/* Divine Light Rays & Starlight Mesh Background */
-[data-theme="paradise-lost"] header,
-[data-theme="paradise-lost"] #trading-rules-box,
-body.paradise-lost-mode header,
-body.paradise-lost-mode #trading-rules-box {
-  background: 
-    radial-gradient(ellipse at top, rgba(255, 223, 128, 0.25) 0%, rgba(13, 27, 42, 0.95) 70%),
-    linear-gradient(180deg, #0f2027 0%, #203a43 50%, #0c1821 100%) !important;
-  border: 2px solid #ffe57f !important;
-  outline: 1px solid #764ba2 !important;
-  outline-offset: -6px;
-  box-shadow: 
-    0 0 35px rgba(255, 223, 128, 0.35), 
-    inset 0 0 25px rgba(255, 215, 0, 0.2),
-    0 0 15px rgba(100, 149, 237, 0.4) !important;
-}
-
-/* Radiant Gold Header & Divine Aura */
-[data-theme="paradise-lost"] header h1,
-[data-theme="paradise-lost"] #trading-rules-box h2,
-body.paradise-lost-mode header h1,
-body.paradise-lost-mode #trading-rules-box h2 {
-  color: #fff8dc !important;
-  text-shadow: 
-    0 0 10px #ffd700, 
-    0 0 20px #ffae00, 
-    0 0 30px rgba(255, 255, 255, 0.8) !important;
-  letter-spacing: 3px !important;
-}
-
-/* Angelic Text & Rules Formatting */
-[data-theme="paradise-lost"] #trading-rules-box p,
-[data-theme="paradise-lost"] #trading-rules-box li,
-body.paradise-lost-mode #trading-rules-box p,
-body.paradise-lost-mode #trading-rules-box li {
-  color: #f4f1de !important;
-  text-shadow: 0 0 4px rgba(255, 223, 128, 0.3) !important;
-}
-
-/* Celestial Halo Buttons & Badges */
-[data-theme="paradise-lost"] #trading-rules-box button,
-[data-theme="paradise-lost"] .lasagna-badge,
-body.paradise-lost-mode #trading-rules-box button,
-body.paradise-lost-mode .lasagna-badge {
-  background: linear-gradient(135deg, #2c3e50 0%, #000000 100%) !important;
-  border: 1px solid #ffd700 !important;
-  color: #fff8dc !important;
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.6) !important;
-  border-radius: 4px;
-}
-
-[data-theme="paradise-lost"] #trading-rules-box button:hover,
-body.paradise-lost-mode #trading-rules-box button:hover {
-  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%) !important;
-  box-shadow: 0 0 22px rgba(255, 255, 255, 0.9), 0 0 10px #ffd700 !important;
-  color: #ffffff !important;
-}
-
-/* Heavenly Sparkle Accent Overrides */
-[data-theme="paradise-lost"] .star-accent,
-body.paradise-lost-mode .star-accent {
-  color: #ffffff !important;
-  text-shadow: 0 0 8px #ffd700, 0 0 12px #fff !important;
-}
-/* ============================================================
-   PARADISE LOST MODE ONLY (Strictly Separated)
-   ============================================================ */
-
-body[data-theme="paradise-lost"],
-body.paradise-lost-mode {
-
-  /* --- 1. THE EMPYREAN HEIGHTS (TOP SECTION) --- */
-  & #main-header,
-  & .header-container,
-  & #trading-rules-box,
-  & .trading-rules,
-  & div[class*="header"],
-  & div[class*="rules"] {
-    background: 
-      radial-gradient(circle at top, rgba(255, 248, 220, 0.22) 0%, rgba(10, 25, 47, 0.95) 75%),
-      linear-gradient(180deg, #0d1b2a 0%, #1b263b 100%) !important;
-    border: 2px solid #ffdf73 !important;
-    outline: 2px solid rgba(255, 215, 0, 0.4) !important;
-    outline-offset: -5px;
-    box-shadow: 0 0 35px rgba(255, 223, 128, 0.35), inset 0 0 25px rgba(255, 215, 0, 0.25) !important;
-  }
-
-  /* Radiant Celestial Typography */
-  & h1, 
-  & .site-title,
-  & #trading-rules-box h2 {
-    color: #fffdf0 !important;
-    text-shadow: 0 0 12px #ffd700, 0 0 25px #ffae00, 0 0 35px rgba(255, 255, 255, 0.9) !important;
-  }
-
-  /* Angelic Controls & Top Buttons */
-  & #top-button, 
-  & .back-to-top, 
-  & .eyestrain-btn,
-  & button[id*="top"] {
-    background: linear-gradient(180deg, #162b48 0%, #08121f 100%) !important;
-    border: 1px solid #ffd700 !important;
-    color: #fff8dc !important;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5) !important;
-    text-shadow: 0 0 6px #ffd700 !important;
-  }
-
-  /* --- 2. THE INFERNAL ABYSS (CARDS & BUTTONS BELOW) --- */
-
-  /* Fiery Blood-Red Item Cards */
-  & .item-card, 
-  & .card, 
-  & .card-container,
-  & div[class*="card"] {
-    background: radial-gradient(circle, rgba(30, 2, 5, 0.96) 0%, rgba(8, 1, 2, 0.99) 100%) !important;
-    border: 2px solid #b30000 !important;
-    outline: 2px solid #ff3300 !important;
-    outline-offset: -5px;
-    color: #ffecd2 !important;
-    box-shadow: 0 0 25px rgba(179, 0, 0, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.95) !important;
-  }
-
-  /* Demonic Smoldering Titles */
-  & .item-card h3, 
-  & .card h3 {
-    color: #ff4500 !important;
-    text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 0 0 20px rgba(139, 0, 0, 0.9) !important;
-  }
-
-  /* Hellfire Filter Navigation Buttons */
-  & .filter-btn, 
-  & .category-btn, 
-  & button[class*="filter"] {
-    background: linear-gradient(180deg, #380000 0%, #120000 100%) !important;
-    border: 1px solid #b30000 !important;
-    color: #ffb3b3 !important;
-    box-shadow: 0 0 10px rgba(179, 0, 0, 0.6) !important;
-  }
-
-  & .filter-btn:hover, 
-  & .filter-btn.active {
-    background: linear-gradient(180deg, #660000 0%, #240000 100%) !important;
-    border-color: #ff5722 !important;
-    color: #ffffff !important;
-    box-shadow: 0 0 20px rgba(255, 87, 34, 0.9) !important;
-  }
-}
+  <!-- GOTHIC TOAST MODAL -->
+  <div id="gothic-toast" class="gothic-toast-hidden">
+    <div class="gothic-toast-content">
+      <div class="gothic-toast-header">✦ RECORD INSCRIBED TO CLIPBOARD ✦</div>
+      <p>Select your destination to dispatch this request:</p>
+      <div class="gothic-toast-actions">
+        <button id="toast-gmail-btn" class="gothic-btn">OPEN GMAIL WEB</button>
+        <button id="toast-mail-btn" class="gothic-btn btn-secondary">DEFAULT MAIL APP</button>
+        <button id="toast-close-btn" class="gothic-btn btn-close">DISMISS</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
