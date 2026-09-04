@@ -1740,43 +1740,60 @@ body.paradise-lost-mode {
   text-decoration: none;
   font-weight: 600;
 }
-/* GLASS SEAL EFFECT FOR NFT BADGES */
-.nft-active {
-  display: inline-block;
-  margin-top: 6px;
-  padding: 6px 14px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #ffffff;
+/* GLASS SEAL CAPSULE ELEVATION */
+.nft-active, 
+.sealed-until-badge, 
+.card p:has(span[style*="color: red"]), 
+span[style*="SEALED UNTIL"] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 10px 0;
+  padding: 8px 18px;
   
-  /* Glassmorphism background and blur */
-  background: rgba(220, 38, 38, 0.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* Glassmorphism translucent base */
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.4) 0%, rgba(120, 0, 0, 0.6) 100%) !important;
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
   
-  /* Glass borders and highlight edge */
-  border: 1px solid rgba(255, 99, 99, 0.5);
-  border-top: 1px solid rgba(255, 255, 255, 0.6); /* Top light reflection */
-  border-radius: 20px;
+  /* Capsule Shape & Glass Borders */
+  border-radius: 50px !important;
+  border: 1px solid rgba(255, 120, 120, 0.4) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.75) !important; /* Beveled edge light highlight */
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.8) !important;     /* Bottom depth shadow edge */
   
-  /* Layered 3D glass shadow + red neon glow */
+  /* Floating elevation & realistic light reflections */
   box-shadow: 
-    inset 0 1px 1px rgba(255, 255, 255, 0.4),   /* Top inner glass reflection */
-    inset 0 -2px 4px rgba(0, 0, 0, 0.5),        /* Bottom inner depth */
-    0 4px 15px rgba(220, 38, 38, 0.4),          /* Outer ambient red glow */
-    0 0 8px rgba(255, 0, 0, 0.6);               /* Neon border pop */
+    /* Top inner glass glare */
+    inset 0 2px 4px rgba(255, 255, 255, 0.5),
+    /* Inner bottom shadow for glass thickness */
+    inset 0 -3px 6px rgba(0, 0, 0, 0.7),
+    /* Elevated drop shadow onto the card surface below */
+    0 10px 20px rgba(0, 0, 0, 0.8),
+    /* Outer red ambient glow */
+    0 0 12px rgba(255, 40, 40, 0.5);
 
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px rgba(255, 0, 0, 0.8);
-  transition: all 0.3s ease;
+  /* Typography styling */
+  color: #ffffff !important;
+  font-family: 'Cinzel', serif, sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 1.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 8px rgba(255, 100, 100, 0.8);
+  
+  /* Lift physical appearance */
+  transform: translateZ(0);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Optional hover state for interactive glass feel */
-.nft-active:hover {
-  background: rgba(220, 38, 38, 0.35);
+/* Interactive Hover state for extra glass reactivity */
+.nft-active:hover, 
+span[style*="SEALED UNTIL"]:hover {
+  transform: translateY(-3px) scale(1.03);
   box-shadow: 
-    inset 0 1px 2px rgba(255, 255, 255, 0.6),
-    0 6px 20px rgba(220, 38, 38, 0.6),
-    0 0 12px rgba(255, 0, 0, 0.9);
-  transform: translateY(-1px);
+    inset 0 2px 6px rgba(255, 255, 255, 0.7),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.8),
+    0 15px 25px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(255, 50, 50, 0.8);
 }
