@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     complete: function(results) {
       allData = results.data.map(item => {
-        item._searchIndex = `${getValByName(item, "Show")} ${getValByName(item, "Date")} ${getValByName(item, "Cast")} ${getValByName(item, "Master")} ${getValByName(item, "Tour", "Location")} ${getValByName(item, "Venue")}`.toLowerCase();
+        item._searchIndex = `${getValByName(item, "Show")} ${getValByName(item, "Date")} ${getValByName(item, "Cast")} ${getValByName(item, "Master")} ${getValByName(item, "Co-Releaser", "Co Releaser")} ${getValByName(item, "Tour", "Location")} ${getValByName(item, "Venue")}`.toLowerCase();
         return item;
       });
       
@@ -231,15 +231,20 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.clipboard.writeText(bodyText).catch(() => {});
       }
 
-      setTimeout(() => {
-        const useGmail = confirm(
-          "📋 Request COPIED to clipboard!\n\n" +
-          "• Click 'OK' to open Gmail Web.\n" +
-          "• Click 'Cancel' for Default Mail App."
-        );
-        if (useGmail) window.open(gmailUrl, "_blank");
-        else window.location.href = mailtoUrl;
-      }, 10);
+      // Explicitly trigger the dispatch notification bar only for email requests
+      if (typeof showToast === "function") {
+        showToast("RECORD INSCRIBED TO CLIPBOARD");
+      } else {
+        setTimeout(() => {
+          const useGmail = confirm(
+            "📋 Request COPIED to clipboard!\n\n" +
+            "• Click 'OK' to open Gmail Web.\n" +
+            "• Click 'Cancel' for Default Mail App."
+          );
+          if (useGmail) window.open(gmailUrl, "_blank");
+          else window.location.href = mailtoUrl;
+        }, 10);
+      }
     });
   }
 });
@@ -354,7 +359,23 @@ function appendNextBatch(count = BATCH_SIZE) {
 
     const tour = getValByName(item, "Tour", "Location", "City");
     const venue = getValByName(item, "Venue", "Theater", "Theatre");
-    const master = getValByName(item, "Master");
+    
+    // Master vs Co-Releaser Logic
+    const masterVal = getValByName(item, "Master");
+    const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
+
+    let masterDisplay = '';
+    if (masterVal && masterVal.toLowerCase() !== "unknown") {
+      masterDisplay = `🎥 <strong>Master:</strong> ${masterVal}`;
+      if (coReleaserVal) {
+        masterDisplay += ` <span style="opacity: 0.8; font-size: 0.9em;">(Co-Releaser: ${coReleaserVal})</span>`;
+      }
+    } else if (coReleaserVal) {
+      masterDisplay = `🎥 <strong>Co-Releaser:</strong> ${coReleaserVal}`;
+    } else if (masterVal) {
+      masterDisplay = `🎥 <strong>Master:</strong> ${masterVal}`;
+    }
+
     const cast = getValByName(item, "Cast");
     const masterNotes = getValByName(item, "Master Notes");
     const tradingNotes = getValByName(item, "Trading Notes");
@@ -408,7 +429,7 @@ function appendNextBatch(count = BATCH_SIZE) {
       <div class="card-meta">
         ${date ? `📅 ${date}${showTime}` : ''} 
         ${locationParts ? `📍 ${locationParts}` : ''}
-        ${master ? `<br>🎥 <strong>Master:</strong> ${master}` : ''}
+        ${masterDisplay ? `<br>${masterDisplay}` : ''}
         ${nftBadgeHTML}
       </div>
 
@@ -494,6 +515,18 @@ function executeAddToCart(item, buttonEl) {
   const sz = getFileSize(item);
   let displayFmt = (fmt && sz) ? `${fmt} [${sz}]` : (fmt || sz || getMediaType(item));
 
+  const masterVal = getValByName(item, "Master");
+  const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
+  
+  let masterStr = "";
+  if (masterVal && masterVal.toLowerCase() !== "unknown") {
+    masterStr = masterVal;
+  } else if (coReleaserVal) {
+    masterStr = `Co-Releaser: ${coReleaserVal}`;
+  } else if (masterVal) {
+    masterStr = masterVal;
+  }
+
   tradeCart.push({
     key: getItemKey(item),
     show: getValByName(item, "Show") || "Unknown Show",
@@ -502,7 +535,7 @@ function executeAddToCart(item, buttonEl) {
     format: displayFmt,
     tour: getValByName(item, "Tour", "Location", "City"),
     venue: getValByName(item, "Venue", "Theater", "Theatre"),
-    master: getValByName(item, "Master")
+    master: masterStr
   });
 
   if (buttonEl) {
@@ -739,12 +772,24 @@ function isNftStillActive(dateStr) {
   return parsedDate ? parsedDate >= today : false;
 }
 
+/* FIXED COPY SINGLE ITEM FUNCTION */
 function copySingleItemSummary(item, buttonElement) {
   const show = getValByName(item, "Show") || "Unknown Show";
   const date = getValByName(item, "Date") || "Unknown Date";
   const tour = getValByName(item, "Tour", "Location", "City");
   const venue = getValByName(item, "Venue", "Theater", "Theatre");
-  const master = getValByName(item, "Master") || "Unknown Master";
+  
+  const masterVal = getValByName(item, "Master");
+  const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
+  
+  let masterStr = "";
+  if (masterVal && masterVal.toLowerCase() !== "unknown") {
+    masterStr = masterVal;
+  } else if (coReleaserVal) {
+    masterStr = `Co-Releaser: ${coReleaserVal}`;
+  } else if (masterVal) {
+    masterStr = masterVal;
+  }
   
   const fmt = getFormat(item);
   const sz = getFileSize(item);
@@ -754,14 +799,10 @@ function copySingleItemSummary(item, buttonElement) {
 
   let text = `${show} - ${date} (${formatStr})`;
   if (location) text += ` | ${location}`;
-  if (master) text += ` | Master: ${master}`;
+  if (masterStr) text += ` | Master: ${masterStr}`;
 
   navigator.clipboard.writeText(text).then(() => {
-    if (typeof showToast === "function") {
-      showToast("📋 Item summary copied to clipboard!");
-    } else if (typeof triggerToast === "function") {
-      triggerToast("📋 Item summary copied to clipboard!");
-    } else {
+    if (buttonElement) {
       const originalText = buttonElement.innerText;
       buttonElement.innerText = "✅ Copied!";
       buttonElement.classList.add("copied");
