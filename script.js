@@ -204,13 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const recipient = "tradingtreelost@gmail.com";
-      const subject = `Trade Request (${tradeCart.length} Items)`;
       const bodyText = generateFormattedText();
-      
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
-      const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
-
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(bodyText).catch(() => {});
       }
@@ -218,9 +212,43 @@ document.addEventListener("DOMContentLoaded", () => {
       showToastBanner();
     });
   }
+
+  // Bind Gothic Toast Modal Action Buttons directly
+  const destinationEmail = "tradingtreelost@gmail.com";
+
+  const bindToastButton = (id, handler) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.onclick = handler;
+  };
+
+  bindToastButton("toast-gmail-btn", () => {
+    const body = encodeURIComponent(window.lastCopiedRequest || generateFormattedText());
+    const subject = encodeURIComponent(`Trade Request (${tradeCart.length} Items)`);
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${destinationEmail}&su=${subject}&body=${body}`, "_blank");
+    hideGothicToast();
+  });
+
+  bindToastButton("toast-mail-btn", () => {
+    const body = encodeURIComponent(window.lastCopiedRequest || generateFormattedText());
+    const subject = encodeURIComponent(`Trade Request (${tradeCart.length} Items)`);
+    window.location.href = `mailto:${destinationEmail}?subject=${subject}&body=${body}`;
+    hideGothicToast();
+  });
+
+  bindToastButton("toast-close-btn", hideGothicToast);
 });
 
 function showToastBanner() {
+  const bodyText = generateFormattedText();
+  window.lastCopiedRequest = bodyText;
+
+  const gothicToast = document.getElementById("gothic-toast");
+  if (gothicToast) {
+    gothicToast.classList.remove("gothic-toast-hidden");
+    gothicToast.style.display = "block";
+    return;
+  }
+
   let toastBar = document.getElementById("toast-bar");
   if (!toastBar) {
     toastBar = document.createElement("div");
@@ -229,17 +257,28 @@ function showToastBanner() {
     document.body.appendChild(toastBar);
   }
   
+  const recipient = "tradingtreelost@gmail.com";
+  const subject = `Trade Request (${tradeCart.length} Items)`;
+
   toastBar.innerHTML = `
     ✦ RECORD INSCRIBED TO CLIPBOARD ✦<br>
     <span style="font-size: 0.85em; opacity: 0.9;">Select your destination to dispatch this request:</span><br>
     <div style="margin-top: 6px;">
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=tradingtreelost@gmail.com&su=${encodeURIComponent(`Trade Request (${tradeCart.length} Items)`)}&body=${encodeURIComponent(generateFormattedText())}" target="_blank" class="toast-link">OPEN GMAIL WEB</a>
-      <a href="mailto:tradingtreelost@gmail.com?subject=${encodeURIComponent(`Trade Request (${tradeCart.length} Items)`)}&body=${encodeURIComponent(generateFormattedText())}" class="toast-link">DEFAULT MAIL APP</a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}" target="_blank" class="toast-link">OPEN GMAIL WEB</a>
+      <a href="mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}" class="toast-link">DEFAULT MAIL APP</a>
       <button type="button" onclick="document.getElementById('toast-bar').classList.remove('visible')" class="toast-dismiss-btn">DISMISS</button>
     </div>
   `;
   
   toastBar.classList.add("visible");
+}
+
+function hideGothicToast() {
+  const toast = document.getElementById("gothic-toast");
+  if (toast) {
+    toast.classList.add("gothic-toast-hidden");
+    toast.style.display = "none";
+  }
 }
 
 function clearClearCartBtn() {
@@ -404,7 +443,8 @@ function appendNextBatch(count = BATCH_SIZE) {
       }
     }
 
-    const cardClass = `item-card ${isNFTActive ? 'card-nft-active nft-card-locked' : 'card-standard'}`;
+    // Explicitly adds 'is-sealed' class for full-card glass shield
+    const cardClass = `item-card ${isNFTActive ? 'card-nft-active nft-card-locked is-sealed' : 'card-standard'}`;
     const itemInCart = isInCart(item);
 
     const card = document.createElement("div");
@@ -906,37 +946,3 @@ if (canvas) {
     animateEmbers();
   }
 }
-// Gothic Toast Actions
-document.addEventListener('DOMContentLoaded', () => {
-  const toast = document.getElementById('gothic-toast');
-  const gmailBtn = document.getElementById('toast-gmail-btn');
-  const mailBtn = document.getElementById('toast-mail-btn');
-  const closeBtn = document.getElementById('toast-close-btn');
-
-  const destinationEmail = "tradingtreelost@gmail.com";
-
-  if (gmailBtn) {
-    gmailBtn.addEventListener('click', () => {
-      // Pull trade request body text from your cart logic/clipboard text
-      const cartText = encodeURIComponent("Here is my trade request:\n\n" + (window.lastCopiedRequest || ""));
-      const subject = encodeURIComponent("Trade Request - Paradise Lost");
-      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${destinationEmail}&su=${subject}&body=${cartText}`, '_blank');
-      toast.classList.add('gothic-toast-hidden');
-    });
-  }
-
-  if (mailBtn) {
-    mailBtn.addEventListener('click', () => {
-      const cartText = encodeURIComponent("Here is my trade request:\n\n" + (window.lastCopiedRequest || ""));
-      const subject = encodeURIComponent("Trade Request - Paradise Lost");
-      window.location.href = `mailto:${destinationEmail}?subject=${subject}&body=${cartText}`;
-      toast.classList.add('gothic-toast-hidden');
-    });
-  }
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', () => {
-      toast.classList.add('gothic-toast-hidden');
-    });
-  }
-});
