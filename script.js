@@ -5,7 +5,6 @@ let currentCategory = 'all';
 let searchTimeout = null;
 let currentRenderToken = 0;
 
-// Pagination configuration
 const BATCH_SIZE = 25;
 let displayedCount = 0;
 let observer = null;
@@ -16,9 +15,6 @@ let tradeCart = loadCartFromStorage();
 
 let originalDocumentTitle = document.title;
 
-/* ============================================================
-   FLOATING CART BUTTON MOUNT GUARANTEE
-============================================================ */
 function ensureCartButtonInBody() {
   let cartBtn = document.getElementById("cart-toggle-btn");
   if (!cartBtn) {
@@ -40,9 +36,6 @@ function ensureCartButtonInBody() {
   }
 }
 
-/* ============================================================
-   MAIN DOM & APPLICATION INITIALIZATION
-============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
   setupIntersectionObserver();
   ensureCartButtonInBody();
@@ -56,9 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   updateButtonLabel();
 
-  // ------------------------------------------------------------
-  // UNVEIL / CONCEAL NINE CIRCLES TOGGLE
-  // ------------------------------------------------------------
   const paletteToggleBtn = document.getElementById("palette-toggle-btn");
   const infernalPalette = document.getElementById("infernal-palette");
 
@@ -76,9 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ------------------------------------------------------------
-  // NO-EYESTRAIN TOGGLE ENGINE
-  // ------------------------------------------------------------
   const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
 
   if (eyestrainBtn) {
@@ -266,9 +253,6 @@ function clearClearCartBtn() {
   });
 }
 
-/* ============================================================
-   INTERSECTION OBSERVER (INFINITE SCROLL ENGINE)
-============================================================ */
 function setupIntersectionObserver() {
   const sentinel = document.getElementById("scroll-sentinel");
   if (!sentinel) return;
@@ -463,9 +447,6 @@ function appendNextBatch(count = BATCH_SIZE) {
   });
 }
 
-/* ============================================================
-   LOCALSTORAGE CART & HELPERS
-============================================================ */
 function loadCartFromStorage() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -822,9 +803,6 @@ function copySingleItemSummary(item, buttonElement) {
   });
 }
 
-/* ============================================================
-   MULTIVERSE THEME ENGINE (Cyberpunk / Paradise Lost)
-============================================================ */
 let currentTheme = localStorage.getItem("siteTheme") || "cyberpunk";
 document.body.setAttribute("data-theme", currentTheme);
 
@@ -873,9 +851,6 @@ function updateButtonLabel() {
   }
 }
 
-/* ============================================================
-   FLOATING INFERNAL EMBERS ANIMATION
-============================================================ */
 const canvas = document.getElementById('ember-canvas');
 if (canvas) {
   const ctx = canvas.getContext('2d');
