@@ -56,13 +56,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   updateButtonLabel();
 
+  // ------------------------------------------------------------
   // UNVEIL / CONCEAL NINE CIRCLES TOGGLE
+  // ------------------------------------------------------------
   const paletteToggleBtn = document.getElementById("palette-toggle-btn");
   const infernalPalette = document.getElementById("infernal-palette");
 
   if (paletteToggleBtn && infernalPalette) {
     paletteToggleBtn.addEventListener("click", (e) => {
       e.preventDefault();
+      
       const isClosed = infernalPalette.classList.toggle("closed");
       const labelSpan = paletteToggleBtn.querySelector(".sigil-label");
       if (labelSpan) {
@@ -73,7 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ------------------------------------------------------------
   // NO-EYESTRAIN TOGGLE ENGINE
+  // ------------------------------------------------------------
   const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
 
   if (eyestrainBtn) {
@@ -223,22 +228,32 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.clipboard.writeText(bodyText).catch(() => {});
       }
 
-      if (typeof showToast === "function") {
-        showToast("RECORD INSCRIBED TO CLIPBOARD");
-      } else {
-        setTimeout(() => {
-          const useGmail = confirm(
-            "📋 Request COPIED to clipboard!\n\n" +
-            "• Click 'OK' to open Gmail Web.\n" +
-            "• Click 'Cancel' for Default Mail App."
-          );
-          if (useGmail) window.open(gmailUrl, "_blank");
-          else window.location.href = mailtoUrl;
-        }, 10);
-      }
+      showToastBanner();
     });
   }
 });
+
+function showToastBanner() {
+  let toastBar = document.getElementById("toast-bar");
+  if (!toastBar) {
+    toastBar = document.createElement("div");
+    toastBar.id = "toast-bar";
+    toastBar.className = "toast-bar";
+    document.body.appendChild(toastBar);
+  }
+  
+  toastBar.innerHTML = `
+    ✦ RECORD INSCRIBED TO CLIPBOARD ✦<br>
+    <span style="font-size: 0.85em; opacity: 0.9;">Select your destination to dispatch this request:</span><br>
+    <div style="margin-top: 6px;">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=tradingtreelost@gmail.com&su=${encodeURIComponent(`Trade Request (${tradeCart.length} Items)`)}&body=${encodeURIComponent(generateFormattedText())}" target="_blank" class="toast-link">OPEN GMAIL WEB</a>
+      <a href="mailto:tradingtreelost@gmail.com?subject=${encodeURIComponent(`Trade Request (${tradeCart.length} Items)`)}&body=${encodeURIComponent(generateFormattedText())}" class="toast-link">DEFAULT MAIL APP</a>
+      <button type="button" onclick="document.getElementById('toast-bar').classList.remove('visible')" class="toast-dismiss-btn">DISMISS</button>
+    </div>
+  `;
+  
+  toastBar.classList.add("visible");
+}
 
 function clearClearCartBtn() {
   const clearCartBtn = document.getElementById("clear-cart-btn");
@@ -251,6 +266,9 @@ function clearClearCartBtn() {
   });
 }
 
+/* ============================================================
+   INTERSECTION OBSERVER (INFINITE SCROLL ENGINE)
+============================================================ */
 function setupIntersectionObserver() {
   const sentinel = document.getElementById("scroll-sentinel");
   if (!sentinel) return;
@@ -330,7 +348,7 @@ function appendNextBatch(count = BATCH_SIZE) {
     const globalIndex = displayedCount + i;
     const show = getValByName(item, "Show") || "Unknown Show";
     const date = getValByName(item, "Date");
-    const matineeEve = getValByName(item, "Matinée / Evening", "Matinee / Evening", "Matinee");
+    const matineeEve = getValByName(item, "Matinée / Evening", "Matinee / Evening", "Matinee", "Evening");
     const showTime = matineeEve ? ` (${matineeEve})` : "";
     
     const format = getFormat(item);
@@ -348,20 +366,20 @@ function appendNextBatch(count = BATCH_SIZE) {
     const tour = getValByName(item, "Tour", "Location", "City");
     const venue = getValByName(item, "Venue", "Theater", "Theatre");
     
-    // Master & Co-Releaser Logic
+    // Master vs Co-Releaser Logic
     const masterVal = getValByName(item, "Master");
     const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
 
     let masterDisplay = '';
-    const isMasterUnknown = !masterVal || masterVal.toLowerCase() === "unknown";
-
-    if (!isMasterUnknown) {
+    if (masterVal && masterVal.toLowerCase() !== "unknown" && masterVal.trim() !== "") {
       masterDisplay = `🎥 <strong>Master:</strong> ${masterVal}`;
       if (coReleaserVal) {
         masterDisplay += ` <span style="opacity: 0.8; font-size: 0.9em;">(Co-Releaser: ${coReleaserVal})</span>`;
       }
     } else if (coReleaserVal) {
       masterDisplay = `🎥 <strong>Co-Releaser:</strong> ${coReleaserVal}`;
+    } else if (masterVal) {
+      masterDisplay = `🎥 <strong>Master:</strong> ${masterVal}`;
     }
 
     const cast = getValByName(item, "Cast");
@@ -374,21 +392,15 @@ function appendNextBatch(count = BATCH_SIZE) {
     const safeTypeClass = displayType.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const typeBadgeHTML = `<span class="badge badge-${safeTypeClass}">${displayType}</span>`;
     
-    // Expanded lookup keys for NFT / Sealed Until Judgment
-    const nftDateStr = getValByName(
-      item, 
-      "NFT Date", "NFT", "NFT Until", "NFT Date/Status", 
-      "Sealed Until Judgment", "Sealed Until Judgment Date", "Sealed Date"
-    );
-    const nftForeverVal = getValByName(
-      item, 
-      "NFT Forever", "NFT Forever?", "Forever NFT"
-    ).toLowerCase();
+    // Check multiple possible NFT field variations
+    const nftDateStr = getValByName(item, "NFT Date", "NFT", "NFT Status", "NFT Until");
+    const nftForeverVal = getValByName(item, "NFT Forever").toLowerCase();
     
     let nftForever = (
       nftForeverVal === "true" || nftForeverVal === "yes" || nftForeverVal === "1" || 
       nftForeverVal === "nftf" || nftForeverVal.includes("forever") ||
-      nftDateStr.toLowerCase().includes("forever") || nftDateStr.toLowerCase() === "nftf"
+      nftDateStr.toLowerCase().includes("forever") || nftDateStr.toLowerCase() === "nftf" ||
+      nftDateStr.toLowerCase().includes("sealed")
     );
 
     const locationParts = [tour, venue].filter(Boolean).join(" - ");
@@ -397,14 +409,14 @@ function appendNextBatch(count = BATCH_SIZE) {
 
     if (nftForever) {
       isNFTActive = true;
-      nftBadgeHTML = `<br><span class="nft-active">⛔ SEALED UNTIL JUDGMENT (FOREVER)</span>`;
+      nftBadgeHTML = `<br><span class="nft-active">⛔ SEALED UNTIL JUDGEMENT</span>`;
     } else if (nftDateStr !== "") {
       if (isNftStillActive(nftDateStr)) {
         isNFTActive = true;
-        nftBadgeHTML = `<br><span class="nft-active">⛔ SEALED UNTIL JUDGMENT: ${nftDateStr}</span>`;
+        nftBadgeHTML = `<br><span class="nft-active">⛔ SEALED UNTIL: ${nftDateStr}</span>`;
       } else {
         isNFTActive = false;
-        nftBadgeHTML = `<br><span class="nft-passed">✅ UNSEALED (${nftDateStr})</span>`;
+        nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
       }
     }
 
@@ -424,7 +436,7 @@ function appendNextBatch(count = BATCH_SIZE) {
       
       <div class="card-meta">
         ${date ? `📅 ${date}${showTime}` : ''} 
-        ${locationParts ? `📍 ${locationParts}` : ''}
+        ${locationParts ? `${date ? ' | ' : ''}📍 ${locationParts}` : ''}
         ${masterDisplay ? `<br>${masterDisplay}` : ''}
         ${nftBadgeHTML}
       </div>
@@ -451,6 +463,9 @@ function appendNextBatch(count = BATCH_SIZE) {
   });
 }
 
+/* ============================================================
+   LOCALSTORAGE CART & HELPERS
+============================================================ */
 function loadCartFromStorage() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -512,10 +527,12 @@ function executeAddToCart(item, buttonEl) {
   const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
   
   let masterStr = "";
-  if (masterVal && masterVal.toLowerCase() !== "unknown") {
+  if (masterVal && masterVal.toLowerCase() !== "unknown" && masterVal.trim() !== "") {
     masterStr = masterVal;
   } else if (coReleaserVal) {
     masterStr = `Co-Releaser: ${coReleaserVal}`;
+  } else if (masterVal) {
+    masterStr = masterVal;
   }
 
   tradeCart.push({
@@ -757,7 +774,7 @@ function isNftStillActive(dateStr) {
   today.setHours(0, 0, 0, 0);
 
   const lower = dateStr.toLowerCase();
-  if (lower.includes("forever") || lower === "nftf" || lower.includes("master")) return true;
+  if (lower.includes("forever") || lower === "nftf" || lower.includes("master") || lower.includes("sealed") || lower.includes("judgement")) return true;
 
   const parsedDate = parseEncoraDate(dateStr);
   return parsedDate ? parsedDate >= today : false;
@@ -773,10 +790,12 @@ function copySingleItemSummary(item, buttonElement) {
   const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
   
   let masterStr = "";
-  if (masterVal && masterVal.toLowerCase() !== "unknown") {
+  if (masterVal && masterVal.toLowerCase() !== "unknown" && masterVal.trim() !== "") {
     masterStr = masterVal;
   } else if (coReleaserVal) {
     masterStr = `Co-Releaser: ${coReleaserVal}`;
+  } else if (masterVal) {
+    masterStr = masterVal;
   }
   
   const fmt = getFormat(item);
