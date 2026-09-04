@@ -1740,3 +1740,43 @@ body.paradise-lost-mode {
   text-decoration: none;
   font-weight: 600;
 }
+/* GLASS SEAL EFFECT FOR NFT BADGES */
+.nft-active {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  
+  /* Glassmorphism background and blur */
+  background: rgba(220, 38, 38, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  /* Glass borders and highlight edge */
+  border: 1px solid rgba(255, 99, 99, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.6); /* Top light reflection */
+  border-radius: 20px;
+  
+  /* Layered 3D glass shadow + red neon glow */
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),   /* Top inner glass reflection */
+    inset 0 -2px 4px rgba(0, 0, 0, 0.5),        /* Bottom inner depth */
+    0 4px 15px rgba(220, 38, 38, 0.4),          /* Outer ambient red glow */
+    0 0 8px rgba(255, 0, 0, 0.6);               /* Neon border pop */
+
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px rgba(255, 0, 0, 0.8);
+  transition: all 0.3s ease;
+}
+
+/* Optional hover state for interactive glass feel */
+.nft-active:hover {
+  background: rgba(220, 38, 38, 0.35);
+  box-shadow: 
+    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    0 6px 20px rgba(220, 38, 38, 0.6),
+    0 0 12px rgba(255, 0, 0, 0.9);
+  transform: translateY(-1px);
+}
