@@ -931,3 +931,37 @@ if (canvas) {
     animateEmbers();
   }
 }
+// Gothic Toast Actions
+document.addEventListener('DOMContentLoaded', () => {
+  const toast = document.getElementById('gothic-toast');
+  const gmailBtn = document.getElementById('toast-gmail-btn');
+  const mailBtn = document.getElementById('toast-mail-btn');
+  const closeBtn = document.getElementById('toast-close-btn');
+
+  const destinationEmail = "tradingtreelost@gmail.com";
+
+  if (gmailBtn) {
+    gmailBtn.addEventListener('click', () => {
+      // Pull trade request body text from your cart logic/clipboard text
+      const cartText = encodeURIComponent("Here is my trade request:\n\n" + (window.lastCopiedRequest || ""));
+      const subject = encodeURIComponent("Trade Request - Paradise Lost");
+      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${destinationEmail}&su=${subject}&body=${cartText}`, '_blank');
+      toast.classList.add('gothic-toast-hidden');
+    });
+  }
+
+  if (mailBtn) {
+    mailBtn.addEventListener('click', () => {
+      const cartText = encodeURIComponent("Here is my trade request:\n\n" + (window.lastCopiedRequest || ""));
+      const subject = encodeURIComponent("Trade Request - Paradise Lost");
+      window.location.href = `mailto:${destinationEmail}?subject=${subject}&body=${cartText}`;
+      toast.classList.add('gothic-toast-hidden');
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      toast.classList.add('gothic-toast-hidden');
+    });
+  }
+});
