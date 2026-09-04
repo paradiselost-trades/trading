@@ -1888,3 +1888,40 @@ span[style*="SEALED UNTIL"]:hover {
   position: relative;
   z-index: 6;
 }
+/* Standalone Sealed Card Parent Container */
+.item-card.is-sealed {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Glass Overlay Pseudo-element */
+.item-card.is-sealed::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+
+  /* Glass reflection & blur */
+  backdrop-filter: blur(4px) saturate(130%);
+  -webkit-backdrop-filter: blur(4px) saturate(130%);
+  background: rgba(220, 38, 38, 0.15);
+
+  /* Glass pane highlights & inner edges */
+  border: 1px solid rgba(255, 100, 100, 0.3);
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    inset 0 1px 3px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.8),
+    0 0 15px rgba(220, 38, 38, 0.25);
+
+  pointer-events: none; /* Allows clicks to pass through to buttons if needed */
+}
+
+/* Elevate card contents and interactive buttons above the glass pane */
+.item-card.is-sealed * {
+  position: relative;
+  z-index: 6;
+}
