@@ -1,271 +1,887 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
-  <!-- Set browser tab title -->
-  <title>Better to Reign in Hell than Serve in Heaven</title>
-  <!-- Transparent PNG Favicon -->
-  <link rel="icon" type="image/png" href="snake-apple.png" />
+let allData = [];
+let currentFilteredItems = [];
+let currentFilter = 'all';
+let currentCategory = 'all';
+let searchTimeout = null;
+let currentRenderToken = 0;
 
-  <!-- Prevent theme-flash on load (Defaults to Paradise Lost) -->
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('paradiseThemeActive');
-      if (savedTheme !== 'false') {
-        document.documentElement.setAttribute('data-theme', 'paradise-lost');
-        document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
+// Pagination configuration
+const BATCH_SIZE = 25;
+let displayedCount = 0;
+let observer = null;
+
+// LocalStorage Trade Cart State
+const STORAGE_KEY = "bootleg_trade_cart";
+let tradeCart = loadCartFromStorage();
+
+let originalDocumentTitle = document.title;
+
+/* ============================================================
+   FLOATING CART BUTTON MOUNT GUARANTEE
+============================================================ */
+function ensureCartButtonInBody() {
+  let cartBtn = document.getElementById("cart-toggle-btn");
+  if (!cartBtn) {
+    cartBtn = document.createElement("button");
+    cartBtn.id = "cart-toggle-btn";
+    cartBtn.className = "cart-toggle-btn";
+    cartBtn.type = "button";
+    document.body.appendChild(cartBtn);
+    cartBtn.addEventListener("click", openDrawer);
+  } else if (cartBtn.parentElement !== document.body) {
+    document.body.appendChild(cartBtn);
+  }
+
+  const countEl = document.getElementById("cart-count");
+  if (countEl) {
+    countEl.innerText = tradeCart.length;
+  } else {
+    cartBtn.innerHTML = `🛒 Trade Request (<span id="cart-count">${tradeCart.length}</span>)`;
+  }
+}
+
+/* ============================================================
+   MAIN DOM & APPLICATION INITIALIZATION
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+  setupIntersectionObserver();
+  ensureCartButtonInBody();
+
+  // Initialize theme based on local storage
+  const savedTheme = localStorage.getItem('paradiseThemeActive');
+  if (savedTheme !== 'false') {
+    document.documentElement.setAttribute('data-theme', 'paradise-lost');
+    document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
+    document.body.classList.add('paradise-lost', 'paradise-lost-mode');
+  }
+  updateButtonLabel();
+
+  // ------------------------------------------------------------
+  // UNVEIL / CONCEAL NINE CIRCLES TOGGLE
+  // ------------------------------------------------------------
+  const paletteToggleBtn = document.getElementById("palette-toggle-btn");
+  const infernalPalette = document.getElementById("infernal-palette");
+
+  if (paletteToggleBtn && infernalPalette) {
+    paletteToggleBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      // Toggle the 'closed' CSS class on the drawer container
+      const isClosed = infernalPalette.classList.toggle("closed");
+      
+      // Update the text label span inside the trigger button
+      const labelSpan = paletteToggleBtn.querySelector(".sigil-label");
+      if (labelSpan) {
+        labelSpan.innerText = isClosed 
+          ? "UNVEIL THE NINE CIRCLES" 
+          : "CONCEAL THE NINE CIRCLES";
       }
-    })();
-  </script>
-
-  <!-- Foolproof JS Text-Targeting Script for Dynamic Cards -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const observer = new MutationObserver(() => {
-        if (document.documentElement.getAttribute('data-theme') === 'paradise-lost') {
-          document.querySelectorAll('.card p, .bootleg-card p').forEach(p => {
-            if (p.innerHTML.includes('CAST:') && !p.innerHTML.includes('infernal-label-cast')) {
-              p.innerHTML = p.innerHTML.replace('CAST:', '<span class="infernal-label-cast">CAST:</span>');
-            }
-            if (p.innerHTML.includes('MASTER NOTES:') && !p.innerHTML.includes('infernal-label-notes')) {
-              p.innerHTML = p.innerHTML.replace('MASTER NOTES:', '<span class="infernal-label-notes">MASTER NOTES:</span>');
-            }
-            if (p.innerHTML.includes('TRADING NOTES:') && !p.innerHTML.includes('infernal-label-notes')) {
-              p.innerHTML = p.innerHTML.replace('TRADING NOTES:', '<span class="infernal-label-notes">TRADING NOTES:</span>');
-            }
-          });
-        }
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
     });
-  </script>
+  }
 
-  <!-- Non-blocking typography preloads for Paradise Lost -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap"></noscript>
-  
-  <!-- Load PapaParse to read CSV files -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  
-  <!-- Cache-buster update -->
-  <link rel="stylesheet" href="style.css?v=8.0" />
-</head>
-<body>
-  <header class="container">
-    <div class="header-top-row">
-      <!-- PARADISE LOST GATEWAY TRIGGER -->
-      <button id="paradise-btn" type="button" class="abandon-btn" onclick="triggerParadiseLost()">
-        ❖ Legacy Model
-      </button>
-    </div>
+  // ------------------------------------------------------------
+  // NO-EYESTRAIN TOGGLE ENGINE
+  // ------------------------------------------------------------
+  const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
 
-    <h1 class="votive-glow"><span class="header-emoji">🎭</span> My Trading Collection</h1>
-    
-    <div class="rules-box">
-      <div class="rules-box-inner">
-        
-        <div class="rules-header">
-          <h2>Trading Rules & Contact</h2>
-          <div class="lasagna-relic-seal y2k-approved-badge">
-            <span>✦</span>
-            LASAGNA APPROVED
-            <span>✦</span>
-          </div>
-        </div>
-        
-        <div class="latin-epigraph">✦ In Principio Erat Verbum ✦</div>
+  if (eyestrainBtn) {
+    if (localStorage.getItem("no_eyestrain_mode") === "enabled") {
+      document.body.classList.add("no-eyestrain");
+      eyestrainBtn.innerText = "📺 Enable CRT Effects";
+    }
 
-        <p><strong>Contact:</strong> <code>tradingtreelost@gmail.com</code></p>
-        
-        <ul>
-          <li>Standard trading ratios apply (1 Video = 2 Audios).</li>
-          <li>Updated every 3-4 days.</li>
-          <li>Respect all NFT dates and master restrictions.</li>
-          <li>Bikinibottomday's bootlegs are only to be traded via email.</li>
-          <li><strong>Follow-Up Policy:</strong> Please wait at least 7 days before sending follow-up emails for trades or gift requests. Life and hardware issues happen!</li>
-          <li>Will not gift Heathers or Six bootlegs at all</li>
-        </ul>
+    eyestrainBtn.addEventListener("click", () => {
+      document.body.classList.toggle("no-eyestrain");
+      const isNoEyestrain = document.body.classList.contains("no-eyestrain");
 
-        <!-- CIRCULAR INFERNAL PALETTE DRAWER -->
-        <div class="infernal-palette-wrapper">
-          <button id="palette-toggle-btn" class="sigil-trigger" type="button" aria-label="Toggle Nine Circles">
-            <span class="sigil-icon">🜏</span>
-            <span class="sigil-label">UNVEIL THE NINE CIRCLES</span>
-          </button>
+      if (isNoEyestrain) {
+        localStorage.setItem("no_eyestrain_mode", "enabled");
+        eyestrainBtn.innerText = "📺 Enable CRT Effects";
+      } else {
+        localStorage.setItem("no_eyestrain_mode", "disabled");
+        eyestrainBtn.innerText = "👁️ Toggle No-Eyestrain Mode";
+      }
+    });
+  }
 
-          <div id="infernal-palette" class="palette-compact closed">
-            <div class="palette-inner">
-              <div class="palette-header">
-                <h3>🜏 THE NINE CIRCLES OF TRADING HELL 🜏</h3>
-                <p>Instant block criteria for bad-faith traders</p>
-              </div>
-
-              <div class="circles-grid">
-                <div class="circle-sector">
-                  <h4>I. LIMBO (THE UNFORMATTED)</h4>
-                  <p><strong>Offense:</strong> Zero-effort emails missing basic show dates, cast details, or trade lists.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Trapped forever writing draft emails that never send.</p>
-                </div>
-
-                <div class="circle-sector">
-                  <h4>II. LUST (THE LISTLESS BEGGAR)</h4>
-                  <p><strong>Offense:</strong> Entitled "I don't have a list but give me this or I'll die" begging emails.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Endless auto-reply notifications reading Request Denied.</p>
-                </div>
-
-                <div class="circle-sector">
-                  <h4>III. GLUTTONY (THE FORMAT BUTCHER)</h4>
-                  <p><strong>Offense:</strong> Stripping VOB menus/Smalls, hiding file sizes, and dumping unorganized files.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Manually rebuilding corrupted folder trees in freezing mud.</p>
-                </div>
-
-                <div class="circle-sector">
-                  <h4>IV. GREED (THE RATIO HOG)</h4>
-                  <p><strong>Offense:</strong> Demanding absurd ratios for common bootlegs while hiding trade details.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Pushing dead hard drives uphill forever.</p>
-                </div>
-
-                <div class="circle-sector">
-                  <h4>V. WRATH (THE HARASSER)</h4>
-                  <p><strong>Offense:</strong> Sending impatient pings under 7 days, spamming DMs, or emailing threats.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Submerged in the Styx while progress bars freeze forever at 99%.</p>
-                </div>
-
-                <div class="circle-sector">
-                  <h4>VI. HERESY (THE NFT IGNORER)</h4>
-                  <p><strong>Offense:</strong> Harassing non-masters for active NFT/NFT(F) recordings or bypassing dates.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Encased in burning iron tombs lined with degraded magnetic tape.</p>
-                </div>
-
-                <div class="circle-sector">
-                  <h4>VII. VIOLENCE (THE LEAKER)</h4>
-                  <p><strong>Offense:</strong> Posting master-restricted files to social media, driving masters to quit.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Plunged into boiling blood where every link triggers a copyright strike.</p>
-                </div>
-
-                <div class="circle-sector">
-                  <h4>VIII. FRAUD (THE SLIME IMPOSTER)</h4>
-                  <p><strong>Offense:</strong> Using "slime tutorial" slang, screen recordings, or public YouTube links.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Cast into boiling pitch and prodded by demons with snapped cables.</p>
-                </div>
-
-                <div class="circle-sector worst-sector">
-                  <h4>IX. TREACHERY (THE BETRAYER)</h4>
-                  <p><strong>Offense:</strong> Taking high-quality lossless master files and knowingly sending back dead links, re-encoded YouTube garbage, or corrupted archives in return.</p>
-                  <p class="sentence"><strong>Sentence:</strong> Encased to the chin in frozen Cocytus, permanently blacklisted with 0 kb/s transfer speeds across all private networks.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </header>
-
-  <main class="container">
-    <div class="controls">
-      <input type="text" id="search-input" placeholder="Search the Hall of Pandemonium (show, cast, date)..." />
+  Papa.parse("./list.csv", {
+    download: true,
+    header: true,
+    skipEmptyLines: "greedy",
+    delimiter: "",
+    transformHeader: function(header) {
+      return header.replace(/[\ufeff\u200b\r\n]/g, '').trim();
+    },
+    complete: function(results) {
+      allData = results.data.map(item => {
+        item._searchIndex = `${getValByName(item, "Show")} ${getValByName(item, "Date")} ${getValByName(item, "Cast")} ${getValByName(item, "Master")} ${getValByName(item, "Tour", "Location")} ${getValByName(item, "Venue")}`.toLowerCase();
+        return item;
+      });
       
-      <!-- Encora CSV Comparison Tool -->
-      <div class="encora-compare-box">
-        <label for="encora-file-input" class="encora-upload-btn">
-          📜 Compare Encora CSV
-        </label>
-        <input type="file" id="encora-file-input" accept=".csv" style="display: none;" />
-        <span id="encora-status-msg" class="encora-status"></span>
-        <button type="button" id="clear-encora-btn" class="clear-encora-btn" style="display: none;">✕ Reset Filter</button>
+      applyFiltersAndRender();
+      updateCartUI();
+    },
+    error: function(err) {
+      const stats = document.getElementById('stats');
+      if (stats) stats.innerText = "Upload your 'list.csv' file to display your collection!";
+    }
+  });
+
+  const searchInput = document.getElementById("search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        applyFiltersAndRender();
+      }, 120);
+    });
+  }
+
+  document.addEventListener("click", (e) => {
+    const filterBtn = e.target.closest(".filter-btn");
+    const catBtn = e.target.closest(".cat-btn");
+
+    if (filterBtn) {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      filterBtn.classList.add("active");
+      currentFilter = filterBtn.getAttribute("data-filter");
+      applyFiltersAndRender();
+    } else if (catBtn) {
+      document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+      catBtn.classList.add("active");
+      currentCategory = catBtn.getAttribute("data-category");
+      applyFiltersAndRender();
+    }
+  });
+
+  const cardContainer = document.getElementById("card-container");
+  if (cardContainer) {
+    cardContainer.addEventListener("click", (e) => {
+      const addBtn = e.target.closest(".add-cart-btn");
+      const copyBtn = e.target.closest(".copy-card-btn");
+
+      if (addBtn) {
+        const idx = parseInt(addBtn.getAttribute("data-index"), 10);
+        const item = currentFilteredItems[idx];
+        if (item) toggleCartItem(item, addBtn);
+      } else if (copyBtn) {
+        const idx = parseInt(copyBtn.getAttribute("data-index"), 10);
+        const item = currentFilteredItems[idx];
+        if (item) copySingleItemSummary(item, copyBtn);
+      }
+    });
+  }
+
+  const scrollTopBtn = document.getElementById("scroll-top-btn");
+  if (scrollTopBtn) {
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (window.scrollY > 300) {
+            scrollTopBtn.classList.add("visible");
+          } else {
+            scrollTopBtn.classList.remove("visible");
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
+    scrollTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  const overlay = document.getElementById("drawer-overlay");
+  const cartToggleBtn = document.getElementById("cart-toggle-btn");
+  if (cartToggleBtn) cartToggleBtn.addEventListener("click", openDrawer);
+  
+  const closeDrawerBtn = document.getElementById("close-drawer-btn");
+  if (closeDrawerBtn) closeDrawerBtn.addEventListener("click", closeDrawer);
+  
+  if (overlay) overlay.addEventListener("click", closeDrawer);
+  
+  const clearCartBtn = document.getElementById("clear-cart-btn");
+  if (clearCartBtn) {
+    clearClearCartBtn();
+  }
+
+  const copyTradeBtn = document.getElementById("copy-trade-btn");
+  if (copyTradeBtn) copyTradeBtn.addEventListener("click", copyTradeRequest);
+
+  const emailBtn = document.getElementById("email-trade-btn");
+  if (emailBtn) {
+    emailBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!tradeCart.length) {
+        alert("Your trade request is empty! Add items to your list first.");
+        return;
+      }
+
+      const recipient = "tradingtreelost@gmail.com";
+      const subject = `Trade Request (${tradeCart.length} Items)`;
+      const bodyText = generateFormattedText();
+      
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+      const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(bodyText).catch(() => {});
+      }
+
+      // Explicitly trigger the dispatch notification bar only for email requests
+      if (typeof showToast === "function") {
+        showToast("RECORD INSCRIBED TO CLIPBOARD");
+      } else {
+        setTimeout(() => {
+          const useGmail = confirm(
+            "📋 Request COPIED to clipboard!\n\n" +
+            "• Click 'OK' to open Gmail Web.\n" +
+            "• Click 'Cancel' for Default Mail App."
+          );
+          if (useGmail) window.open(gmailUrl, "_blank");
+          else window.location.href = mailtoUrl;
+        }, 10);
+      }
+    });
+  }
+});
+
+function clearClearCartBtn() {
+  const clearCartBtn = document.getElementById("clear-cart-btn");
+  if (!clearCartBtn) return;
+  clearCartBtn.addEventListener("click", () => {
+    tradeCart = [];
+    saveCartToStorage();
+    updateCartUI();
+    applyFiltersAndRender();
+  });
+}
+
+/* ============================================================
+   INTERSECTION OBSERVER (INFINITE SCROLL ENGINE)
+============================================================ */
+function setupIntersectionObserver() {
+  const sentinel = document.getElementById("scroll-sentinel");
+  if (!sentinel) return;
+
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      if (displayedCount < currentFilteredItems.length) {
+        appendNextBatch();
+      }
+    }
+  }, {
+    root: null,
+    rootMargin: "400px",
+    threshold: 0.1
+  });
+
+  observer.observe(sentinel);
+}
+
+function applyFiltersAndRender() {
+  const searchEl = document.getElementById("search-input");
+  const query = searchEl ? searchEl.value.toLowerCase().trim() : "";
+  currentRenderToken++;
+    
+  currentFilteredItems = allData.filter(item => {
+    const displayType = getMediaType(item);
+    if (currentFilter !== 'all' && displayType.toLowerCase() !== currentFilter.toLowerCase()) {
+      return false;
+    }
+
+    if (currentCategory !== 'all') {
+      const tour = getValByName(item, "Tour", "Location", "City").toLowerCase();
+      const venue = getValByName(item, "Venue", "Theater", "Theatre").toLowerCase();
+      const locationText = `${tour} ${venue}`;
+
+      if (currentCategory === 'off-broadway') {
+        if (!locationText.includes("off-broadway") && !locationText.includes("off broadway")) return false;
+      } else if (currentCategory === 'broadway') {
+        if (locationText.includes("off-broadway") || locationText.includes("off broadway")) return false;
+        if (!locationText.includes("broadway")) return false;
+      } else if (currentCategory === 'west end') {
+        if (!locationText.includes("west end")) return false;
+      }
+    }
+
+    if (query && !item._searchIndex.includes(query)) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const stats = document.getElementById('stats');
+  if (stats) stats.innerText = `SHOWING ${currentFilteredItems.length} OF ${allData.length} ITEMS`;
+
+  const container = document.getElementById("card-container");
+  if (container) {
+    container.innerHTML = "";
+    displayedCount = 0;
+
+    if (currentFilteredItems.length > 0) {
+      appendNextBatch(30);
+    }
+  }
+}
+
+function appendNextBatch(count = BATCH_SIZE) {
+  const container = document.getElementById("card-container");
+  if (!container) return;
+
+  const nextSlice = currentFilteredItems.slice(displayedCount, displayedCount + count);
+  if (nextSlice.length === 0) return;
+
+  const fragment = document.createDocumentFragment();
+
+  nextSlice.forEach((item, i) => {
+    const globalIndex = displayedCount + i;
+    const show = getValByName(item, "Show") || "Unknown Show";
+    const date = getValByName(item, "Date");
+    const matineeEve = getValByName(item, "Matinée / Evening", "Matinee / Evening");
+    const showTime = matineeEve ? ` (${matineeEve})` : "";
+    
+    const format = getFormat(item);
+    const sizeVal = getFileSize(item);
+
+    let displayFormatStr = "";
+    if (format && sizeVal) {
+      displayFormatStr = `${format} [${sizeVal}]`;
+    } else if (format) {
+      displayFormatStr = format;
+    } else if (sizeVal) {
+      displayFormatStr = sizeVal;
+    }
+
+    const tour = getValByName(item, "Tour", "Location", "City");
+    const venue = getValByName(item, "Venue", "Theater", "Theatre");
+    const master = getValByName(item, "Master");
+    const cast = getValByName(item, "Cast");
+    const masterNotes = getValByName(item, "Master Notes");
+    const tradingNotes = getValByName(item, "Trading Notes");
+    const myNotes = getValByName(item, "My Notes");
+
+    const displayType = getMediaType(item);
+    const formatBadgeHTML = displayFormatStr ? `<span class="badge badge-format">${displayFormatStr}</span>` : '';
+    const safeTypeClass = displayType.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const typeBadgeHTML = `<span class="badge badge-${safeTypeClass}">${displayType}</span>`;
+    
+    const nftDateStr = getValByName(item, "NFT Date");
+    const nftForeverVal = getValByName(item, "NFT Forever").toLowerCase();
+    
+    let nftForever = (
+      nftForeverVal === "true" || nftForeverVal === "yes" || nftForeverVal === "1" || 
+      nftForeverVal === "nftf" || nftForeverVal.includes("forever") ||
+      nftDateStr.toLowerCase().includes("forever") || nftDateStr.toLowerCase() === "nftf"
+    );
+
+    const locationParts = [tour, venue].filter(Boolean).join(" - ");
+    let nftBadgeHTML = '';
+    let isNFTActive = false;
+
+    if (nftForever) {
+      isNFTActive = true;
+      nftBadgeHTML = `<br><span class="nft-active">⛔ NFT FOREVER</span>`;
+    } else if (nftDateStr !== "") {
+      if (isNftStillActive(nftDateStr)) {
+        isNFTActive = true;
+        nftBadgeHTML = `<br><span class="nft-active">⛔ NFT UNTIL: ${nftDateStr}</span>`;
+      } else {
+        isNFTActive = false;
+        nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
+      }
+    }
+
+    const cardClass = `item-card ${isNFTActive ? 'card-nft-active nft-card-locked' : 'card-standard'}`;
+    const itemInCart = isInCart(item);
+
+    const card = document.createElement("div");
+    card.className = cardClass;
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-title">${show}</div>
+        <div class="card-badges" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+          ${formatBadgeHTML}
+          ${typeBadgeHTML}
+        </div>
       </div>
       
-      <!-- Primary Format Filters -->
-      <div class="filters">
-        <button type="button" class="filter-btn active" data-filter="all">All Formats</button>
-        <button type="button" class="filter-btn" data-filter="Video">Videos</button>
-        <button type="button" class="filter-btn" data-filter="Audio">Audios</button>
+      <div class="card-meta">
+        ${date ? `📅 ${date}${showTime}` : ''} 
+        ${locationParts ? `📍 ${locationParts}` : ''}
+        ${master ? `<br>🎥 <strong>Master:</strong> ${master}` : ''}
+        ${nftBadgeHTML}
       </div>
 
-      <!-- Category Location Filters -->
-      <div class="filters category-filters">
-        <button type="button" class="cat-btn active" data-category="all">All Locations</button>
-        <button type="button" class="cat-btn" data-category="broadway">Broadway</button>
-        <button type="button" class="cat-btn" data-category="off-broadway">Off-Broadway</button>
-        <button type="button" class="cat-btn" data-category="west end">West End</button>
+      ${cast ? `<div class="card-cast"><strong>CAST:</strong> ${cast}</div>` : ''}
+      ${masterNotes ? `<div class="card-notes"><strong>MASTER NOTES:</strong> ${masterNotes}</div>` : ''}
+      ${tradingNotes ? `<div class="card-notes"><strong>TRADING NOTES:</strong> ${tradingNotes}</div>` : ''}
+      ${myNotes ? `<div class="card-notes"><strong>NOTES:</strong> ${myNotes}</div>` : ''}
+
+      <div class="card-actions">
+        <button type="button" class="add-cart-btn ${itemInCart ? 'in-cart' : ''}" data-index="${globalIndex}">
+          ${itemInCart ? '✓ In Request' : '+ Add to Trade'}
+        </button>
+        <button type="button" class="copy-card-btn" data-index="${globalIndex}">📋 Copy Info</button>
       </div>
-    </div>
+    `;
+    fragment.appendChild(card);
+  });
 
-    <!-- Visual Divider -->
-    <div class="abyss-divider" style="display: flex; align-items: center; justify-content: center; margin: 40px 0 20px 0; gap: 15px;">
-      <div style="flex-grow: 1; height: 1px; background: linear-gradient(90deg, rgba(255,215,0,0.8), rgba(255,69,0,0.8), transparent);"></div>
-      <span class="abyss-label" style="font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 2px; color: #ffaa00; text-shadow: 0 0 8px #ff4500; text-transform: uppercase;">
-        ✦ THE GREAT CHASM — ENTER PANDEMONIUM ✦
-      </span>
-      <div style="flex-grow: 1; height: 1px; background: linear-gradient(-90deg, rgba(255,215,0,0.8), rgba(255,69,0,0.8), transparent);"></div>
-    </div>
+  requestAnimationFrame(() => {
+    container.appendChild(fragment);
+    displayedCount += nextSlice.length;
+    ensureCartButtonInBody();
+  });
+}
 
-    <div id="stats">Loading collection...</div>
-    <div id="card-container"></div>
+/* ============================================================
+   LOCALSTORAGE CART & HELPERS
+============================================================ */
+function loadCartFromStorage() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch (e) {
+    return [];
+  }
+}
 
-    <!-- Scroll Sentinel for Infinite Loading -->
-    <div id="scroll-sentinel" style="height: 20px; margin-top: 20px;"></div>
-  </main>
+function saveCartToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tradeCart));
+  } catch (e) {}
+}
 
-  <!-- Scroll to Top Floating Button -->
-  <button type="button" id="scroll-top-btn" title="Back to Top">⬆ ASCEND</button>
+function openDrawer() {
+  document.getElementById("trade-drawer")?.classList.add("open");
+  document.getElementById("drawer-overlay")?.classList.add("open");
+}
 
-  <!-- Floating Trade Cart Trigger Button -->
-  <button type="button" id="cart-toggle-btn" class="cart-toggle-btn">
-    🏛️ Trade Request (<span id="cart-count">0</span>)
-  </button>
+function closeDrawer() {
+  document.getElementById("trade-drawer")?.classList.remove("open");
+  document.getElementById("drawer-overlay")?.classList.remove("open");
+}
 
-  <!-- Slide-out Trade Drawer -->
-  <div id="trade-drawer" class="trade-drawer">
-    <div class="drawer-header">
-      <h2>🎭 Your Trade Request</h2>
-      <button type="button" id="close-drawer-btn" class="close-btn">&times;</button>
-    </div>
+function getItemKey(item) {
+  const fmt = getFormat(item) || getFileSize(item) || getMediaType(item);
+  return `${getValByName(item, "Show")}|${getValByName(item, "Date")}|${getValByName(item, "Master")}|${fmt}`.toLowerCase();
+}
+
+function isInCart(item) {
+  const key = getItemKey(item);
+  return tradeCart.some(c => c.key === key);
+}
+
+function toggleCartItem(item, buttonEl) {
+  const key = getItemKey(item);
+  const existingIdx = tradeCart.findIndex(c => c.key === key);
+
+  if (existingIdx > -1) {
+    tradeCart.splice(existingIdx, 1);
+    if (buttonEl) {
+      buttonEl.innerText = "+ Add to Trade";
+      buttonEl.classList.remove("in-cart");
+    }
+    saveCartToStorage();
+    updateCartUI();
+  } else {
+    executeAddToCart(item, buttonEl);
+  }
+}
+
+function executeAddToCart(item, buttonEl) {
+  const fmt = getFormat(item);
+  const sz = getFileSize(item);
+  let displayFmt = (fmt && sz) ? `${fmt} [${sz}]` : (fmt || sz || getMediaType(item));
+
+  tradeCart.push({
+    key: getItemKey(item),
+    show: getValByName(item, "Show") || "Unknown Show",
+    date: getValByName(item, "Date") || "Unknown Date",
+    type: getMediaType(item),
+    format: displayFmt,
+    tour: getValByName(item, "Tour", "Location", "City"),
+    venue: getValByName(item, "Venue", "Theater", "Theatre"),
+    master: getValByName(item, "Master")
+  });
+
+  if (buttonEl) {
+    buttonEl.innerText = "✓ In Request";
+    buttonEl.classList.add("in-cart");
+  }
+
+  saveCartToStorage();
+  updateCartUI();
+}
+
+function generateFormattedText() {
+  const itemsText = tradeCart.map((item, i) => {
+    const location = [item.tour, item.venue].filter(Boolean).join(" - ");
+    let line = `${i + 1}. ${item.show} - ${item.date} (${item.format})`;
+    if (location) line += ` | ${location}`;
+    if (item.master) line += ` | Master: ${item.master}`;
+    return line;
+  }).join("\n");
+
+  return [
+    "Hi!",
+    "I would like to initiate a trade for the following items from your collection:",
+    "",
+    itemsText,
+    "",
+    "My Trading List / Link: [INSERT YOUR LINK HERE]",
+    "",
+    "Thanks!"
+  ].join("\n");
+}
+
+function updateCartUI() {
+  ensureCartButtonInBody();
+  const container = document.getElementById("cart-items-container");
+  const countEl = document.getElementById("cart-count");
+  const videoCountEl = document.getElementById("cart-video-count");
+  const audioCountEl = document.getElementById("cart-audio-count");
+
+  if (countEl) countEl.innerText = tradeCart.length;
+
+  let videos = 0;
+  let audios = 0;
+
+  if (!container) return;
+
+  if (tradeCart.length === 0) {
+    container.innerHTML = `<p class="empty-cart-msg">No items added yet. Click "+ Add to Trade" on any item card!</p>`;
+    if (videoCountEl) videoCountEl.innerText = "0";
+    if (audioCountEl) audioCountEl.innerText = "0";
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  tradeCart.forEach(item => {
+    if (item.type.includes("VIDEO")) videos++;
+    if (item.type.includes("AUDIO")) audios++;
+
+    const location = [item.tour, item.venue].filter(Boolean).join(" - ");
     
-    <div class="drawer-body">
-      <div id="cart-items-container">
-        <p class="empty-cart-msg">No items added yet. Click "+ Add to Trade" on any item card!</p>
-      </div>
-    </div>
+    const cartCard = document.createElement("div");
+    cartCard.className = "cart-item-row";
 
-    <div class="drawer-footer">
-      <div id="cart-summary-stats" class="cart-summary-stats">
-        Videos: <span id="cart-video-count">0</span> | Audios: <span id="cart-audio-count">0</span>
+    cartCard.innerHTML = `
+      <div class="cart-item-details">
+        <strong>${item.show}</strong>
+        <span>📅 ${item.date} (${item.format}) ${location ? `| 📍 ${location}` : ''}</span>
       </div>
-      <div class="drawer-actions">
-        <button type="button" id="copy-trade-btn" class="action-btn">📋 Copy Request</button>
-        <button type="button" id="email-trade-btn" class="action-btn email-btn">✉️ Email Request</button>
-        <button type="button" id="clear-cart-btn" class="clear-btn">Clear All</button>
-      </div>
-    </div>
-  </div>
+      <button type="button" class="remove-cart-item" data-key="${item.key}">&times;</button>
+    `;
+
+    cartCard.querySelector(".remove-cart-item").addEventListener("click", () => {
+      tradeCart = tradeCart.filter(c => c.key !== item.key);
+      saveCartToStorage();
+      updateCartUI();
+      applyFiltersAndRender();
+    });
+
+    fragment.appendChild(cartCard);
+  });
+
+  requestAnimationFrame(() => {
+    container.innerHTML = "";
+    container.appendChild(fragment);
+    if (videoCountEl) videoCountEl.innerText = videos;
+    if (audioCountEl) audioCountEl.innerText = audios;
+  });
+}
+
+function copyTradeRequest() {
+  if (!tradeCart.length) return;
+  const text = generateFormattedText();
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById("copy-trade-btn");
+    if (btn) {
+      btn.innerText = "✅ Copied Request!";
+      setTimeout(() => { btn.innerText = "📋 Copy Request"; }, 2000);
+    }
+  });
+}
+
+function getValByName(item, ...names) {
+  if (!item) return "";
+  const keys = Object.keys(item);
+  for (const name of names) {
+    const target = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    for (const key of keys) {
+      if (key.toLowerCase().replace(/[^a-z0-9]/g, '') === target) {
+        const val = item[key];
+        if (val !== undefined && val !== null) {
+          const str = val.toString().trim();
+          if (str) return str;
+        }
+      }
+    }
+  }
+  return "";
+}
+
+function getFileSize(item) {
+  if (!item) return "";
+
+  const sizeFields = ["File Size", "Size", "Filesize"];
+  for (const f of sizeFields) {
+    const val = getValByName(item, f);
+    if (val) {
+      const match = val.match(/\b\d+(\.\d+)?\s*(gb|mb|kb|tb)\b/i);
+      if (match) return match[0].toUpperCase();
+    }
+  }
+
+  for (const key in item) {
+    const val = item[key];
+    if (typeof val === 'string' && val) {
+      const match = val.match(/\b\d+(\.\d+)?\s*(gb|mb|kb|tb)\b/i);
+      if (match) return match[0].toUpperCase();
+    }
+  }
+
+  return "";
+}
+
+function getFormat(item) {
+  if (!item) return "";
+
+  const candidateKeys = [
+    "Trader Format", "Release Format", "File Format", 
+    "Media Format", "Format", "Container", "Extension", 
+    "Video Format", "Audio Format"
+  ];
+
+  let rawFormat = candidateKeys.map(k => getValByName(item, k)).find(v => Boolean(v)) || "";
+
+  if (!rawFormat) {
+    const formatRegex = /\b(vob|mp4|mkv|mov|avi|iso|mp3|m4a|flac|wav|ts|m2ts|wmv|mpg|mpeg|tracked|untracked)\b/i;
+    for (const key in item) {
+      const val = item[key];
+      if (typeof val === 'string' && formatRegex.test(val)) {
+        const match = val.match(formatRegex);
+        if (match) {
+          rawFormat = match[0].toUpperCase();
+          break;
+        }
+      }
+    }
+  }
+
+  if (!rawFormat) return "";
+
+  let cleaned = rawFormat.replace(/\b\d+(\.\d+)?\s*(gb|mb|kb|tb)\b/gi, "");
+  cleaned = cleaned.replace(/\b(video|audio|both|mixed)\b/gi, "");
+  cleaned = cleaned
+    .replace(/[\(\[\{\)\]\}]/g, " ")
+    .replace(/[-–—/,\.\:]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return cleaned;
+}
+
+function getMediaType(item) {
+  const audioVideo = getValByName(item, "Audio / Video", "Audio/Video").toLowerCase();
+  const typeRaw = getValByName(item, "Type").toLowerCase();
   
-  <div id="drawer-overlay" class="drawer-overlay"></div>
+  const rawFmt = (
+    getValByName(item, "Trader Format") + " " + 
+    getValByName(item, "Release Format") + " " + 
+    getValByName(item, "Format")
+  ).toLowerCase();
 
-  <footer class="y2k-watermark">
-    <div class="latin-epigraph">Descendit Ad Infernos • Facta Est Lux</div>
-    made by <span>paradise lost</span> (fka ananas)
-  </footer>
+  const isAudio = audioVideo.includes("audio") || typeRaw.includes("audio") || rawFmt.match(/\b(audio|mp3|m4a|wav|flac|tracked|cd)\b/);
+  const isVideo = audioVideo.includes("video") || typeRaw.includes("video") || rawFmt.match(/\b(video|mp4|vob|mov|mkv|avi|iso)\b/);
 
-  <script src="script.js?v=8.0"></script>
+  if (audioVideo.includes("both") || audioVideo.includes("mixed") || audioVideo.includes("&") || audioVideo.includes("/") || (isAudio && isVideo)) {
+    return "VIDEO / AUDIO";
+  }
+  if (isAudio) return "AUDIO";
+  return "VIDEO";
+}
+
+function parseEncoraDate(dateStr) {
+  if (!dateStr) return null;
+  const clean = dateStr.trim().replace(/\./g, '-');
+  const parts = clean.split(/[-/]/);
+
+  if (parts.length === 3) {
+    let day, month, year;
+    if (parts[0].length === 4) {
+      year = parseInt(parts[0], 10);
+      month = parseInt(parts[1], 10) - 1;
+      day = parseInt(parts[2], 10);
+    } else if (parts[2].length === 4) {
+      year = parseInt(parts[2], 10);
+      day = parseInt(parts[0], 10);
+      month = parseInt(parts[1], 10) - 1;
+    }
+    if (year && month !== undefined && day) return new Date(year, month, day);
+  }
+
+  const d = new Date(clean);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function isNftStillActive(dateStr) {
+  if (!dateStr) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const lower = dateStr.toLowerCase();
+  if (lower.includes("forever") || lower === "nftf" || lower.includes("master")) return true;
+
+  const parsedDate = parseEncoraDate(dateStr);
+  return parsedDate ? parsedDate >= today : false;
+}
+
+/* FIXED COPY SINGLE ITEM FUNCTION - ISOLATED FROM EMAIL DISPATCH TOAST */
+function copySingleItemSummary(item, buttonElement) {
+  const show = getValByName(item, "Show") || "Unknown Show";
+  const date = getValByName(item, "Date") || "Unknown Date";
+  const tour = getValByName(item, "Tour", "Location", "City");
+  const venue = getValByName(item, "Venue", "Theater", "Theatre");
+  const master = getValByName(item, "Master") || "Unknown Master";
   
-  <!-- GOTHIC TOAST MODAL -->
-  <div id="gothic-toast" class="gothic-toast-hidden">
-    <div class="gothic-toast-content">
-      <div class="gothic-toast-header">✦ RECORD INSCRIBED TO CLIPBOARD ✦</div>
-      <p>Select your destination to dispatch this request:</p>
-      <div class="gothic-toast-actions">
-        <button id="toast-gmail-btn" class="gothic-btn">OPEN GMAIL WEB</button>
-        <button id="toast-mail-btn" class="gothic-btn btn-secondary">DEFAULT MAIL APP</button>
-        <button id="toast-close-btn" class="gothic-btn btn-close">DISMISS</button>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
+  const fmt = getFormat(item);
+  const sz = getFileSize(item);
+  const formatStr = (fmt && sz) ? `${fmt} [${sz}]` : (fmt || sz || getMediaType(item));
+
+  const location = [tour, venue].filter(Boolean).join(" - ");
+
+  let text = `${show} - ${date} (${formatStr})`;
+  if (location) text += ` | ${location}`;
+  if (master) text += ` | Master: ${master}`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    if (buttonElement) {
+      const originalText = buttonElement.innerText;
+      buttonElement.innerText = "✅ Copied!";
+      buttonElement.classList.add("copied");
+
+      setTimeout(() => {
+        buttonElement.innerText = originalText;
+        buttonElement.classList.remove("copied");
+      }, 2000);
+    }
+  });
+}
+
+/* ============================================================
+   MULTIVERSE THEME ENGINE (Cyberpunk / Paradise Lost)
+============================================================ */
+let currentTheme = localStorage.getItem("siteTheme") || "cyberpunk";
+document.body.setAttribute("data-theme", currentTheme);
+
+function setTheme(themeName) {
+  currentTheme = themeName;
+  document.body.setAttribute("data-theme", themeName);
+  localStorage.setItem("siteTheme", themeName);
+  updateUI();
+}
+
+function updateUI() {
+  const btn = document.getElementById("paradise-btn");
+  if (!btn) return;
+
+  if (currentTheme === "paradise-lost") {
+    btn.innerText = "ASCEND TO CYBERSPACE";
+  } else {
+    btn.innerText = "ABANDON ALL HOPE";
+  }
+}
+
+function triggerParadiseLost() {
+  const isParadise = document.documentElement.getAttribute('data-theme') === 'paradise-lost';
+
+  if (isParadise) {
+    document.documentElement.removeAttribute('data-theme');
+    document.documentElement.classList.remove('paradise-lost', 'paradise-lost-mode');
+    document.body.classList.remove('paradise-lost', 'paradise-lost-mode');
+    localStorage.setItem('paradiseThemeActive', 'false');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'paradise-lost');
+    document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
+    document.body.classList.add('paradise-lost', 'paradise-lost-mode');
+    localStorage.setItem('paradiseThemeActive', 'true');
+  }
+
+  updateButtonLabel();
+}
+
+function updateButtonLabel() {
+  const btn = document.getElementById('paradise-btn');
+  const isParadise = document.documentElement.getAttribute('data-theme') === 'paradise-lost';
+  
+  if (btn) {
+    btn.textContent = isParadise ? '❖ Legacy Model (Cyberpunk)' : '❖ Ascend to Paradise';
+  }
+}
+
+/* ============================================================
+   FLOATING INFERNAL EMBERS ANIMATION
+============================================================ */
+const canvas = document.getElementById('ember-canvas');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+
+  let width = (canvas.width = window.innerWidth);
+  let height = (canvas.height = window.innerHeight);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const embers = Array.from({ length: 45 }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height + height * 0.4,
+    radius: Math.random() * 2 + 0.8,
+    speedY: -(Math.random() * 0.7 + 0.2),
+    speedX: (Math.random() - 0.5) * 0.4,
+    opacity: Math.random() * 0.7 + 0.3,
+    color: Math.random() > 0.4 ? '#ff4500' : '#ffaa00'
+  }));
+
+  function animateEmbers() {
+    ctx.clearRect(0, 0, width, height);
+
+    embers.forEach((ember) => {
+      ember.y += ember.speedY;
+      ember.x += ember.speedX;
+
+      if (ember.y < height * 0.35) {
+        ember.opacity -= 0.005;
+      }
+
+      if (ember.y < height * 0.2 || ember.opacity <= 0) {
+        ember.y = height + Math.random() * 50;
+        ember.x = Math.random() * width;
+        ember.opacity = Math.random() * 0.7 + 0.3;
+      }
+
+      ctx.beginPath();
+      ctx.arc(ember.x, ember.y, ember.radius, 0, Math.PI * 2);
+      ctx.fillStyle = ember.color;
+      ctx.globalAlpha = ember.opacity;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = ember.color;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animateEmbers);
+  }
+
+  if (window.innerWidth > 768) {
+    animateEmbers();
+  }
+}
