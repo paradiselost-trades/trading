@@ -56,20 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   updateButtonLabel();
 
-  // ------------------------------------------------------------
   // UNVEIL / CONCEAL NINE CIRCLES TOGGLE
-  // ------------------------------------------------------------
   const paletteToggleBtn = document.getElementById("palette-toggle-btn");
   const infernalPalette = document.getElementById("infernal-palette");
 
   if (paletteToggleBtn && infernalPalette) {
     paletteToggleBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      
-      // Toggle the 'closed' CSS class on the drawer container
       const isClosed = infernalPalette.classList.toggle("closed");
-      
-      // Update the text label span inside the trigger button
       const labelSpan = paletteToggleBtn.querySelector(".sigil-label");
       if (labelSpan) {
         labelSpan.innerText = isClosed 
@@ -79,9 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ------------------------------------------------------------
   // NO-EYESTRAIN TOGGLE ENGINE
-  // ------------------------------------------------------------
   const eyestrainBtn = document.getElementById("toggle-eyestrain-btn");
 
   if (eyestrainBtn) {
@@ -231,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.clipboard.writeText(bodyText).catch(() => {});
       }
 
-      // Explicitly trigger the dispatch notification bar only for email requests
       if (typeof showToast === "function") {
         showToast("RECORD INSCRIBED TO CLIPBOARD");
       } else {
@@ -260,9 +251,6 @@ function clearClearCartBtn() {
   });
 }
 
-/* ============================================================
-   INTERSECTION OBSERVER (INFINITE SCROLL ENGINE)
-============================================================ */
 function setupIntersectionObserver() {
   const sentinel = document.getElementById("scroll-sentinel");
   if (!sentinel) return;
@@ -342,7 +330,7 @@ function appendNextBatch(count = BATCH_SIZE) {
     const globalIndex = displayedCount + i;
     const show = getValByName(item, "Show") || "Unknown Show";
     const date = getValByName(item, "Date");
-    const matineeEve = getValByName(item, "Matinée / Evening", "Matinee / Evening");
+    const matineeEve = getValByName(item, "Matinée / Evening", "Matinee / Evening", "Matinee");
     const showTime = matineeEve ? ` (${matineeEve})` : "";
     
     const format = getFormat(item);
@@ -360,34 +348,42 @@ function appendNextBatch(count = BATCH_SIZE) {
     const tour = getValByName(item, "Tour", "Location", "City");
     const venue = getValByName(item, "Venue", "Theater", "Theatre");
     
-    // Master vs Co-Releaser Logic
+    // Master & Co-Releaser Logic
     const masterVal = getValByName(item, "Master");
     const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
 
     let masterDisplay = '';
-    if (masterVal && masterVal.toLowerCase() !== "unknown") {
+    const isMasterUnknown = !masterVal || masterVal.toLowerCase() === "unknown";
+
+    if (!isMasterUnknown) {
       masterDisplay = `🎥 <strong>Master:</strong> ${masterVal}`;
       if (coReleaserVal) {
         masterDisplay += ` <span style="opacity: 0.8; font-size: 0.9em;">(Co-Releaser: ${coReleaserVal})</span>`;
       }
     } else if (coReleaserVal) {
       masterDisplay = `🎥 <strong>Co-Releaser:</strong> ${coReleaserVal}`;
-    } else if (masterVal) {
-      masterDisplay = `🎥 <strong>Master:</strong> ${masterVal}`;
     }
 
     const cast = getValByName(item, "Cast");
     const masterNotes = getValByName(item, "Master Notes");
     const tradingNotes = getValByName(item, "Trading Notes");
-    const myNotes = getValByName(item, "My Notes");
+    const myNotes = getValByName(item, "My Notes", "Notes");
 
     const displayType = getMediaType(item);
     const formatBadgeHTML = displayFormatStr ? `<span class="badge badge-format">${displayFormatStr}</span>` : '';
     const safeTypeClass = displayType.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const typeBadgeHTML = `<span class="badge badge-${safeTypeClass}">${displayType}</span>`;
     
-    const nftDateStr = getValByName(item, "NFT Date");
-    const nftForeverVal = getValByName(item, "NFT Forever").toLowerCase();
+    // Expanded lookup keys for NFT / Sealed Until Judgment
+    const nftDateStr = getValByName(
+      item, 
+      "NFT Date", "NFT", "NFT Until", "NFT Date/Status", 
+      "Sealed Until Judgment", "Sealed Until Judgment Date", "Sealed Date"
+    );
+    const nftForeverVal = getValByName(
+      item, 
+      "NFT Forever", "NFT Forever?", "Forever NFT"
+    ).toLowerCase();
     
     let nftForever = (
       nftForeverVal === "true" || nftForeverVal === "yes" || nftForeverVal === "1" || 
@@ -401,14 +397,14 @@ function appendNextBatch(count = BATCH_SIZE) {
 
     if (nftForever) {
       isNFTActive = true;
-      nftBadgeHTML = `<br><span class="nft-active">⛔ NFT FOREVER</span>`;
+      nftBadgeHTML = `<br><span class="nft-active">⛔ SEALED UNTIL JUDGMENT (FOREVER)</span>`;
     } else if (nftDateStr !== "") {
       if (isNftStillActive(nftDateStr)) {
         isNFTActive = true;
-        nftBadgeHTML = `<br><span class="nft-active">⛔ NFT UNTIL: ${nftDateStr}</span>`;
+        nftBadgeHTML = `<br><span class="nft-active">⛔ SEALED UNTIL JUDGMENT: ${nftDateStr}</span>`;
       } else {
         isNFTActive = false;
-        nftBadgeHTML = `<br><span class="nft-passed">✅ PAST NFT (${nftDateStr})</span>`;
+        nftBadgeHTML = `<br><span class="nft-passed">✅ UNSEALED (${nftDateStr})</span>`;
       }
     }
 
@@ -455,9 +451,6 @@ function appendNextBatch(count = BATCH_SIZE) {
   });
 }
 
-/* ============================================================
-   LOCALSTORAGE CART & HELPERS
-============================================================ */
 function loadCartFromStorage() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -523,8 +516,6 @@ function executeAddToCart(item, buttonEl) {
     masterStr = masterVal;
   } else if (coReleaserVal) {
     masterStr = `Co-Releaser: ${coReleaserVal}`;
-  } else if (masterVal) {
-    masterStr = masterVal;
   }
 
   tradeCart.push({
@@ -772,7 +763,6 @@ function isNftStillActive(dateStr) {
   return parsedDate ? parsedDate >= today : false;
 }
 
-/* FIXED COPY SINGLE ITEM FUNCTION */
 function copySingleItemSummary(item, buttonElement) {
   const show = getValByName(item, "Show") || "Unknown Show";
   const date = getValByName(item, "Date") || "Unknown Date";
@@ -787,8 +777,6 @@ function copySingleItemSummary(item, buttonElement) {
     masterStr = masterVal;
   } else if (coReleaserVal) {
     masterStr = `Co-Releaser: ${coReleaserVal}`;
-  } else if (masterVal) {
-    masterStr = masterVal;
   }
   
   const fmt = getFormat(item);
