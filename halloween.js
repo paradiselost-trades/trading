@@ -4,8 +4,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const observer = new MutationObserver(() => {
-    if (document.documentElement.getAttribute('data-theme') === 'death-note') {
-      document.querySelectorAll('.card p, .bootleg-card p').forEach(p => {
+    const activeTheme = document.documentElement.getAttribute('data-theme');
+    if (activeTheme === 'death-note') {
+      document.querySelectorAll('.card p, .bootleg-card p, .item-card div').forEach(p => {
         if (p.innerHTML.includes('CAST:') && !p.innerHTML.includes('infernal-label-cast')) {
           p.innerHTML = p.innerHTML.replace('CAST:', '<span class="infernal-label-cast">CAST:</span>');
         }
@@ -18,5 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+
   observer.observe(document.body, { childList: true, subtree: true });
 });
