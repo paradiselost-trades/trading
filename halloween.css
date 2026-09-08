@@ -469,3 +469,65 @@ html[data-theme="death-note"] #cart-toggle-btn:hover {
   border-color: #ff3333 !important;
   box-shadow: 0 0 15px rgba(255, 51, 51, 0.8) !important;
 }
+/* ==========================================================================
+   DEATH NOTE — PURPLE/VIOLET OVERRIDE & HARD RESET
+   ========================================================================== */
+
+/* 1. Global Borders & Glowing Elements */
+html[data-theme="death-note"] *,
+html[data-theme="death-note"] *::before,
+html[data-theme="death-note"] *::after {
+  border-color: #333333 !important;
+}
+
+/* 2. Fix Search Input Purple Glow & Outline */
+html[data-theme="death-note"] #search-input,
+html[data-theme="death-note"] input[type="text"] {
+  background-color: #0d0d0d !important;
+  color: #ffffff !important;
+  border: 1px solid #8b0000 !important;
+  box-shadow: 0 0 8px rgba(139, 0, 0, 0.4) !important;
+  outline: none !important;
+}
+
+html[data-theme="death-note"] #search-input:focus,
+html[data-theme="death-note"] input[type="text"]:focus {
+  border-color: #ff3333 !important;
+  box-shadow: 0 0 12px rgba(255, 51, 51, 0.7) !important;
+}
+
+/* 3. Rules Box Border Fix */
+html[data-theme="death-note"] .rules-box,
+html[data-theme="death-note"] .rules-box-inner {
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15) !important;
+}
+
+/* 4. Abyss Divider Label & Lines Fix */
+html[data-theme="death-note"] .abyss-divider span,
+html[data-theme="death-note"] .abyss-label {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5) !important;
+}
+
+html[data-theme="death-note"] .abyss-divider div {
+  background: #ffffff !important;
+  opacity: 0.3 !important;
+}
+
+/* 5. Ascend / Floating Action Buttons */
+html[data-theme="death-note"] #scroll-top-btn,
+html[data-theme="death-note"] #cart-toggle-btn {
+  background-color: #0d0d0d !important;
+  color: #ffffff !important;
+  border: 1px solid #8b0000 !important;
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.5) !important;
+  text-shadow: none !important;
+}
+
+html[data-theme="death-note"] #scroll-top-btn:hover,
+html[data-theme="death-note"] #cart-toggle-btn:hover {
+  background-color: #8b0000 !important;
+  border-color: #ff3333 !important;
+  box-shadow: 0 0 15px rgba(255, 51, 51, 0.8) !important;
+}
