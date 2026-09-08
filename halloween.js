@@ -1,5 +1,5 @@
 /* ==========================================================================
-   DEATH NOTE RESKIN — COMPLETE DYNAMIC SCRIPT & INTERACTIVE TRAPS
+   DEATH NOTE RESKIN — DYNAMIC SCRIPT & INTERACTIVE TRAPS (UPDATED)
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const labelObserver = new MutationObserver(() => {
     const activeTheme = document.documentElement.getAttribute('data-theme');
     if (activeTheme === 'death-note') {
-      document.querySelectorAll('.card p, .bootleg-card p, .item-card div').forEach(p => {
+      document.querySelectorAll('.card p, .bootleg-card p, .item-card div, .card-cast, .card-notes').forEach(p => {
         if (p.innerHTML.includes('CAST:') && !p.innerHTML.includes('infernal-label-cast')) {
           p.innerHTML = p.innerHTML.replace('CAST:', '<span class="infernal-label-cast">CAST:</span>');
         }
@@ -30,11 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupDeathNoteFeatures() {
   const isDeathNote = () => document.documentElement.getAttribute('data-theme') === 'death-note';
 
+  // SAFE MODE TOGGLE BUTTON
+  const injectSafeModeButton = () => {
+    if (document.getElementById('dn-safe-mode-btn')) return;
+    const header = document.querySelector('header') || document.body;
+
+    const safeBtn = document.createElement('button');
+    safeBtn.id = 'dn-safe-mode-btn';
+    safeBtn.style.cssText = 'margin: 5px; padding: 6px 12px; background: #222; color: #fff; border: 1px solid #666; cursor: pointer; font-size: 0.85rem;';
+    safeBtn.innerText = '🛡️ Safe Mode: OFF';
+    header.appendChild(safeBtn);
+
+    safeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dn-safe-mode');
+      const active = document.body.classList.contains('dn-safe-mode');
+      safeBtn.innerText = active ? '🛡️ Safe Mode: ON' : '🛡️ Safe Mode: OFF';
+    });
+  };
+
   // INJECT THE LIND L. TAILOR BAIT CARD
   const injectBaitCard = () => {
     if (!isDeathNote() || document.getElementById('lind-l-tailor-card')) return;
-    
-    // Find grid or card list container dynamically
+
     const container = document.getElementById('card-container') || 
                       document.querySelector('.card-grid') || 
                       document.querySelector('.items-list') || 
@@ -69,18 +86,15 @@ function setupDeathNoteFeatures() {
   function triggerLTrap() {
     const baitCard = document.getElementById('lind-l-tailor-card');
     
-    // Low sinister chime sound
     playSinisterChime();
 
-    // Card turns to ash / vanishes
     if (baitCard) {
       baitCard.style.transition = 'all 0.8s ease';
       baitCard.style.opacity = '0';
-      baitCard.style.transform = 'scale(0.8) rotate(5deg)';
+      baitCard.style.transform = 'scale(0.8)';
       setTimeout(() => baitCard.remove(), 800);
     }
 
-    // Full Screen Trap Warning Banner
     const banner = document.createElement('div');
     banner.className = 'kira-trap-banner';
     banner.innerHTML = `
@@ -103,6 +117,7 @@ function setupDeathNoteFeatures() {
     const eyeBtn = document.createElement('button');
     eyeBtn.id = 'shinigami-eyes-btn';
     eyeBtn.className = 'shinigami-btn';
+    eyeBtn.style.cssText = 'margin: 5px; padding: 6px 12px; background: #8b0000; color: #fff; border: 1px solid #ff0000; cursor: pointer; font-size: 0.85rem;';
     eyeBtn.innerText = '👁️ Trade Half Your Life for Shinigami Eyes';
     header.appendChild(eyeBtn);
 
@@ -113,17 +128,13 @@ function setupDeathNoteFeatures() {
     });
   };
 
-  // 40-SECOND KIRA COUNTDOWN & OMINOUS WebAudio FLATLINE
+  // 40-SECOND KIRA COUNTDOWN & WebAudio FLATLINE
   document.addEventListener('click', (e) => {
-    // Detect clicks on global floating trade button or individual card buttons
-    const tradeTrigger = e.target.closest('#trade-request-btn, .floating-trade-btn, [class*="trade"], .add-cart-btn, button');
+    const tradeTrigger = e.target.closest('#trade-request-btn, .floating-trade-btn, [class*="trade"], .add-cart-btn');
     
     if (tradeTrigger && !document.getElementById('death-note-timer-box') && isDeathNote()) {
-      
-      // Floating Timer Box fixed over bottom right UI
       const timerBox = document.createElement('div');
       timerBox.id = 'death-note-timer-box';
-      timerBox.className = 'death-timer-box';
       timerBox.innerHTML = `
         <span class="timer-label">KIRA HEART RATE:</span>
         <span id="death-timer-count">40s</span>
@@ -137,24 +148,21 @@ function setupDeathNoteFeatures() {
         timeLeft--;
         if (countDisplay) countDisplay.innerText = `${timeLeft}s`;
 
-      if (timeLeft <= 0) {
+        if (timeLeft <= 0) {
           clearInterval(interval);
           if (timerBox) {
             timerBox.classList.add('flatlined');
             timerBox.innerHTML = `<span class="timer-label">STATUS:</span> <span class="flatline-text">💀 FLATLINE</span>`;
           }
 
-          // 1. Synthesize flatline audio tone
           playFlatlineTone();
-
-          // 2. Trigger 2-second Full Screen Blackout
           triggerBlackout();
         }
       }, 1000);
     }
   });
 
-  // AUDIO SYNTHESIZERS (NO CHEERY AUDIO CLIPS)
+  // AUDIO SYNTHESIZERS
   function playFlatlineTone() {
     try {
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -162,17 +170,15 @@ function setupDeathNoteFeatures() {
       const gain = audioCtx.createGain();
 
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(380, audioCtx.currentTime); // Low eerie flatline
-      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(380, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
 
       osc.connect(gain);
       gain.connect(audioCtx.destination);
 
       osc.start();
-      osc.stop(audioCtx.currentTime + 3.0);
-    } catch (err) {
-      console.log('Audio Context blocked or unsupported', err);
-    }
+      osc.stop(audioCtx.currentTime + 2.5);
+    } catch (err) {}
   }
 
   function playSinisterChime() {
@@ -183,32 +189,32 @@ function setupDeathNoteFeatures() {
 
       osc.type = 'sine';
       osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
 
       osc.connect(gain);
       gain.connect(audioCtx.destination);
 
       osc.start();
-      osc.stop(audioCtx.currentTime + 1.2);
+      osc.stop(audioCtx.currentTime + 1.0);
     } catch (err) {}
   }
-   // Triggers a 2-second screen blackout on flatline
+
   function triggerBlackout() {
     const blackout = document.createElement('div');
     blackout.className = 'kira-blackout-screen';
     document.body.appendChild(blackout);
 
-    // Remove the blackout after exactly 2 seconds
     setTimeout(() => {
       blackout.remove();
     }, 2000);
   }
 
-  // Watch for dynamic theme updates
+  // WATCH FOR THEME ACTIVATION
   const themeObserver = new MutationObserver(() => {
     if (isDeathNote()) {
       injectBaitCard();
       injectEyeButton();
+      injectSafeModeButton();
     }
   });
 
@@ -216,5 +222,6 @@ function setupDeathNoteFeatures() {
   if (isDeathNote()) {
     injectBaitCard();
     injectEyeButton();
+    injectSafeModeButton();
   }
 }
