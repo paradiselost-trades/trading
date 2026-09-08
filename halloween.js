@@ -459,3 +459,54 @@ html[data-theme="death-note"] [class*="btn"]:active {
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 0 15px #ff0000 !important;
   transform: translateY(2px) scale(0.98) !important;
 }
+/* ==========================================================================
+   DEATH NOTE DYNAMIC TICKER INJECTION
+   ========================================================================== */
+
+(function initDeathNoteTicker() {
+  const canonicalRules = [
+    "The human whose name is written in this note shall die.",
+    "This note will not take effect unless the writer has the person's face in their mind when writing his/her name.",
+    "If the cause of death is written within 40 seconds of writing the person's name, it will happen.",
+    "If the cause of death is not specified, the person will simply die of a heart attack.",
+    "After writing the cause of death, details of the death should be written in the next 6 minutes and 40 seconds.",
+    "The human who touches the Death Note can recognize the image and voice of its original owner, even if the human is not the owner.",
+    "The person in possession of the Death Note is possessed by a god of death, its original owner, until they die.",
+    "A human who uses the Death Note can neither go to Heaven nor Hell."
+  ];
+
+  let currentRuleIndex = 0;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check if the current active theme is Death Note
+    const activeTheme = document.documentElement.getAttribute('data-theme');
+    if (activeTheme !== 'death-note') return;
+
+    // Build ticker HTML dynamically without changing index.html
+    const tickerContainer = document.createElement('div');
+    tickerContainer.id = 'dn-rules-ticker';
+    tickerContainer.className = 'dn-ticker-bottom';
+    tickerContainer.innerHTML = `
+      <span class="dn-ticker-label">HOW TO USE IT</span>
+      <div class="dn-ticker-content">
+        <span id="dn-rule-text">${canonicalRules[0]}</span>
+      </div>
+    `;
+
+    document.body.appendChild(tickerContainer);
+
+    // Set up auto-cycling rule text
+    setInterval(() => {
+      const ruleElement = document.getElementById('dn-rule-text');
+      if (!ruleElement) return;
+
+      ruleElement.classList.add('fade-out');
+
+      setTimeout(() => {
+        currentRuleIndex = (currentRuleIndex + 1) % canonicalRules.length;
+        ruleElement.textContent = canonicalRules[currentRuleIndex];
+        ruleElement.classList.remove('fade-out');
+      }, 500);
+    }, 7000);
+  });
+})();
