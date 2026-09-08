@@ -1925,3 +1925,87 @@ span[style*="SEALED UNTIL"]:hover {
   position: relative;
   z-index: 6;
 }
+/* Dynamic Center Modal Styling */
+#dynamic-toast-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+}
+
+#dynamic-toast-modal .toast-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+#dynamic-toast-modal .toast-content-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #0a0a0a;
+  border: 1px solid #ff2222;
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
+  padding: 24px;
+  border-radius: 6px;
+  text-align: center;
+  color: #fff;
+  width: 90%;
+  max-width: 440px;
+}
+
+#dynamic-toast-modal .toast-title {
+  font-family: 'Cinzel', serif;
+  font-weight: bold;
+  color: #ff3333;
+  font-size: 1.1em;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+#dynamic-toast-modal .toast-desc {
+  font-size: 0.9em;
+  color: #ccc;
+  margin-bottom: 18px;
+}
+
+#dynamic-toast-modal .toast-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#dynamic-toast-modal .toast-action-btn,
+#dynamic-toast-modal .toast-dismiss-btn {
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 60, 60, 0.5);
+  background: #141414;
+  color: #fff;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#dynamic-toast-modal .toast-action-btn:hover {
+  background: #8b0000;
+  border-color: #ff4d4d;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+}
+
+#dynamic-toast-modal .toast-dismiss-btn {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+#dynamic-toast-modal .toast-dismiss-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
