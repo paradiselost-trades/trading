@@ -571,3 +571,11 @@ html[data-theme="death-note"] input[type="text"] {
   margin-top: 10px !important;
   align-self: center !important;
 }
+/* Change Label Style and Spacing for TIME LEFT */
+#death-note-timer-box .timer-label::before {
+  content: "TIME LEFT: " !important;
+}
+
+#death-note-timer-box .timer-label {
+  font-size: 0 !important; /* Hides old text while preserving font properties */
+}
