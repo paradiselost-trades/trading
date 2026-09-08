@@ -1,10 +1,11 @@
 /* ==========================================================================
-   DEATH NOTE RESKIN — HALLOWEEN THEME OVERLAY (FULL FIX)
+   DEATH NOTE RESKIN — HALLOWEEN THEME OVERLAY (UPDATED & FULLY REPAIRED)
    ========================================================================== */
 
-/* 1. IMPORTS & FONTS */
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+/* 1. FONT IMPORT DEFINITIONS */
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Rock+Salt&family=Reenie+Beanie&family=UnifrakturMaguntia&family=Share+Tech+Mono&display=swap');
 
+/* Death Note Gothic Font Declaration */
 @font-face {
   font-family: 'DeathNoteGothic';
   src: url('font/Death%20Note.ttf') format('truetype'),
@@ -14,6 +15,7 @@
   font-display: swap;
 }
 
+/* Whizbang Roman Font Declaration */
 @font-face {
   font-family: 'Whizbang';
   src: url('font/whizbang-roman.ttf') format('truetype');
@@ -24,8 +26,8 @@
 
 :root[data-theme="death-note"] {
   --dn-bg: #0d0d0d;
-  --dn-paper-bg: #f5f2e9;
-  --dn-paper-line: #c3bcae;
+  --dn-paper-bg: #f7f4ec;
+  --dn-paper-line: #cfc8b8;
   --dn-paper-text: #0a0a0a;
   --dn-rulebook-bg: #050505;
   --dn-rulebook-border: #ffffff;
@@ -33,13 +35,15 @@
   --dn-crimson: #8b0000;
   --dn-glow-red: #ff3333;
   
+  /* Font Family Variables */
   --dn-font-heading: 'DeathNoteGothic', 'UnifrakturMaguntia', 'Courier New', monospace;
   --dn-font-body: 'Whizbang', 'Special Elite', 'Georgia', serif;
+  --dn-font-handwriting: 'Rock Salt', 'Reenie Beanie', cursive;
   --dn-font-mono: 'Share Tech Mono', 'Courier New', monospace;
 }
 
 /* ==========================================================================
-   2. ATMOSPHERIC BACKGROUND & OVERLAYS
+   2. CRT SCANLINE KILL SWITCH & ATMOSPHERIC BACKGROUND
    ========================================================================== */
 html[data-theme="death-note"] ::before,
 html[data-theme="death-note"] ::after,
@@ -50,49 +54,30 @@ html[data-theme="death-note"] .overlay {
   box-shadow: none !important;
 }
 
-html[data-theme="death-note"] body {
+/* Base Layout Background Override */
+html[data-theme="death-note"],
+html[data-theme="death-note"] body,
+html[data-theme="death-note"] #app,
+html[data-theme="death-note"] .main-container {
+  background-color: var(--dn-bg) !important;
   background: #050505 radial-gradient(circle at 50% 20%, rgba(139, 0, 0, 0.18) 0%, transparent 50%),
-              radial-gradient(circle at 20% 80%, rgba(40, 40, 40, 0.4) 0%, transparent 40%),
               radial-gradient(circle at 50% 50%, #141414 0%, #020202 100%) fixed !important;
-  position: relative;
-  overflow-x: hidden;
   color: #f0f0f0 !important;
 }
 
-/* Crimson Border Glow */
-html[data-theme="death-note"] body::before {
-  content: "" !important;
-  position: fixed !important;
-  inset: 0 !important;
-  box-shadow: inset 0 0 100px rgba(139, 0, 0, 0.25), inset 0 0 40px rgba(0, 0, 0, 0.9) !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-}
-
-/* Floating Crimson Ash Effect */
-html[data-theme="death-note"] body::after {
-  content: "" !important;
-  position: fixed !important;
-  top: -50%; left: -50%; width: 200%; height: 200% !important;
-  background: radial-gradient(2px 2px at 20px 30px, rgba(255, 77, 77, 0.4), rgba(0,0,0,0)),
-              radial-gradient(2px 2px at 40px 70px, rgba(139, 0, 0, 0.5), rgba(0,0,0,0)),
-              radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.3), rgba(0,0,0,0)) repeat !important;
-  background-size: 200px 200px !important;
-  animation: floatingAsh 18s linear infinite !important;
-  pointer-events: none !important;
-  opacity: 0.6 !important;
-  z-index: 0 !important;
-}
-
-@keyframes floatingAsh {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(-200px) rotate(5deg); }
-}
-
 /* ==========================================================================
-   3. TYPOGRAPHY
+   3. TYPOGRAPHY RULES (HEADINGS = DEATH NOTE | BODY = WHIZBANG)
    ========================================================================== */
-html[data-theme="death-note"] :is(h1, h2, h3, h4, .main-title, .votive-glow, #stats) {
+
+/* Major Headings ONLY — Death Note Gothic */
+html[data-theme="death-note"] h1,
+html[data-theme="death-note"] h2,
+html[data-theme="death-note"] h3,
+html[data-theme="death-note"] h4,
+html[data-theme="death-note"] .main-title,
+html[data-theme="death-note"] .votive-glow,
+html[data-theme="death-note"] #stats,
+html[data-theme="death-note"] .kira-banner-content h1 {
   font-family: var(--dn-font-heading) !important;
   color: #ffffff !important;
   letter-spacing: 2.5px !important;
@@ -100,7 +85,15 @@ html[data-theme="death-note"] :is(h1, h2, h3, h4, .main-title, .votive-glow, #st
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 18px #000000 !important;
 }
 
-html[data-theme="death-note"] :is(.card-meta, .card-cast, .card-notes, .card-title, p, span, li, div:not(.main-title)) {
+/* Card Body, Meta, Cast, & Notes — Whizbang Font */
+html[data-theme="death-note"] .card-meta,
+html[data-theme="death-note"] .card-cast,
+html[data-theme="death-note"] .card-notes,
+html[data-theme="death-note"] .card-title,
+html[data-theme="death-note"] p,
+html[data-theme="death-note"] span,
+html[data-theme="death-note"] li,
+html[data-theme="death-note"] div:not(.main-title) {
   font-family: var(--dn-font-body) !important;
   font-size: 0.98rem;
   line-height: 1.5;
@@ -109,57 +102,62 @@ html[data-theme="death-note"] :is(.card-meta, .card-cast, .card-notes, .card-tit
 }
 
 /* ==========================================================================
-   4. NOTEBOOK CARDS & BADGES
+   4. LINED PAPER BACKGROUND & CARDS
    ========================================================================== */
-html[data-theme="death-note"] :is(.card, .bootleg-card, .item-card) {
+
+html[data-theme="death-note"] .card,
+html[data-theme="death-note"] .bootleg-card,
+html[data-theme="death-note"] .item-card {
   position: relative !important;
   background-color: var(--dn-paper-bg) !important;
-  background-image: repeating-linear-gradient(transparent, transparent 27px, var(--dn-paper-line) 28px) !important;
-  border: 1px solid #d2cbba !important;
-  border-radius: 2px !important;
-  padding: 20px 20px 20px 58px !important;
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(180, 170, 150, 0.2) !important;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    var(--dn-paper-line) 28px
+  ) !important;
+  border: 1px solid #b5b0a1 !important;
+  border-radius: 3px !important;
+  padding-left: 48px !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.85), 0 0 2px rgba(255, 255, 255, 0.2) !important;
   color: var(--dn-paper-text) !important;
-  margin-bottom: 25px !important;
-  overflow: hidden !important;
 }
 
-/* Margin Line */
-html[data-theme="death-note"] :is(.card, .bootleg-card, .item-card)::before {
+/* Red Notebook Margin Line */
+html[data-theme="death-note"] .card::before,
+html[data-theme="death-note"] .bootleg-card::before,
+html[data-theme="death-note"] .item-card::before {
   content: "" !important;
   position: absolute !important;
-  inset: 0 auto 0 44px !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 34px !important;
   width: 2px !important;
   background-color: var(--dn-margin-line) !important;
   z-index: 1 !important;
 }
 
-/* Notebook Ring Punch Holes */
-html[data-theme="death-note"] :is(.card, .bootleg-card, .item-card)::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 auto 0 14px !important;
-  width: 14px !important;
-  background: radial-gradient(circle at center, #0d0d0d 40%, transparent 45%) repeat-y !important;
-  background-size: 14px 40px !important;
-  z-index: 2 !important;
-}
-
-html[data-theme="death-note"] :is(.card, .bootleg-card, .item-card) :is(p, .card-cast, .card-notes) {
+/* Card Text Styling */
+html[data-theme="death-note"] .card p,
+html[data-theme="death-note"] .bootleg-card p,
+html[data-theme="death-note"] .item-card p,
+html[data-theme="death-note"] .card-cast,
+html[data-theme="death-note"] .card-notes {
   font-family: var(--dn-font-body) !important;
   color: #050505 !important;
   background: transparent !important;
   line-height: 28px !important;
 }
 
-html[data-theme="death-note"] :is(.infernal-label-cast, .infernal-label-notes) {
-  color: var(--dn-crimson) !important;
+/* Deep Crimson Label Highlights */
+html[data-theme="death-note"] .infernal-label-cast,
+html[data-theme="death-note"] .infernal-label-notes {
+  color: #8b0000 !important;
   font-family: var(--dn-font-body) !important;
   font-weight: 800 !important;
   background: transparent !important;
 }
 
-/* Format & Size Badges */
+/* Badges and Metadata */
 html[data-theme="death-note"] :is(.format-badge, .size-badge, .card-type, .card-size, [class*="master"], [class*="badge"]) {
   background-color: var(--dn-crimson) !important;
   color: #ffffff !important;
@@ -171,20 +169,22 @@ html[data-theme="death-note"] :is(.format-badge, .size-badge, .card-type, .card-
 }
 
 /* ==========================================================================
-   5. INSTRUCTION BOXES & TRAP OVERLAYS
+   5. INSTRUCTION PAGES & TRAP OVERLAYS
    ========================================================================== */
-html[data-theme="death-note"] :is(.rules-box, #infernal-palette) {
+
+html[data-theme="death-note"] .rules-box,
+html[data-theme="death-note"] #infernal-palette {
   background-color: var(--dn-rulebook-bg) !important;
   border: 2px solid var(--dn-rulebook-border) !important;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
   text-align: center !important;
   position: relative !important;
-  margin-top: 35px !important;
-  padding-top: 25px !important;
 }
 
-html[data-theme="death-note"] .rules-box :is(p, ul, li) {
+html[data-theme="death-note"] .rules-box p,
+html[data-theme="death-note"] .rules-box ul,
+html[data-theme="death-note"] .rules-box li {
   font-family: var(--dn-font-body) !important;
   color: #ffffff !important;
   line-height: 1.7 !important;
@@ -193,120 +193,93 @@ html[data-theme="death-note"] .rules-box :is(p, ul, li) {
 html[data-theme="death-note"] .rules-box::before {
   content: "HOW TO USE IT" !important;
   position: absolute;
-  top: -16px; left: 50%;
+  top: -14px;
+  left: 50%;
   transform: translateX(-50%);
-  background: #000000 !important;
-  color: #ffffff !important;
-  font-family: var(--dn-font-mono) !important;
-  padding: 2px 14px;
-  font-size: 0.9rem;
-  border: 1px solid #ffffff;
-  z-index: 2;
+  background: var(--dn-rulebook-bg);
+  color: #fff;
+  font-family: var(--dn-font-heading);
+  padding: 2px 16px;
+  font-size: 1rem;
+  border: 1px solid var(--dn-rulebook-border);
 }
 
+/* Shinigami Eyes Effect */
 body.shinigami-eyes-active {
   filter: invert(100%) hue-rotate(180deg) contrast(140%) !important;
 }
 
-/* L Broadcast Trap Banner */
+/* L's Trap Modal Banner */
 .kira-trap-banner {
   position: fixed;
-  inset: 0;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   background: rgba(0, 0, 0, 0.95);
   display: flex; justify-content: center; align-items: center;
   z-index: 99999;
 }
 
 .kira-banner-content {
-  border: 2px solid var(--dn-crimson);
+  border: 3px solid #8b0000;
   padding: 40px;
   background: #000000;
-  color: var(--dn-glow-red);
+  color: #ff3333;
   text-align: center;
-  box-shadow: 0 0 30px var(--dn-crimson);
+  box-shadow: 0 0 30px #ff0000;
 }
 
-.kira-banner-content h1 {
-  font-family: var(--dn-font-mono) !important;
-  font-size: 2rem !important;
+.kira-trap-banner .kira-banner-content p {
   color: #ffffff !important;
-  letter-spacing: 2px !important;
-  margin-bottom: 15px !important;
-}
-
-.kira-banner-content p {
-  color: #ff4d4d !important;
-  font-family: var(--dn-font-mono) !important;
-  font-size: 1.05rem !important;
-  letter-spacing: 1px !important;
+  font-family: var(--dn-font-heading) !important;
+  font-size: 1.1rem !important;
   margin: 15px 0 25px 0 !important;
 }
 
 .kira-banner-content button {
-  background: var(--dn-crimson);
+  background: #8b0000;
   color: #ffffff;
-  border: 1px solid #ff4d4d;
+  border: none;
   padding: 10px 22px;
   cursor: pointer;
-  font-family: var(--dn-font-mono) !important;
-  font-size: 0.9rem !important;
+  font-family: var(--dn-font-body) !important;
   font-weight: bold;
-  transition: all 0.2s ease;
 }
 
-.kira-banner-content button:hover {
-  background: #ff0000 !important;
-  color: #000000 !important;
-}
-
-/* ==========================================================================
-   6. TIMER BOX & SAFE MODE
-   ========================================================================== */
+/* Floating Timer Box */
 #death-note-timer-box {
   position: fixed;
-  bottom: 150px !important;
-  right: 25px !important;
-  background: #1a1a1a !important;
-  border: 2px solid var(--dn-glow-red) !important;
+  bottom: 80px;
+  right: 25px;
+  background: #0d0d0d !important;
+  border: 2px solid #ff0000 !important;
   color: #ffffff !important;
   padding: 10px 16px;
   border-radius: 6px;
-  font-family: var(--dn-font-mono) !important;
+  font-family: var(--dn-font-heading) !important;
   font-size: 0.95rem;
-  box-shadow: 0 0 15px rgba(255, 0, 0, 0.8) !important;
-  z-index: 999999 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.9) !important;
+  z-index: 9999999 !important;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-#death-note-timer-box .timer-label {
-  color: #ffffff !important;
-  font-weight: 800 !important;
-}
-
-#death-timer-count,
-#death-note-timer-box .flatline-text {
-  color: var(--dn-glow-red) !important;
+#death-timer-count {
+  color: #ff3333 !important;
   font-weight: 900 !important;
-  font-size: 1.1rem !important;
-  text-shadow: 0 0 8px #ff0000 !important;
 }
 
-#death-note-timer-box.flatlined {
-  border-color: #ff0000 !important;
-  background: #1a0000 !important;
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.9) !important;
-}
-
+/* Full Screen Blackout Overlay */
 .kira-blackout-screen {
   position: fixed;
-  inset: 0;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   background-color: #000000 !important;
   z-index: 99999999 !important;
   pointer-events: all;
 }
 
+/* ==========================================================================
+   6. SAFE MODE OVERRIDE (Kills Glows, Animations, and Filters)
+   ========================================================================== */
 body.dn-safe-mode,
 body.dn-safe-mode * {
   text-shadow: none !important;
@@ -322,7 +295,7 @@ body.dn-safe-mode #death-note-timer-box {
 }
 
 /* ==========================================================================
-   7. INTERACTIVE BUTTON STATES
+   7. BUTTON CONTROL STATES (INACTIVE & ACTIVE)
    ========================================================================== */
 html[data-theme="death-note"] :is(.filter-btn, .category-btn, .tag-btn, .cat-btn, button, [class*="btn"]) {
   border: 1px solid #444444 !important;
@@ -338,143 +311,32 @@ html[data-theme="death-note"] :is(.filter-btn, .cat-btn, button):hover {
   box-shadow: 0 0 8px rgba(139, 0, 0, 0.5) !important;
 }
 
-/* Active / Selected Button State */
+/* Active Highlighted Buttons (ALL FORMATS, ALL LOCATIONS, etc.) */
 html[data-theme="death-note"] :is(.filter-btn.active, .category-btn.active, .cat-btn.active, .tag-btn.active, button.active, .active) {
   background: var(--dn-crimson) !important;
   color: #ffffff !important;
   border-color: var(--dn-glow-red) !important;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6), 0 0 12px rgba(255, 51, 51, 0.8) !important;
-  transform: translateY(1px) !important;
-}
-
-/* Physical Click State */
-html[data-theme="death-note"] :is(.filter-btn, .cat-btn, button, [class*="btn"]):active {
-  background: #a00000 !important;
-  color: #ffffff !important;
-  border-color: #ff0000 !important;
-  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 0 15px #ff0000 !important;
-  transform: translateY(2px) scale(0.98) !important;
 }
 
 /* ==========================================================================
-   8. RULEBOOK DYNAMIC TICKER STYLES
+   8. INPUT FIELD & DIVIDER OVERRIDES
    ========================================================================== */
-#dn-rules-ticker {
-  position: fixed;
-  left: 0;
-  width: 100%;
-  background-color: #050505 !important;
-  border-top: 2px solid #ffffff !important;
-  border-bottom: 2px solid #ffffff !important;
-  padding: 8px 16px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 15px !important;
-  z-index: 999999 !important;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9) !important;
-  font-family: var(--dn-font-mono) !important;
-}
-
-.dn-ticker-bottom {
-  bottom: 0 !important;
-}
-
-.dn-ticker-label {
-  background: #ffffff !important;
-  color: #000000 !important;
-  font-weight: bold !important;
-  font-size: 0.75rem !important;
-  padding: 2px 8px !important;
-  letter-spacing: 1.5px !important;
-  text-transform: uppercase !important;
-  white-space: nowrap !important;
-}
-
-.dn-ticker-content {
-  color: #f0f0f0 !important;
-  font-size: 0.88rem !important;
-  letter-spacing: 1px !important;
-  text-align: center !important;
-}
-
-#dn-rule-text {
-  transition: opacity 0.5s ease-in-out !important;
-  opacity: 1 !important;
-}
-
-#dn-rule-text.fade-out {
-  opacity: 0 !important;
-}
-
-/* ==========================================================================
-   9. HARD PURPLE / VIOLET PURGE & INLINE OVERRIDES
-   ========================================================================== */
-
-/* Universal Border Override */
-html[data-theme="death-note"] *,
-html[data-theme="death-note"] *::before,
-html[data-theme="death-note"] *::after {
-  border-color: #333333 !important;
-}
-
-/* Search Input Box */
 html[data-theme="death-note"] #search-input,
 html[data-theme="death-note"] input[type="text"] {
   background-color: #0d0d0d !important;
   color: #ffffff !important;
   border: 1px solid #8b0000 !important;
   box-shadow: 0 0 8px rgba(139, 0, 0, 0.4) !important;
-  outline: none !important;
-  font-family: var(--dn-font-mono) !important;
-}
-
-html[data-theme="death-note"] #search-input:focus,
-html[data-theme="death-note"] input[type="text"]:focus {
-  border-color: #ff3333 !important;
-  box-shadow: 0 0 12px rgba(255, 51, 51, 0.7) !important;
-}
-
-/* Outer Rules Box */
-html[data-theme="death-note"] .rules-box,
-html[data-theme="death-note"] .rules-box-inner {
-  border: 2px solid #ffffff !important;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15) !important;
-  background-color: #050505 !important;
-}
-
-/* Overriding Inline Styles for "THE GREAT CHASM" Divider */
-html[data-theme="death-note"] .abyss-divider {
-  margin: 40px 0 20px 0 !important;
 }
 
 html[data-theme="death-note"] .abyss-divider span,
 html[data-theme="death-note"] .abyss-label {
   color: #ffffff !important;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5) !important;
-  font-family: var(--dn-font-mono) !important;
 }
 
 html[data-theme="death-note"] .abyss-divider div,
 html[data-theme="death-note"] .abyss-divider div[style] {
   background: #ffffff !important;
-  opacity: 0.25 !important;
-}
-
-/* Floating Action Buttons */
-html[data-theme="death-note"] #scroll-top-btn,
-html[data-theme="death-note"] #cart-toggle-btn {
-  background-color: #0d0d0d !important;
-  color: #ffffff !important;
-  border: 1px solid #8b0000 !important;
-  box-shadow: 0 0 10px rgba(139, 0, 0, 0.5) !important;
-  text-shadow: none !important;
-  font-family: var(--dn-font-mono) !important;
-}
-
-html[data-theme="death-note"] #scroll-top-btn:hover,
-html[data-theme="death-note"] #cart-toggle-btn:hover {
-  background-color: #8b0000 !important;
-  border-color: #ff3333 !important;
-  box-shadow: 0 0 15px rgba(255, 51, 51, 0.8) !important;
+  opacity: 0.3 !important;
 }
