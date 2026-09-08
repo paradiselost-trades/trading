@@ -350,3 +350,93 @@ body.dn-safe-mode * {
   filter: none !important;
   transition: none !important;
 }
+/* ==========================================================================
+   FORCE KILL ALL PURPLE BACKGROUNDS & GLOWS ON CONTROLS / SEARCH CONTAINER
+   ========================================================================== */
+
+html[data-theme="death-note"] .controls,
+html[data-theme="death-note"] div.controls,
+html[data-theme="death-note"] main .controls,
+html[data-theme="death-note"] header,
+html[data-theme="death-note"] body {
+  background: #050505 !important;
+  background-color: #050505 !important;
+  box-shadow: none !important;
+  border-color: #333333 !important;
+}
+
+/* Force search bar container wrapper to be black */
+html[data-theme="death-note"] #search-input,
+html[data-theme="death-note"] .controls input {
+  background-color: #000000 !important;
+  border: 1px solid #8b0000 !important;
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.4) !important;
+}
+/* ==========================================================================
+   FIX KIRA TRAP MODAL & TIMER TEXT OVERLAP
+   ========================================================================== */
+
+/* 1. Force Blood Red Death Note Theme on Trap Modal */
+.kira-trap-banner {
+  background: rgba(0, 0, 0, 0.95) !important;
+  z-index: 999999 !important;
+}
+
+.kira-banner-content {
+  border: 3px solid #8b0000 !important;
+  background: #000000 !important;
+  box-shadow: 0 0 35px #ff0000 !important;
+}
+
+.kira-banner-content h1 {
+  font-family: var(--dn-font-heading) !important;
+  color: #ff3333 !important;
+  text-shadow: 0 0 15px #ff0000, 0 0 30px #8b0000 !important;
+  letter-spacing: 3px !important;
+}
+
+.kira-banner-content p {
+  color: #ffffff !important;
+  font-family: var(--dn-font-heading) !important;
+  letter-spacing: 1.5px !important;
+}
+
+.kira-banner-content button#close-kira-banner {
+  background: #8b0000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ff3333 !important;
+  font-family: var(--dn-font-heading) !important;
+  letter-spacing: 2px !important;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5) !important;
+  cursor: pointer;
+}
+
+.kira-banner-content button#close-kira-banner:hover {
+  background: #ff0000 !important;
+  color: #000000 !important;
+}
+
+/* 2. Fix Timer Box Spacing & Prevent Text Squishing */
+#death-note-timer-box {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-width: 190px !important;
+  padding: 8px 14px !important;
+  gap: 12px !important;
+}
+
+#death-note-timer-box .timer-label {
+  font-family: var(--dn-font-heading) !important;
+  font-size: 0.85rem !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+}
+
+#death-timer-count {
+  font-family: var(--dn-font-mono) !important;
+  font-size: 1rem !important;
+  color: #ff3333 !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+}
