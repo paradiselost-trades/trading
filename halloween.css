@@ -1,0 +1,145 @@
+/* ==========================================================================
+   DEATH NOTE RESKIN — HALLOWEEN THEME OVERLAY
+   ========================================================================== */
+
+/* Load Death Note Title Font & Scribbled Card Fonts */
+@font-face {
+  font-family: 'DeathNote';
+  src: url('https://db.onlinewebfonts.com/t/7d1efd1e672727a8585994f711be8628.woff2') format('woff2'),
+       url('https://db.onlinewebfonts.com/t/7d1efd1e672727a8585994f711be8628.woff') format('woff');
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Reenie+Beanie&family=Rock+Salt&family=UnifrakturMaguntia&display=swap');
+
+:root[data-theme="death-note"] {
+  --dn-bg: #0a0a0a;
+  --dn-paper-bg: #f4f1ea;
+  --dn-paper-line: #d8d3c7;
+  --dn-paper-text: #1a1a1a;
+  --dn-rulebook-bg: #000000;
+  --dn-rulebook-border: #ffffff;
+  --dn-margin-line: #b30000;
+  --dn-font-title: 'DeathNote', 'UnifrakturMaguntia', serif;
+  --dn-font-handwriting: 'Rock Salt', 'Reenie Beanie', cursive;
+}
+
+/* Base Layout Background */
+html[data-theme="death-note"] body {
+  background-color: var(--dn-bg) !important;
+  background-image: radial-gradient(circle at 50% 30%, rgba(30, 30, 30, 0.8) 0%, rgba(0, 0, 0, 0.95) 100%) !important;
+  color: #e0e0e0 !important;
+}
+
+/* Authentic Death Note Header Typography */
+html[data-theme="death-note"] h1,
+html[data-theme="death-note"] .votive-glow {
+  font-family: var(--dn-font-title) !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 0 20px #000000 !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase !important;
+}
+
+html[data-theme="death-note"] h2,
+html[data-theme="death-note"] h3,
+html[data-theme="death-note"] h4 {
+  font-family: var(--dn-font-title) !important;
+  color: #ffffff !important;
+  letter-spacing: 2px !important;
+}
+
+/* ==========================================================================
+   1. THE BLACK PAGES (Death Note Instruction Pages)
+   ========================================================================== */
+
+html[data-theme="death-note"] .rules-box,
+html[data-theme="death-note"] #infernal-palette {
+  background-color: var(--dn-rulebook-bg) !important;
+  border: 2px solid var(--dn-rulebook-border) !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  text-align: center !important;
+  position: relative !important;
+}
+
+html[data-theme="death-note"] .rules-box p,
+html[data-theme="death-note"] .rules-box ul,
+html[data-theme="death-note"] .rules-box li,
+html[data-theme="death-note"] #infernal-palette p,
+html[data-theme="death-note"] #infernal-palette h4 {
+  font-family: 'Georgia', 'Times New Roman', serif !important;
+  text-align: center !important;
+  color: #ffffff !important;
+  line-height: 1.7 !important;
+}
+
+html[data-theme="death-note"] .rules-box::before {
+  content: "HOW TO USE IT" !important;
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dn-rulebook-bg);
+  color: #fff;
+  font-family: var(--dn-font-title);
+  padding: 2px 16px;
+  font-size: 1.1rem;
+  border: 1px solid var(--dn-rulebook-border);
+}
+
+/* ==========================================================================
+   2. LINED PAPER BACKGROUND & HANDWRITING FOR CARDS
+   ========================================================================== */
+
+html[data-theme="death-note"] .card,
+html[data-theme="death-note"] .bootleg-card,
+html[data-theme="death-note"] .item-card {
+  position: relative !important;
+  background-color: var(--dn-paper-bg) !important;
+  /* Lined Notebook Paper Pattern */
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    var(--dn-paper-line) 28px
+  ) !important;
+  border: 1px solid #ccc !important;
+  border-radius: 2px !important;
+  padding-left: 45px !important; /* Margin offset */
+  box-shadow: 3px 5px 15px rgba(0, 0, 0, 0.6) !important;
+  color: var(--dn-paper-text) !important;
+}
+
+/* Vertical Crimson Notebook Margin Line */
+html[data-theme="death-note"] .card::before,
+html[data-theme="death-note"] .bootleg-card::before,
+html[data-theme="death-note"] .item-card::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 32px !important;
+  width: 2px !important;
+  background-color: var(--dn-margin-line) !important;
+  z-index: 1 !important;
+}
+
+/* Scribbled Handwriting Font inside Cards */
+html[data-theme="death-note"] .card p,
+html[data-theme="death-note"] .bootleg-card p,
+html[data-theme="death-note"] .item-card p,
+html[data-theme="death-note"] .card h3,
+html[data-theme="death-note"] .bootleg-card h3 {
+  font-family: var(--dn-font-handwriting) !important;
+  color: #111111 !important;
+  font-size: 0.95rem !important;
+  line-height: 28px !important; /* Aligns text with notebook lines */
+}
+
+/* Card Labels Bolding */
+html[data-theme="death-note"] .infernal-label-cast,
+html[data-theme="death-note"] .infernal-label-notes {
+  color: #8b0000 !important;
+  font-family: var(--dn-font-handwriting) !important;
+  font-weight: bold !important;
+}
