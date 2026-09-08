@@ -1,3 +1,34 @@
+/* Import clean, readable Death Note-themed typewriter font */
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+/* Main Gothic Font for Major Headings */
+@font-face {
+  font-family: 'DeathNoteGothic';
+  src: url('font/DeathNoteFont.ttf') format('truetype');
+  font-display: swap;
+}
+
+/* Major Headings ONLY */
+html[data-theme="death-note"] h1,
+html[data-theme="death-note"] h2,
+html[data-theme="death-note"] .main-title,
+html[data-theme="death-note"] #stats {
+  font-family: 'DeathNoteGothic', 'Courier New', monospace !important;
+}
+
+/* Readable Body Text for Cards, Cast, & Notes */
+html[data-theme="death-note"] .card-meta,
+html[data-theme="death-note"] .card-cast,
+html[data-theme="death-note"] .card-notes,
+html[data-theme="death-note"] .card-title,
+html[data-theme="death-note"] p,
+html[data-theme="death-note"] span {
+  font-family: 'Special Elite', 'Georgia', serif !important;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #111111 !important; /* Sharp black ink readability */
+  text-shadow: none !important;
+}
 /* ==========================================================================
    DEATH NOTE RESKIN — HALLOWEEN THEME OVERLAY
    ========================================================================== */
