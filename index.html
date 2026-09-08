@@ -9,23 +9,31 @@
   <!-- Transparent PNG Favicon -->
   <link rel="icon" type="image/png" href="snake-apple.png" />
 
-  <!-- Prevent theme-flash on load (Defaults to Paradise Lost) -->
+  <!-- INTERNAL THEME SWITCHER (Controlled strictly by index) -->
   <script>
     (function() {
-      const savedTheme = localStorage.getItem('paradiseThemeActive');
-      if (savedTheme !== 'false') {
-        document.documentElement.setAttribute('data-theme', 'paradise-lost');
+      // ========================================================
+      // CHANGE YOUR ACTIVE THEME HERE:
+      // Set to 'death-note'  ---> Activates Death Note Theme
+      // Set to 'paradise-lost' ---> Activates Paradise Lost Theme
+      // ========================================================
+      const ACTIVE_THEME = 'death-note';
+
+      document.documentElement.setAttribute('data-theme', ACTIVE_THEME);
+      
+      if (ACTIVE_THEME === 'paradise-lost') {
         document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
       }
     })();
   </script>
 
-  <!-- Foolproof JS Text-Targeting Script for Dynamic Cards -->
+  <!-- JS Text-Targeting Script for Dynamic Cards -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const observer = new MutationObserver(() => {
-        if (document.documentElement.getAttribute('data-theme') === 'paradise-lost') {
-          document.querySelectorAll('.card p, .bootleg-card p').forEach(p => {
+        const theme = document.documentElement.getAttribute('data-theme');
+        if (theme === 'paradise-lost' || theme === 'death-note') {
+          document.querySelectorAll('.card p, .bootleg-card p, .item-card p').forEach(p => {
             if (p.innerHTML.includes('CAST:') && !p.innerHTML.includes('infernal-label-cast')) {
               p.innerHTML = p.innerHTML.replace('CAST:', '<span class="infernal-label-cast">CAST:</span>');
             }
@@ -51,8 +59,12 @@
   <!-- Load PapaParse to read CSV files -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   
-  <!-- Cache-buster update -->
+  <!-- Base Stylesheet -->
   <link rel="stylesheet" href="style.css?v=8.0" />
+
+  <!-- Death Note / Halloween Reskin Styles & Script -->
+  <link rel="stylesheet" href="halloween.css?v=1.0" />
+  <script src="halloween.js?v=1.0"></script>
 </head>
 <body>
   <header class="container">
