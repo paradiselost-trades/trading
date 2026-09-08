@@ -40,13 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupIntersectionObserver();
   ensureCartButtonInBody();
 
-  // Initialize theme based on local storage
-  const savedTheme = localStorage.getItem('paradiseThemeActive');
-  if (savedTheme !== 'false') {
-    document.documentElement.setAttribute('data-theme', 'paradise-lost');
-    document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
-    document.body.classList.add('paradise-lost', 'paradise-lost-mode');
-  }
+  // Respect active theme setting without forced overrides
   updateButtonLabel();
 
   const paletteToggleBtn = document.getElementById("palette-toggle-btn");
@@ -224,7 +218,6 @@ function openGothicToast(bodyText) {
   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
   const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
 
-  // Attach button click events
   const gmailBtn = document.getElementById("toast-gmail-btn");
   const mailBtn = document.getElementById("toast-mail-btn");
   const closeBtn = document.getElementById("toast-close-btn");
@@ -247,7 +240,6 @@ function openGothicToast(bodyText) {
     closeBtn.onclick = closeGothicToast;
   }
 
-  // Remove hidden class to display fixed modal
   toast.classList.remove("gothic-toast-hidden");
 }
 
@@ -366,7 +358,6 @@ function appendNextBatch(count = BATCH_SIZE) {
     const tour = getValByName(item, "Tour", "Location", "City");
     const venue = getValByName(item, "Venue", "Theater", "Theatre");
     
-    // Master vs Co-Releaser Logic
     const masterVal = getValByName(item, "Master");
     const coReleaserVal = getValByName(item, "Co-Releaser", "Co Releaser", "Co-release", "Coreleaser");
 
@@ -392,7 +383,6 @@ function appendNextBatch(count = BATCH_SIZE) {
     const safeTypeClass = displayType.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const typeBadgeHTML = `<span class="badge badge-${safeTypeClass}">${displayType}</span>`;
     
-    // Check multiple possible NFT field variations
     const nftDateStr = getValByName(item, "NFT Date", "NFT", "NFT Status", "NFT Until");
     const nftForeverVal = getValByName(item, "NFT Forever").toLowerCase();
     
@@ -420,7 +410,6 @@ function appendNextBatch(count = BATCH_SIZE) {
       }
     }
 
-    // Explicitly adds 'is-sealed' class for full-card glass shield
     const cardClass = `item-card ${isNFTActive ? 'card-nft-active nft-card-locked is-sealed' : 'card-standard'}`;
     const itemInCart = isInCart(item);
 
@@ -820,40 +809,17 @@ function copySingleItemSummary(item, buttonElement) {
   });
 }
 
-let currentTheme = localStorage.getItem("siteTheme") || "cyberpunk";
-document.body.setAttribute("data-theme", currentTheme);
-
-function setTheme(themeName) {
-  currentTheme = themeName;
-  document.body.setAttribute("data-theme", themeName);
-  localStorage.setItem("siteTheme", themeName);
-  updateUI();
-}
-
-function updateUI() {
-  const btn = document.getElementById("paradise-btn");
-  if (!btn) return;
-
-  if (currentTheme === "paradise-lost") {
-    btn.innerText = "ASCEND TO CYBERSPACE";
-  } else {
-    btn.innerText = "ABANDON ALL HOPE";
-  }
-}
-
 function triggerParadiseLost() {
-  const isParadise = document.documentElement.getAttribute('data-theme') === 'paradise-lost';
-
-  if (isParadise) {
-    document.documentElement.removeAttribute('data-theme');
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  
+  if (currentTheme === 'paradise-lost') {
+    document.documentElement.setAttribute('data-theme', 'death-note');
     document.documentElement.classList.remove('paradise-lost', 'paradise-lost-mode');
     document.body.classList.remove('paradise-lost', 'paradise-lost-mode');
-    localStorage.setItem('paradiseThemeActive', 'false');
   } else {
     document.documentElement.setAttribute('data-theme', 'paradise-lost');
     document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
     document.body.classList.add('paradise-lost', 'paradise-lost-mode');
-    localStorage.setItem('paradiseThemeActive', 'true');
   }
 
   updateButtonLabel();
@@ -864,7 +830,7 @@ function updateButtonLabel() {
   const isParadise = document.documentElement.getAttribute('data-theme') === 'paradise-lost';
   
   if (btn) {
-    btn.textContent = isParadise ? '❖ Legacy Model (Cyberpunk)' : '❖ Ascend to Paradise';
+    btn.textContent = isParadise ? '❖ Legacy Model (Death Note)' : '❖ Ascend to Paradise';
   }
 }
 
