@@ -714,3 +714,70 @@ html[data-theme="death-note"] .rules-box .rules-title::after {
     text-shadow: 0 0 14px #ffcc00, 0 0 25px #ff0000;
   }
 }
+/* GOTHIC RULE CONTAINER */
+.gothic-rule-box {
+  width: 85%;
+  max-width: 750px;
+  margin: 20px auto 25px auto;
+  padding: 12px 20px;
+  background: #000000;
+  border: 2px solid #8b0000;
+  outline: 1px solid #ff0000;
+  outline-offset: -5px;
+  box-shadow: 0 0 15px rgba(139, 0, 0, 0.5), inset 0 0 15px rgba(0, 0, 0, 0.9);
+  text-align: center;
+  position: relative;
+}
+
+.gothic-rule-header,
+.gothic-rule-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gothic-title {
+  color: #ff3333;
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-weight: bold;
+  text-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
+}
+
+.gothic-corner {
+  color: #8b0000;
+  font-size: 1rem;
+}
+
+.gothic-rule-body {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+#dn-rule-text {
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#dn-rule-text.real-rule {
+  color: #dcdcdc;
+}
+
+#dn-rule-text.fake-rule {
+  color: #ffcc00;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+}
+
+.gothic-divider {
+  color: #550000;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+}
