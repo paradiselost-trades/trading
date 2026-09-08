@@ -611,3 +611,76 @@ html[data-theme="death-note"] input[type="text"] {
 #death-note-timer-box .timer-label::before {
   content: "" !important; /* Clears out pseudo-element override */
 }
+/* ==========================================================================
+   DEATH NOTE FIXES: SPACING, TITLE COLOR, BUTTON STYLING & RULES HEADER
+   ========================================================================== */
+
+/* 1. Remove excess gap in TIME LEFT timer box */
+#death-note-timer-box {
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  min-width: auto !important;
+  padding: 8px 14px !important;
+}
+
+#death-note-timer-box .timer-label {
+  margin-right: 0 !important;
+}
+
+/* 2. Turn "MY TRADING COLLECTION" blue title into Death Note Crimson Glow */
+html[data-theme="death-note"] h1,
+html[data-theme="death-note"] .site-title,
+html[data-theme="death-note"] .title,
+html[data-theme="death-note"] [class*="title"] {
+  color: #ff3333 !important;
+  font-family: var(--dn-font-heading) !important;
+  text-shadow: 0 0 12px #ff0000, 0 0 25px #8b0000 !important;
+  letter-spacing: 3px !important;
+}
+
+/* Hide default site logo/icon if it introduces blue elements */
+html[data-theme="death-note"] header img,
+html[data-theme="death-note"] .logo-icon {
+  filter: drop-shadow(0 0 8px #ff0000) sepia(100%) hue-rotate(300deg) !important;
+}
+
+/* 3. Style Shinigami Eyes and Safe Mode control buttons */
+#shinigami-eyes-btn,
+#dn-safe-mode-btn {
+  background: #111111 !important;
+  color: #ff3333 !important;
+  border: 1px solid #8b0000 !important;
+  font-family: 'Share Tech Mono', monospace !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  padding: 8px 16px !important;
+  border-radius: 3px !important;
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.4) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+#shinigami-eyes-btn:hover,
+#dn-safe-mode-btn:hover {
+  background: #8b0000 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px #ff0000 !important;
+}
+
+/* 4. Overwrite redundant inner "Trading Rules & Contact" header text */
+html[data-theme="death-note"] .rules-box h2,
+html[data-theme="death-note"] .rules-box h3,
+html[data-theme="death-note"] .rules-box .rules-title {
+  font-size: 0 !important; /* Conceals redundant HTML title text */
+}
+
+html[data-theme="death-note"] .rules-box h2::after,
+html[data-theme="death-note"] .rules-box h3::after,
+html[data-theme="death-note"] .rules-box .rules-title::after {
+  content: "RULEBOOK INSTRUCTIONS" !important;
+  font-size: 1.25rem !important;
+  color: #ffffff !important;
+  font-family: var(--dn-font-heading) !important;
+  letter-spacing: 2px !important;
+  display: block !important;
+  margin-bottom: 12px !important;
+}
