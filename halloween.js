@@ -137,21 +137,18 @@ function setupDeathNoteFeatures() {
         timeLeft--;
         if (countDisplay) countDisplay.innerText = `${timeLeft}s`;
 
-        if (timeLeft <= 0) {
+      if (timeLeft <= 0) {
           clearInterval(interval);
           if (timerBox) {
             timerBox.classList.add('flatlined');
             timerBox.innerHTML = `<span class="timer-label">STATUS:</span> <span class="flatline-text">💀 FLATLINE</span>`;
           }
 
-          // 1. Synthesize real continuous flatline monitor tone
+          // 1. Synthesize flatline audio tone
           playFlatlineTone();
 
-          // 2. Trigger screen blood-red glitch shake
-          document.body.classList.add('heart-flatline-glitch');
-          setTimeout(() => {
-            document.body.classList.remove('heart-flatline-glitch');
-          }, 3000);
+          // 2. Trigger 2-second Full Screen Blackout
+          triggerBlackout();
         }
       }, 1000);
     }
@@ -194,6 +191,17 @@ function setupDeathNoteFeatures() {
       osc.start();
       osc.stop(audioCtx.currentTime + 1.2);
     } catch (err) {}
+  }
+   // Triggers a 2-second screen blackout on flatline
+  function triggerBlackout() {
+    const blackout = document.createElement('div');
+    blackout.className = 'kira-blackout-screen';
+    document.body.appendChild(blackout);
+
+    // Remove the blackout after exactly 2 seconds
+    setTimeout(() => {
+      blackout.remove();
+    }, 2000);
   }
 
   // Watch for dynamic theme updates
