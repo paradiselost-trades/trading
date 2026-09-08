@@ -128,15 +128,16 @@ function setupDeathNoteFeatures() {
     });
   };
 
-  // 40-SECOND KIRA COUNTDOWN & WebAudio FLATLINE
+  // 40-SECOND COUNTDOWN (UPDATED: RESTRICTED TO LIND L. TAILOR & TRADE REQUESTS)
   document.addEventListener('click', (e) => {
-    const tradeTrigger = e.target.closest('#trade-request-btn, .floating-trade-btn, [class*="trade"], .add-cart-btn');
+    // Only trigger for Lind L. Tailor bait button or global trade drawer toggles
+    const tradeTrigger = e.target.closest('#bait-add-btn, #trade-request-btn, .floating-trade-btn');
     
     if (tradeTrigger && !document.getElementById('death-note-timer-box') && isDeathNote()) {
       const timerBox = document.createElement('div');
       timerBox.id = 'death-note-timer-box';
       timerBox.innerHTML = `
-        <span class="timer-label">KIRA HEART RATE:</span>
+        <span class="timer-label">TIME LEFT:</span>
         <span id="death-timer-count">40s</span>
       `;
       document.body.appendChild(timerBox);
