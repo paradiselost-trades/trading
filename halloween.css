@@ -355,3 +355,55 @@ html[data-theme="death-note"] :is(.filter-btn, button, [class*="btn"]):active {
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 0 15px #ff0000 !important;
   transform: translateY(2px) scale(0.98) !important;
 }
+/* ==========================================================================
+   DEATH NOTE RULEBOOK DYNAMIC TICKER STYLES
+   ========================================================================== */
+
+#dn-rules-ticker {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background-color: #050505 !important;
+  border-top: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  padding: 8px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 15px !important;
+  z-index: 999999 !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9) !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+}
+
+/* Fixed at page bottom (above bottom drawer triggers if necessary) */
+.dn-ticker-bottom {
+  bottom: 0 !important;
+}
+
+.dn-ticker-label {
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  font-size: 0.75rem !important;
+  padding: 2px 8px !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+.dn-ticker-content {
+  color: #f0f0f0 !important;
+  font-size: 0.88rem !important;
+  letter-spacing: 1px !important;
+  text-align: center !important;
+}
+
+#dn-rule-text {
+  transition: opacity 0.5s ease-in-out !important;
+  opacity: 1 !important;
+}
+
+#dn-rule-text.fade-out {
+  opacity: 0 !important;
+}
