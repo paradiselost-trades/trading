@@ -214,46 +214,47 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function showToastBanner() {
-  const bodyText = generateFormattedText();
-  window.lastCopiedRequest = bodyText;
+function openGothicToast(bodyText) {
+  const toast = document.getElementById("gothic-toast");
+  if (!toast) return;
 
-  const gothicToast = document.getElementById("gothic-toast");
-  if (gothicToast) {
-    gothicToast.classList.remove("gothic-toast-hidden");
-    gothicToast.style.display = "block";
-    return;
-  }
-
-  let toastBar = document.getElementById("toast-bar");
-  if (!toastBar) {
-    toastBar = document.createElement("div");
-    toastBar.id = "toast-bar";
-    toastBar.className = "toast-bar";
-    document.body.appendChild(toastBar);
-  }
-  
   const recipient = "tradingtreelost@gmail.com";
   const subject = `Trade Request (${tradeCart.length} Items)`;
 
-  toastBar.innerHTML = `
-    ✦ RECORD INSCRIBED TO CLIPBOARD ✦<br>
-    <span style="font-size: 0.85em; opacity: 0.9;">Select your destination to dispatch this request:</span><br>
-    <div style="margin-top: 6px;">
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}" target="_blank" class="toast-link">OPEN GMAIL WEB</a>
-      <a href="mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}" class="toast-link">DEFAULT MAIL APP</a>
-      <button type="button" onclick="document.getElementById('toast-bar').classList.remove('visible')" class="toast-dismiss-btn">DISMISS</button>
-    </div>
-  `;
-  
-  toastBar.classList.add("visible");
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+  const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+
+  // Attach button click events
+  const gmailBtn = document.getElementById("toast-gmail-btn");
+  const mailBtn = document.getElementById("toast-mail-btn");
+  const closeBtn = document.getElementById("toast-close-btn");
+
+  if (gmailBtn) {
+    gmailBtn.onclick = () => {
+      window.open(gmailUrl, "_blank");
+      closeGothicToast();
+    };
+  }
+
+  if (mailBtn) {
+    mailBtn.onclick = () => {
+      window.location.href = mailtoUrl;
+      closeGothicToast();
+    };
+  }
+
+  if (closeBtn) {
+    closeBtn.onclick = closeGothicToast;
+  }
+
+  // Remove hidden class to display fixed modal
+  toast.classList.remove("gothic-toast-hidden");
 }
 
-function hideGothicToast() {
+function closeGothicToast() {
   const toast = document.getElementById("gothic-toast");
   if (toast) {
     toast.classList.add("gothic-toast-hidden");
-    toast.style.display = "none";
   }
 }
 
