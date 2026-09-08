@@ -363,3 +363,13 @@ body.heart-flatline-glitch::after {
   font-weight: 900 !important;
   text-shadow: none !important;
 }
+/* Force L Trap Banner Subtext to White with Death Note Gothic Font */
+.kira-trap-banner .kira-banner-content p {
+  color: #ffffff !important;
+  font-family: 'DeathNoteGothic', 'Courier New', monospace !important;
+  font-size: 1.15rem !important;
+  letter-spacing: 1.5px !important;
+  opacity: 1 !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important;
+  margin: 15px 0 25px 0 !important;
+}
