@@ -314,3 +314,50 @@ body.dn-safe-mode #death-note-timer-box {
   border: 1px solid #ffffff !important;
   background: #000000 !important;
 }
+/* ==========================================================================
+   OVERRIDE BASE NEON PINK / PURPLE GLOWS & BUTTON STYLES
+   ========================================================================== */
+
+/* Search bar, inputs, & Encora button */
+html[data-theme="death-note"] input,
+html[data-theme="death-note"] textarea,
+html[data-theme="death-note"] select,
+html[data-theme="death-note"] #search-input,
+html[data-theme="death-note"] .search-bar,
+html[data-theme="death-note"] button:not(#shinigami-eyes-btn):not(#dn-safe-mode-btn):not(#close-kira-banner) {
+  border-color: #444444 !important;
+  color: #d0d0d0 !important;
+  background-color: #111111 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Active and inactive filter buttons (ALL FORMATS, VIDEOS, BROADWAY, etc.) */
+html[data-theme="death-note"] .filter-btn,
+html[data-theme="death-note"] .category-btn,
+html[data-theme="death-note"] .tag-btn,
+html[data-theme="death-note"] [class*="btn"] {
+  border: 1px solid #444444 !important;
+  background: #121212 !important;
+  color: #cccccc !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Active filter state overrides (replace neon pink fill with crimson/dark grey) */
+html[data-theme="death-note"] .filter-btn.active,
+html[data-theme="death-note"] .category-btn.active,
+html[data-theme="death-note"] .tag-btn.active,
+html[data-theme="death-note"] .active {
+  background: #8b0000 !important; /* Deep crimson for selected filters */
+  color: #ffffff !important;
+  border-color: #ff3333 !important;
+  box-shadow: 0 0 8px rgba(139, 0, 0, 0.6) !important;
+}
+
+/* Hover states */
+html[data-theme="death-note"] button:hover,
+html[data-theme="death-note"] .filter-btn:hover {
+  border-color: #8b0000 !important;
+  color: #ffffff !important;
+}
