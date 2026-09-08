@@ -209,33 +209,9 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.clipboard.writeText(bodyText).catch(() => {});
       }
 
-      showToastBanner();
+      openGothicToast(bodyText);
     });
   }
-
-  // Bind Gothic Toast Modal Action Buttons directly
-  const destinationEmail = "tradingtreelost@gmail.com";
-
-  const bindToastButton = (id, handler) => {
-    const btn = document.getElementById(id);
-    if (btn) btn.onclick = handler;
-  };
-
-  bindToastButton("toast-gmail-btn", () => {
-    const body = encodeURIComponent(window.lastCopiedRequest || generateFormattedText());
-    const subject = encodeURIComponent(`Trade Request (${tradeCart.length} Items)`);
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${destinationEmail}&su=${subject}&body=${body}`, "_blank");
-    hideGothicToast();
-  });
-
-  bindToastButton("toast-mail-btn", () => {
-    const body = encodeURIComponent(window.lastCopiedRequest || generateFormattedText());
-    const subject = encodeURIComponent(`Trade Request (${tradeCart.length} Items)`);
-    window.location.href = `mailto:${destinationEmail}?subject=${subject}&body=${body}`;
-    hideGothicToast();
-  });
-
-  bindToastButton("toast-close-btn", hideGothicToast);
 });
 
 function showToastBanner() {
