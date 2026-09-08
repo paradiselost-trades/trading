@@ -1,5 +1,5 @@
 /* ==========================================================================
-   DEATH NOTE RESKIN — HALLOWEEN THEME OVERLAY (OPTIMIZED)
+   DEATH NOTE RESKIN — HALLOWEEN THEME OVERLAY (FULL FIX)
    ========================================================================== */
 
 /* 1. IMPORTS & FONTS */
@@ -324,7 +324,7 @@ body.dn-safe-mode #death-note-timer-box {
 /* ==========================================================================
    7. INTERACTIVE BUTTON STATES
    ========================================================================== */
-html[data-theme="death-note"] :is(.filter-btn, .category-btn, .tag-btn, button, [class*="btn"]) {
+html[data-theme="death-note"] :is(.filter-btn, .category-btn, .tag-btn, .cat-btn, button, [class*="btn"]) {
   border: 1px solid #444444 !important;
   background: #121212 !important;
   color: #cccccc !important;
@@ -332,14 +332,14 @@ html[data-theme="death-note"] :is(.filter-btn, .category-btn, .tag-btn, button, 
   transition: all 0.15s ease-in-out !important;
 }
 
-html[data-theme="death-note"] :is(.filter-btn, button):hover {
+html[data-theme="death-note"] :is(.filter-btn, .cat-btn, button):hover {
   border-color: var(--dn-crimson) !important;
   color: #ffffff !important;
   box-shadow: 0 0 8px rgba(139, 0, 0, 0.5) !important;
 }
 
 /* Active / Selected Button State */
-html[data-theme="death-note"] :is(.filter-btn.active, .category-btn.active, .tag-btn.active, button.active, .active) {
+html[data-theme="death-note"] :is(.filter-btn.active, .category-btn.active, .cat-btn.active, .tag-btn.active, button.active, .active) {
   background: var(--dn-crimson) !important;
   color: #ffffff !important;
   border-color: var(--dn-glow-red) !important;
@@ -348,17 +348,17 @@ html[data-theme="death-note"] :is(.filter-btn.active, .category-btn.active, .tag
 }
 
 /* Physical Click State */
-html[data-theme="death-note"] :is(.filter-btn, button, [class*="btn"]):active {
+html[data-theme="death-note"] :is(.filter-btn, .cat-btn, button, [class*="btn"]):active {
   background: #a00000 !important;
   color: #ffffff !important;
   border-color: #ff0000 !important;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.9), 0 0 15px #ff0000 !important;
   transform: translateY(2px) scale(0.98) !important;
 }
-/* ==========================================================================
-   DEATH NOTE RULEBOOK DYNAMIC TICKER STYLES
-   ========================================================================== */
 
+/* ==========================================================================
+   8. RULEBOOK DYNAMIC TICKER STYLES
+   ========================================================================== */
 #dn-rules-ticker {
   position: fixed;
   left: 0;
@@ -373,10 +373,9 @@ html[data-theme="death-note"] :is(.filter-btn, button, [class*="btn"]):active {
   gap: 15px !important;
   z-index: 999999 !important;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.9) !important;
-  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+  font-family: var(--dn-font-mono) !important;
 }
 
-/* Fixed at page bottom (above bottom drawer triggers if necessary) */
 .dn-ticker-bottom {
   bottom: 0 !important;
 }
@@ -407,18 +406,19 @@ html[data-theme="death-note"] :is(.filter-btn, button, [class*="btn"]):active {
 #dn-rule-text.fade-out {
   opacity: 0 !important;
 }
+
 /* ==========================================================================
-   DEATH NOTE — PURPLE/VIOLET OVERRIDE & HARD RESET
+   9. HARD PURPLE / VIOLET PURGE & INLINE OVERRIDES
    ========================================================================== */
 
-/* 1. Global Borders & Glowing Elements */
+/* Universal Border Override */
 html[data-theme="death-note"] *,
 html[data-theme="death-note"] *::before,
 html[data-theme="death-note"] *::after {
   border-color: #333333 !important;
 }
 
-/* 2. Fix Search Input Purple Glow & Outline */
+/* Search Input Box */
 html[data-theme="death-note"] #search-input,
 html[data-theme="death-note"] input[type="text"] {
   background-color: #0d0d0d !important;
@@ -426,6 +426,7 @@ html[data-theme="death-note"] input[type="text"] {
   border: 1px solid #8b0000 !important;
   box-shadow: 0 0 8px rgba(139, 0, 0, 0.4) !important;
   outline: none !important;
+  font-family: var(--dn-font-mono) !important;
 }
 
 html[data-theme="death-note"] #search-input:focus,
@@ -434,26 +435,33 @@ html[data-theme="death-note"] input[type="text"]:focus {
   box-shadow: 0 0 12px rgba(255, 51, 51, 0.7) !important;
 }
 
-/* 3. Rules Box Border Fix */
+/* Outer Rules Box */
 html[data-theme="death-note"] .rules-box,
 html[data-theme="death-note"] .rules-box-inner {
   border: 2px solid #ffffff !important;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.15) !important;
+  background-color: #050505 !important;
 }
 
-/* 4. Abyss Divider Label & Lines Fix */
+/* Overriding Inline Styles for "THE GREAT CHASM" Divider */
+html[data-theme="death-note"] .abyss-divider {
+  margin: 40px 0 20px 0 !important;
+}
+
 html[data-theme="death-note"] .abyss-divider span,
 html[data-theme="death-note"] .abyss-label {
   color: #ffffff !important;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.5) !important;
+  font-family: var(--dn-font-mono) !important;
 }
 
-html[data-theme="death-note"] .abyss-divider div {
+html[data-theme="death-note"] .abyss-divider div,
+html[data-theme="death-note"] .abyss-divider div[style] {
   background: #ffffff !important;
-  opacity: 0.3 !important;
+  opacity: 0.25 !important;
 }
 
-/* 5. Ascend / Floating Action Buttons */
+/* Floating Action Buttons */
 html[data-theme="death-note"] #scroll-top-btn,
 html[data-theme="death-note"] #cart-toggle-btn {
   background-color: #0d0d0d !important;
@@ -461,68 +469,7 @@ html[data-theme="death-note"] #cart-toggle-btn {
   border: 1px solid #8b0000 !important;
   box-shadow: 0 0 10px rgba(139, 0, 0, 0.5) !important;
   text-shadow: none !important;
-}
-
-html[data-theme="death-note"] #scroll-top-btn:hover,
-html[data-theme="death-note"] #cart-toggle-btn:hover {
-  background-color: #8b0000 !important;
-  border-color: #ff3333 !important;
-  box-shadow: 0 0 15px rgba(255, 51, 51, 0.8) !important;
-}
-/* ==========================================================================
-   DEATH NOTE — PURPLE/VIOLET OVERRIDE & HARD RESET
-   ========================================================================== */
-
-/* 1. Global Borders & Glowing Elements */
-html[data-theme="death-note"] *,
-html[data-theme="death-note"] *::before,
-html[data-theme="death-note"] *::after {
-  border-color: #333333 !important;
-}
-
-/* 2. Fix Search Input Purple Glow & Outline */
-html[data-theme="death-note"] #search-input,
-html[data-theme="death-note"] input[type="text"] {
-  background-color: #0d0d0d !important;
-  color: #ffffff !important;
-  border: 1px solid #8b0000 !important;
-  box-shadow: 0 0 8px rgba(139, 0, 0, 0.4) !important;
-  outline: none !important;
-}
-
-html[data-theme="death-note"] #search-input:focus,
-html[data-theme="death-note"] input[type="text"]:focus {
-  border-color: #ff3333 !important;
-  box-shadow: 0 0 12px rgba(255, 51, 51, 0.7) !important;
-}
-
-/* 3. Rules Box Border Fix */
-html[data-theme="death-note"] .rules-box,
-html[data-theme="death-note"] .rules-box-inner {
-  border: 2px solid #ffffff !important;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.15) !important;
-}
-
-/* 4. Abyss Divider Label & Lines Fix */
-html[data-theme="death-note"] .abyss-divider span,
-html[data-theme="death-note"] .abyss-label {
-  color: #ffffff !important;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5) !important;
-}
-
-html[data-theme="death-note"] .abyss-divider div {
-  background: #ffffff !important;
-  opacity: 0.3 !important;
-}
-
-/* 5. Ascend / Floating Action Buttons */
-html[data-theme="death-note"] #scroll-top-btn,
-html[data-theme="death-note"] #cart-toggle-btn {
-  background-color: #0d0d0d !important;
-  color: #ffffff !important;
-  border: 1px solid #8b0000 !important;
-  box-shadow: 0 0 10px rgba(139, 0, 0, 0.5) !important;
-  text-shadow: none !important;
+  font-family: var(--dn-font-mono) !important;
 }
 
 html[data-theme="death-note"] #scroll-top-btn:hover,
