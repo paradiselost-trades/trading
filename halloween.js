@@ -1,9 +1,10 @@
 /* ==========================================================================
-   DEATH NOTE RESKIN — DYNAMIC CARD SCRIPT
+   DEATH NOTE RESKIN — COMPLETE DYNAMIC SCRIPT & INTERACTIVE TRAPS
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const observer = new MutationObserver(() => {
+  // 1. DYNAMIC CARD LABEL HIGHLIGHT OBSERVER
+  const labelObserver = new MutationObserver(() => {
     const activeTheme = document.documentElement.getAttribute('data-theme');
     if (activeTheme === 'death-note') {
       document.querySelectorAll('.card p, .bootleg-card p, .item-card div').forEach(p => {
@@ -20,24 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  observer.observe(document.body, { childList: true, subtree: true });
-});
-/* ==========================================================================
-   DEATH NOTE RESKIN — ADVANCED INTERACTIVE TRAPS & SHINIGAMI EYES
-   ========================================================================== */
+  labelObserver.observe(document.body, { childList: true, subtree: true });
 
-document.addEventListener('DOMContentLoaded', () => {
+  // 2. INITIALIZE ADVANCED DEATH NOTE FEATURES
   setupDeathNoteFeatures();
 });
 
 function setupDeathNoteFeatures() {
   const isDeathNote = () => document.documentElement.getAttribute('data-theme') === 'death-note';
 
-  // 1. INJECT THE LIND L. TAILOR BAIT CARD
+  // INJECT THE LIND L. TAILOR BAIT CARD
   const injectBaitCard = () => {
     if (!isDeathNote() || document.getElementById('lind-l-tailor-card')) return;
-    const container = document.getElementById('card-container');
-    if (!container) return;
+    
+    // Find grid or card list container dynamically
+    const container = document.getElementById('card-container') || 
+                      document.querySelector('.card-grid') || 
+                      document.querySelector('.items-list') || 
+                      document.body;
 
     const bait = document.createElement('div');
     bait.id = 'lind-l-tailor-card';
@@ -54,18 +55,22 @@ function setupDeathNoteFeatures() {
         <button type="button" id="bait-add-btn" class="add-cart-btn">+ Add to Trade</button>
       </div>
     `;
-    container.prepend(bait);
+
+    if (container !== document.body) {
+      container.prepend(bait);
+    } else {
+      document.body.appendChild(bait);
+    }
 
     document.getElementById('bait-add-btn')?.addEventListener('click', triggerLTrap);
   };
 
-  // 2. TRAP TRIGGER (LIND L. TAILOR EXECUTION)
+  // TRAP TRIGGER (LIND L. TAILOR EXECUTION)
   function triggerLTrap() {
     const baitCard = document.getElementById('lind-l-tailor-card');
     
-    // Play dramatic audio/chime if available
-    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2874/2874-preview.mp3');
-    audio.play().catch(() => {});
+    // Low sinister chime sound
+    playSinisterChime();
 
     // Card turns to ash / vanishes
     if (baitCard) {
@@ -75,7 +80,7 @@ function setupDeathNoteFeatures() {
       setTimeout(() => baitCard.remove(), 800);
     }
 
-    // Full Screen Banner
+    // Full Screen Trap Warning Banner
     const banner = document.createElement('div');
     banner.className = 'kira-trap-banner';
     banner.innerHTML = `
@@ -90,7 +95,7 @@ function setupDeathNoteFeatures() {
     document.getElementById('close-kira-banner').onclick = () => banner.remove();
   }
 
-  // 3. SHINIGAMI EYES CONTRACT
+  // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -108,46 +113,98 @@ function setupDeathNoteFeatures() {
     });
   };
 
-  // 4. 40-SECOND KIRA COUNTDOWN & FLATLINE TIMER
+  // 40-SECOND KIRA COUNTDOWN & OMINOUS WebAudio FLATLINE
   document.addEventListener('click', (e) => {
-    const addBtn = e.target.closest('.add-cart-btn');
-    if (addBtn && !addBtn.dataset.hasTimer && isDeathNote()) {
-      addBtn.dataset.hasTimer = "true";
-      let timeLeft = 40;
+    // Detect clicks on global floating trade button or individual card buttons
+    const tradeTrigger = e.target.closest('#trade-request-btn, .floating-trade-btn, [class*="trade"], .add-cart-btn, button');
+    
+    if (tradeTrigger && !document.getElementById('death-note-timer-box') && isDeathNote()) {
       
-      const timerSpan = document.createElement('span');
-      timerSpan.className = 'death-timer';
-      timerSpan.innerText = ` [⏱️ ${timeLeft}s]`;
-      addBtn.appendChild(timerSpan);
+      // Floating Timer Box fixed over bottom right UI
+      const timerBox = document.createElement('div');
+      timerBox.id = 'death-note-timer-box';
+      timerBox.className = 'death-timer-box';
+      timerBox.innerHTML = `
+        <span class="timer-label">KIRA HEART RATE:</span>
+        <span id="death-timer-count">40s</span>
+      `;
+      document.body.appendChild(timerBox);
+
+      let timeLeft = 40;
+      const countDisplay = document.getElementById('death-timer-count');
 
       const interval = setInterval(() => {
         timeLeft--;
-        timerSpan.innerText = ` [⏱️ ${timeLeft}s]`;
-        
+        if (countDisplay) countDisplay.innerText = `${timeLeft}s`;
+
         if (timeLeft <= 0) {
           clearInterval(interval);
-          timerSpan.innerText = ' [💀 FLATLINE]';
-          // Play flatline sound
-          const flatline = new Audio('https://assets.mixkit.co/active_storage/sfx/951/951-preview.mp3');
-          flatline.play().catch(() => {});
-          
-          // Glitch UI effect
+          if (timerBox) {
+            timerBox.classList.add('flatlined');
+            timerBox.innerHTML = `<span class="timer-label">STATUS:</span> <span class="flatline-text">💀 FLATLINE</span>`;
+          }
+
+          // 1. Synthesize real continuous flatline monitor tone
+          playFlatlineTone();
+
+          // 2. Trigger screen blood-red glitch shake
           document.body.classList.add('heart-flatline-glitch');
-          setTimeout(() => document.body.classList.remove('heart-flatline-glitch'), 1500);
+          setTimeout(() => {
+            document.body.classList.remove('heart-flatline-glitch');
+          }, 3000);
         }
       }, 1000);
     }
   });
 
-  // Watch for theme switches
-  const observer = new MutationObserver(() => {
+  // AUDIO SYNTHESIZERS (NO CHEERY AUDIO CLIPS)
+  function playFlatlineTone() {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(380, audioCtx.currentTime); // Low eerie flatline
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 3.0);
+    } catch (err) {
+      console.log('Audio Context blocked or unsupported', err);
+    }
+  }
+
+  function playSinisterChime() {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 1.2);
+    } catch (err) {}
+  }
+
+  // Watch for dynamic theme updates
+  const themeObserver = new MutationObserver(() => {
     if (isDeathNote()) {
       injectBaitCard();
       injectEyeButton();
     }
   });
 
-  observer.observe(document.body, { childList: true, subtree: true });
+  themeObserver.observe(document.body, { childList: true, subtree: true });
   if (isDeathNote()) {
     injectBaitCard();
     injectEyeButton();
