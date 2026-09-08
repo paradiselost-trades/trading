@@ -333,3 +333,33 @@ body.heart-flatline-glitch::after {
   background: #ff0000 !important;
   box-shadow: 0 0 15px #ff0000;
 }
+/* Fix Status Timer Box Visibility & Contrast */
+#death-note-timer-box {
+  background: #0d0d0d !important;
+  border: 2px solid #ff0000 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.9), inset 0 0 10px rgba(255, 0, 0, 0.3) !important;
+  z-index: 9999999 !important;
+}
+
+#death-note-timer-box .timer-label {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+#death-timer-count {
+  color: #ff3333 !important;
+  font-size: 1.1rem !important;
+  font-weight: 900 !important;
+  text-shadow: 0 0 8px #ff0000 !important;
+}
+
+#death-note-timer-box.flatlined .flatline-text {
+  color: #ffffff !important;
+  background: #cc0000 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-weight: 900 !important;
+  text-shadow: none !important;
+}
