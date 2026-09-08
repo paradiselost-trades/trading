@@ -373,3 +373,20 @@ body.heart-flatline-glitch::after {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important;
   margin: 15px 0 25px 0 !important;
 }
+/* 2-Second Full Screen Blackout */
+.kira-blackout-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000 !important;
+  z-index: 99999999 !important;
+  pointer-events: all;
+  animation: fadeInInstant 0.1s ease-in;
+}
+
+@keyframes fadeInInstant {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
