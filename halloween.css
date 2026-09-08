@@ -305,3 +305,31 @@ body.heart-flatline-glitch::after {
   75% { transform: translate(2px, -1px); }
   100% { transform: translate(0, 0); }
 }
+/* Custom Death Note Font & Contrast Fix for L's Trap Popup */
+.kira-banner-content h1 {
+  font-family: 'DeathNoteGothic', 'Courier New', monospace !important;
+  font-size: 2.4rem !important;
+  color: #ffffff !important;
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000 !important;
+  letter-spacing: 2px;
+  margin-bottom: 15px !important;
+}
+
+.kira-banner-content p {
+  font-family: 'Special Elite', 'Georgia', serif !important;
+  color: #ff4d4d !important; /* Brighter red for sharp contrast */
+  font-size: 1rem !important;
+  letter-spacing: 1px;
+}
+
+.kira-banner-content button {
+  font-family: 'Special Elite', 'Georgia', serif !important;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+.kira-banner-content button:hover {
+  background: #ff0000 !important;
+  box-shadow: 0 0 15px #ff0000;
+}
