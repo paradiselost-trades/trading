@@ -399,3 +399,110 @@ body.dn-safe-mode * {
   filter: none !important;
   transition: none !important;
 }
+/* ==========================================================================
+   SPACING & PADDING ADJUSTMENTS (TRAP MODAL + TIMER BOX)
+   ========================================================================== */
+
+/* 1. Enhanced Trap Modal Spacing */
+.kira-trap-banner {
+  background: rgba(0, 0, 0, 0.95) !important;
+  z-index: 999999 !important;
+  padding: 20px !important;
+}
+
+.kira-banner-content {
+  border: 3px solid #8b0000 !important;
+  background: #000000 !important;
+  box-shadow: 0 0 35px #ff0000 !important;
+  max-width: 620px !important;
+  width: 90% !important;
+  padding: 45px 35px !important; /* Generous inner padding */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 22px !important; /* Clean vertical spacing between elements */
+  border-radius: 4px !important;
+}
+
+.kira-banner-content h1 {
+  font-family: var(--dn-font-heading) !important;
+  color: #ff3333 !important;
+  font-size: 1.8rem !important;
+  text-shadow: 0 0 15px #ff0000, 0 0 30px #8b0000 !important;
+  letter-spacing: 4px !important;
+  margin: 0 !important;
+  line-height: 1.3 !important;
+}
+
+.kira-banner-content p {
+  color: #ffffff !important;
+  font-family: var(--dn-font-heading) !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 2px !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+
+.kira-banner-content button#close-kira-banner {
+  background: #8b0000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ff3333 !important;
+  font-family: var(--dn-font-heading) !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 2.5px !important;
+  padding: 12px 28px !important;
+  margin-top: 10px !important;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.6) !important;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
+}
+
+.kira-banner-content button#close-kira-banner:hover {
+  background: #ff0000 !important;
+  color: #000000 !important;
+  box-shadow: 0 0 20px #ff0000 !important;
+}
+
+/* 2. Enhanced Heart Rate Timer Box Spacing */
+#death-note-timer-box {
+  position: fixed !important;
+  bottom: 25px !important;
+  left: 25px !important;
+  right: auto !important;
+  background: #000000 !important;
+  border: 2px solid #ff0000 !important;
+  border-radius: 6px !important;
+  padding: 10px 18px !important; /* Extra horizontal cushion */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 20px !important; /* Prevents "KIRA HEART RATE" and "37s" from overlapping */
+  min-width: 220px !important;
+  box-shadow: 0 0 18px rgba(255, 0, 0, 0.8) !important;
+  z-index: 9999999 !important;
+}
+
+#death-note-timer-box .timer-label {
+  font-family: var(--dn-font-heading) !important;
+  font-size: 0.9rem !important;
+  color: #ffffff !important;
+  letter-spacing: 1.5px !important;
+  white-space: nowrap !important;
+}
+
+#death-timer-count {
+  font-family: var(--dn-font-mono) !important;
+  font-size: 1.1rem !important;
+  color: #ff3333 !important;
+  font-weight: 900 !important;
+  letter-spacing: 1.5px !important;
+  white-space: nowrap !important;
+}
+
+#death-timer-count {
+  font-family: var(--dn-font-mono) !important;
+  font-size: 1rem !important;
+  color: #ff3333 !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+}
