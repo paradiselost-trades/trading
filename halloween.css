@@ -3,7 +3,7 @@
    ========================================================================== */
 
 /* 1. FONT IMPORT DEFINITIONS */
-@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Rock+Salt&family=Reenie+Beanie&family=UnifrakturMaguntia&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 /* Main Gothic Font for Major Headings (Relative Path Fix) */
 /* Death Note Gothic Font Declaration */
@@ -192,7 +192,10 @@ body.shinigami-eyes-active {
   filter: invert(100%) hue-rotate(180deg) contrast(140%) !important;
 }
 
-/* L's Trap Modal Banner */
+/* ==========================================================================
+   OFFICIAL L BROADCAST TRAP POPUP
+   ========================================================================== */
+
 .kira-trap-banner {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -202,53 +205,88 @@ body.shinigami-eyes-active {
 }
 
 .kira-banner-content {
-  border: 3px solid #8b0000;
+  border: 2px solid #8b0000;
   padding: 40px;
   background: #000000;
   color: #ff3333;
   text-align: center;
-  box-shadow: 0 0 30px #ff0000;
+  box-shadow: 0 0 30px #8b0000;
 }
 
-.kira-trap-banner .kira-banner-content p {
+/* Header Text — Official Broadcast Monospace */
+.kira-banner-content h1,
+.kira-trap-banner .kira-banner-content h1 {
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+  font-size: 2rem !important;
   color: #ffffff !important;
-  font-family: var(--dn-font-heading) !important;
-  font-size: 1.1rem !important;
-  margin: 15px 0 25px 0 !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5) !important;
+  letter-spacing: 2px !important;
+  margin-bottom: 15px !important;
 }
 
+/* Message Subtext — Clean Monospace */
+.kira-trap-banner .kira-banner-content p {
+  color: #ff4d4d !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 1px !important;
+  margin: 15px 0 25px 0 !important;
+  text-shadow: none !important;
+}
+
+/* Button Styling */
 .kira-banner-content button {
   background: #8b0000;
   color: #ffffff;
-  border: none;
+  border: 1px solid #ff4d4d;
   padding: 10px 22px;
   cursor: pointer;
-  font-family: var(--dn-font-body) !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+  font-size: 0.9rem !important;
   font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
 }
 
-/* Floating Timer Box */
+.kira-banner-content button:hover {
+  background: #ff0000 !important;
+  color: #000000 !important;
+}
+
+/* ==========================================================================
+   FLOATING TIMER BOX (HIGH-VISIBILITY FIX)
+   ========================================================================== */
+
 #death-note-timer-box {
   position: fixed;
   bottom: 80px;
   right: 25px;
-  background: #0d0d0d !important;
-  border: 2px solid #ff0000 !important;
+  background: #1a1a1a !important; /* Lighter container background for contrast */
+  border: 2px solid #ff3333 !important;
   color: #ffffff !important;
   padding: 10px 16px;
   border-radius: 6px;
-  font-family: var(--dn-font-heading) !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
   font-size: 0.95rem;
-  box-shadow: 0 0 15px rgba(255, 0, 0, 0.9) !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 2px #ffffff !important; /* White outer ring highlight */
   z-index: 9999999 !important;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+#death-note-timer-box .timer-label {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+}
+
 #death-timer-count {
   color: #ff3333 !important;
   font-weight: 900 !important;
+  font-size: 1.1rem !important;
+  font-family: 'Share Tech Mono', 'Courier New', monospace !important;
+  text-shadow: 0 0 8px #ff0000 !important;
 }
 
 /* Full Screen Blackout Overlay */
