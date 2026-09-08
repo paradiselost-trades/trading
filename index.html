@@ -9,20 +9,26 @@
   <!-- Transparent PNG Favicon -->
   <link rel="icon" type="image/png" href="snake-apple.png" />
 
-  <!-- INTERNAL THEME SWITCHER (Controlled strictly by index) -->
+  <!-- Unified Theme Controller (Strict Index Control) -->
   <script>
     (function() {
       // ========================================================
       // CHANGE YOUR ACTIVE THEME HERE:
-      // Set to 'death-note'  ---> Activates Death Note Theme
-      // Set to 'paradise-lost' ---> Activates Paradise Lost Theme
+      // Options: 'death-note'  OR  'paradise-lost'
       // ========================================================
       const ACTIVE_THEME = 'death-note';
 
+      // Clear legacy storage overrides to prevent theme flashing
+      localStorage.removeItem('paradiseThemeActive');
+      localStorage.removeItem('deathNoteActive');
+
+      // Set the attribute immediately before render
       document.documentElement.setAttribute('data-theme', ACTIVE_THEME);
-      
+
       if (ACTIVE_THEME === 'paradise-lost') {
         document.documentElement.classList.add('paradise-lost', 'paradise-lost-mode');
+      } else {
+        document.documentElement.classList.remove('paradise-lost', 'paradise-lost-mode');
       }
     })();
   </script>
