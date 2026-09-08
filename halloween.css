@@ -143,3 +143,25 @@ html[data-theme="death-note"] .infernal-label-notes {
   font-family: var(--dn-font-handwriting) !important;
   font-weight: bold !important;
 }
+/* Death Note Text Contrast & Readability Fix */
+html[data-theme="death-note"] .card-cast,
+html[data-theme="death-note"] .card-notes,
+html[data-theme="death-note"] .item-card div {
+  color: #111111 !important; /* Sharp dark text for paper readability */
+  background: transparent !important; /* Removes muddy grey highlight blocks */
+}
+
+html[data-theme="death-note"] .infernal-label-cast,
+html[data-theme="death-note"] .infernal-label-notes {
+  color: #8b0000 !important; /* Deep crimson for label highlights */
+  font-weight: 800 !important;
+  background: transparent !important;
+  padding: 0 2px;
+}
+
+/* Fix light metallic/white text on notebook paper */
+html[data-theme="death-note"] .card-meta,
+html[data-theme="death-note"] .card-title {
+  color: #1a1a1a !important;
+  text-shadow: none !important;
+}
