@@ -579,3 +579,35 @@ html[data-theme="death-note"] input[type="text"] {
 #death-note-timer-box .timer-label {
   font-size: 0 !important; /* Hides old text while preserving font properties */
 }
+/* ==========================================================================
+   FIX KIRA TRAP FONT & TIMER LABEL VISIBILITY
+   ========================================================================== */
+
+/* 1. Force Share Tech Mono font on Trap Modal paragraph */
+.kira-banner-content p {
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 1.5px !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  width: 100% !important;
+  text-align: center !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+
+/* 2. Restore "TIME LEFT" label visibility and override previous font-size: 0 */
+#death-note-timer-box .timer-label {
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: 0.95rem !important;
+  color: #ffffff !important;
+  letter-spacing: 1.5px !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#death-note-timer-box .timer-label::before {
+  content: "" !important; /* Clears out pseudo-element override */
+}
