@@ -538,3 +538,36 @@ html[data-theme="death-note"] input[type="text"] {
   border: 1px solid #8b0000 !important;
   box-shadow: 0 0 12px rgba(139, 0, 0, 0.5) !important;
 }
+/* ==========================================================================
+   FIX KIRA TRAP MODAL ALIGNMENT & SPACING
+   ========================================================================== */
+
+.kira-banner-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 90% !important;
+  max-width: 600px !important;
+  padding: 40px 30px !important;
+  gap: 20px !important;
+}
+
+.kira-banner-content h1 {
+  width: 100% !important;
+  text-align: center !important;
+  margin: 0 !important;
+}
+
+.kira-banner-content p {
+  width: 100% !important;
+  text-align: center !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+}
+
+.kira-banner-content button#close-kira-banner {
+  margin-top: 10px !important;
+  align-self: center !important;
+}
