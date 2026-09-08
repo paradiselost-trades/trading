@@ -506,3 +506,35 @@ body.dn-safe-mode * {
   font-weight: 900 !important;
   letter-spacing: 1px !important;
 }
+/* ==========================================================================
+   FINAL ABSOLUTE PURPLE ELIMINATOR (FORCE BLACK)
+   ========================================================================== */
+
+html[data-theme="death-note"],
+html[data-theme="death-note"] body,
+html[data-theme="death-note"] #app,
+html[data-theme="death-note"] header,
+html[data-theme="death-note"] main,
+html[data-theme="death-note"] footer,
+html[data-theme="death-note"] .main-container,
+html[data-theme="death-note"] .container,
+html[data-theme="death-note"] .controls,
+html[data-theme="death-note"] div.controls,
+html[data-theme="death-note"] .search-container,
+html[data-theme="death-note"] .control-panel,
+html[data-theme="death-note"] section {
+  background: #050505 !important;
+  background-color: #050505 !important;
+  box-shadow: none !important;
+  border-color: #333333 !important;
+}
+
+/* Force dark red/black aesthetic on search input wrapper */
+html[data-theme="death-note"] #search-input,
+html[data-theme="death-note"] .controls input,
+html[data-theme="death-note"] input[type="text"] {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #8b0000 !important;
+  box-shadow: 0 0 12px rgba(139, 0, 0, 0.5) !important;
+}
