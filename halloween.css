@@ -662,31 +662,37 @@ li::before {
   visibility: visible !important;
   opacity: 1 !important;
 }
-/* RESET LIND L. TAILOR CARD TO NORMAL INLINE GRID FLOW */
-[data-theme="death-note"] .card[data-title*="Tailor"],
-.shinigami-mode .card[data-title*="Tailor"],
-[data-theme="death-note"] .broadcast-card {
-  position: static !important;
-  transform: none !important;
-  margin: 0 auto 20px auto !important;
-  top: auto !important;
-  left: auto !important;
-  z-index: 1 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
+/* FIX LIND L. TAILOR CARD DISPLAY, POSITION & CONTRAST */
+body[data-theme="death-note"] .card,
+html[data-theme="death-note"] .card {
+  /* Fallback to ensure card layout stays inline */
+  box-sizing: border-box;
 }
 
-/* FIX TEXT CONTRAST ON NOTEBOOK BACKGROUND */
-[data-theme="death-note"] .card[data-title*="Tailor"] p,
-[data-theme="death-note"] .card[data-title*="Tailor"] span,
-[data-theme="death-note"] .card[data-title*="Tailor"] div {
-  color: #1a1a1a !important;
+/* Force static grid positioning for any card containing broadcast styling */
+[data-theme="death-note"] #card-container .card,
+.shinigami-mode #card-container .card {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  z-index: 1 !important;
+}
+
+/* Force dark text contrast on light/lined card backgrounds */
+[data-theme="death-note"] .card p,
+[data-theme="death-note"] .card span,
+[data-theme="death-note"] .card h3 {
   text-shadow: none !important;
 }
 
-[data-theme="death-note"] .card[data-title*="Tailor"] .infernal-label-cast,
-[data-theme="death-note"] .card[data-title*="Tailor"] .infernal-label-notes {
-  color: #8b0000 !important;
-  font-weight: bold !important;
+/* Target dark text specifically for white/notebook style cards */
+[data-theme="death-note"] .card[style*="background"],
+[data-theme="death-note"] .card[class*="broadcast"] {
+  color: #111111 !important;
+}
+
+[data-theme="death-note"] .card[style*="background"] p,
+[data-theme="death-note"] .card[class*="broadcast"] p {
+  color: #1a1a1a !important;
 }
