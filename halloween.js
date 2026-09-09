@@ -61,7 +61,8 @@ function setupDeathNoteFeatures() {
 
     document.body.appendChild(overlay);
 
-    document.getElementById('close-misa-popup')?.addEventListener('click', () => {
+    document.getElementById('close-misa-popup')?.addEventListener('click', (e) => {
+      e.stopPropagation();
       overlay.remove();
     });
   }
@@ -122,7 +123,7 @@ function setupDeathNoteFeatures() {
 
     const banner = document.createElement('div');
     banner.id = 'kira-trap-overlay';
-    banner.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
+    banner.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 9999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
 
     banner.innerHTML = `
       <div class="kira-banner-content" style="max-width: 500px; width: 90%; padding: 20px; background: #111; border: 2px solid #8b0000; box-shadow: 0 0 20px #ff0000; box-sizing: border-box;">
@@ -165,6 +166,38 @@ function setupDeathNoteFeatures() {
     showKiraBanner();
   }
 
+  // INITIALIZE / START TIMER BOX
+  function startDeathTimer() {
+    if (document.getElementById('death-note-timer-box')) return;
+
+    const timerBox = document.createElement('div');
+    timerBox.id = 'death-note-timer-box';
+    timerBox.innerHTML = `
+      <span class="timer-label">TIME LEFT:</span>
+      <span id="death-timer-count">40s</span>
+    `;
+    document.body.appendChild(timerBox);
+
+    let timeLeft = 40;
+    const countDisplay = document.getElementById('death-timer-count');
+
+    const interval = setInterval(() => {
+      timeLeft--;
+      if (countDisplay) countDisplay.innerText = `${timeLeft}s`;
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        if (timerBox) {
+          timerBox.classList.add('flatlined');
+          timerBox.innerHTML = `<span class="timer-label">STATUS:</span> <span class="flatline-text">💀 FLATLINE</span>`;
+        }
+
+        playFlatlineTone();
+        triggerBlackout();
+      }
+    }, 1000);
+  }
+
   // GLOBAL EVENT DELEGATION FOR CLICK HANDLERS
   document.addEventListener('click', (e) => {
     // 1. Trap Card Trigger
@@ -176,38 +209,13 @@ function setupDeathNoteFeatures() {
     }
 
     // 2. 40-Second Timer Trigger on Trade Buttons
-    const tradeTrigger = e.target.closest('#trade-request-btn, .floating-trade-btn');
-    if (tradeTrigger && !document.getElementById('death-note-timer-box')) {
-      const timerBox = document.createElement('div');
-      timerBox.id = 'death-note-timer-box';
-      timerBox.innerHTML = `
-        <span class="timer-label">TIME LEFT:</span>
-        <span id="death-timer-count">40s</span>
-      `;
-      document.body.appendChild(timerBox);
-
-      let timeLeft = 40;
-      const countDisplay = document.getElementById('death-timer-count');
-
-      const interval = setInterval(() => {
-        timeLeft--;
-        if (countDisplay) countDisplay.innerText = `${timeLeft}s`;
-
-        if (timeLeft <= 0) {
-          clearInterval(interval);
-          if (timerBox) {
-            timerBox.classList.add('flatlined');
-            timerBox.innerHTML = `<span class="timer-label">STATUS:</span> <span class="flatline-text">💀 FLATLINE</span>`;
-          }
-
-          playFlatlineTone();
-          triggerBlackout();
-        }
-      }, 1000);
+    const tradeTrigger = e.target.closest('#trade-request-btn, .floating-trade-btn, .add-cart-btn');
+    if (tradeTrigger) {
+      startDeathTimer();
     }
   });
 
- // SHINIGAMI EYES CONTRACT BUTTON
+  // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -228,6 +236,8 @@ function setupDeathNoteFeatures() {
       if (active) {
         playMisaTheme();
         showMisaPopup();
+      } else {
+        document.getElementById('misa-pop-overlay')?.remove();
       }
     });
   };
@@ -465,6 +475,7 @@ function setupDeathNoteFeatures() {
   injectEyeButton();
   injectSafeModeButton();
   setupRuleRotator();
+  startDeathTimer();
 
   // WATCH FOR DYNAMIC THEME CHANGES
   const themeObserver = new MutationObserver(() => {
