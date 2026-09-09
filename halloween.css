@@ -696,3 +696,80 @@ html[data-theme="death-note"] .card {
 [data-theme="death-note"] .card[class*="broadcast"] p {
   color: #1a1a1a !important;
 }
+/* OVERRIDE INLINE JS STYLES FOR LIND L. TAILOR CARD */
+#card-container div[style*="background"],
+#card-container .card[style*="background"],
+div[style*="background-image"],
+.shinigami-mode div[style*="background"] {
+  /* Fix position and layout */
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  margin: 0 auto 20px auto !important;
+  z-index: 1 !important;
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+
+  /* Fix invisible text and glow effects */
+  color: #111111 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Force inner text elements to dark charcoal and crimson */
+#card-container div[style*="background"] *,
+.shinigami-mode div[style*="background"] * {
+  color: #1a1a1a !important;
+  text-shadow: none !important;
+}
+
+#card-container div[style*="background"] .infernal-label-cast,
+#card-container div[style*="background"] .infernal-label-notes,
+.shinigami-mode div[style*="background"] strong {
+  color: #8b0000 !important;
+  font-weight: bold !important;
+}
+/* FORCE ALL CARDS (INCLUDING LIND L. TAILOR) BACK INTO THE GRID FLOW */
+#card-container > div,
+#card-container .card,
+div[class*="card"],
+div[style*="fixed"],
+div[style*="absolute"] {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  margin: 0 0 20px 0 !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* FIX LIGHT/NOTEBOOK CARD TEXT IN SHINIGAMI MODE */
+#card-container div,
+#card-container div p,
+#card-container div span,
+#card-container div h3 {
+  text-shadow: none !important;
+}
+
+/* Force dark text color over any element rendered with a light background */
+div[style*="background"],
+div[class*="broadcast"],
+div[class*="tailor"] {
+  color: #111111 !important;
+}
+
+div[style*="background"] p,
+div[class*="broadcast"] p,
+div[class*="tailor"] p,
+div[style*="background"] span,
+div[class*="broadcast"] span,
+div[class*="tailor"] span {
+  color: #1a1a1a !important;
+}
