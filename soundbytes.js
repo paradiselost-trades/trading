@@ -10,7 +10,7 @@ const deathNoteAudio = {
   },
   light_laugh: {
     file: new Audio('audios/laugh.mp3'),
-    text: '*(I can barely hold my laugh...)*'
+    text: '*(Light cackles evil laugh)*'
   },
   world_without_light: {
     file: new Audio('audios/world_without_light.mp3'),
@@ -18,7 +18,7 @@ const deathNoteAudio = {
   },
   i_am_l: {
     file: new Audio('audios/L.mp3'),
-    text: 'I am L.'
+    text: 'I wanted to tell you... I’m L.'
   }
 };
 
@@ -27,7 +27,7 @@ function playSoundByte(key) {
   if (!item) return;
 
   item.file.currentTime = 0;
-  item.file.play().catch(err => console.log('Autoplay blocked:', err));
+  item.file.play().catch(err => console.log('Autoplay or file issue:', err));
 
   showAnimeSubtitle(item.text);
 }
@@ -46,33 +46,35 @@ function showAnimeSubtitle(text) {
   }, 3500);
 }
 
-// Bind Sound Byte Triggers to Your Exact HTML Elements
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. "MATSUDA, YOU IDIOT!" -> Clear All Button (Trade Drawer)
-  document.getElementById('clear-cart-btn')?.addEventListener('click', () => {
-    playSoundByte('matsuda');
-  });
-
-  // 2. "I can barely hold my laugh..." -> Lasagna Approved Seal
-  document.querySelector('.lasagna-relic-seal')?.addEventListener('click', () => {
+// Event Delegation (Guarantees clicks work even on dynamic elements)
+document.addEventListener('click', (e) => {
+  // 1. Lasagna Approved Badge (or its inner spans)
+  if (e.target.closest('.lasagna-relic-seal')) {
     playSoundByte('light_laugh');
-  });
+    return;
+  }
 
-  // 3. "I am L." -> Unveil the Nine Circles Button
-  document.getElementById('palette-toggle-btn')?.addEventListener('click', () => {
+  // 2. Unveil Nine Circles Button
+  if (e.target.closest('#palette-toggle-btn')) {
     playSoundByte('i_am_l');
-  });
+    return;
+  }
 
-  // 4. "All according to keikaku." -> Copy & Email Trade Request Buttons
-  document.getElementById('copy-trade-btn')?.addEventListener('click', () => {
-    playSoundByte('keikaku');
-  });
-  document.getElementById('email-trade-btn')?.addEventListener('click', () => {
-    playSoundByte('keikaku');
-  });
+  // 3. Clear All Trade Cart Button
+  if (e.target.closest('#clear-cart-btn')) {
+    playSoundByte('matsuda');
+    return;
+  }
 
-  // 5. "World Without Light" -> Scroll to Top "ASCEND" Button
-  document.getElementById('scroll-top-btn')?.addEventListener('click', () => {
+  // 4. Copy Request or Email Request Buttons
+  if (e.target.closest('#copy-trade-btn') || e.target.closest('#email-trade-btn')) {
+    playSoundByte('keikaku');
+    return;
+  }
+
+  // 5. Scroll to Top "ASCEND" Button
+  if (e.target.closest('#scroll-top-btn')) {
     playSoundByte('world_without_light');
-  });
+    return;
+  }
 });
