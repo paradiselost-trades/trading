@@ -628,3 +628,28 @@ li::before {
   color: #8b0000 !important;
   font-weight: bold;
 }
+/* Retro Yellow Anime Subtitles */
+#dn-anime-sub {
+  position: fixed !important;
+  bottom: 40px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  border: 1px solid #ffffff !important;
+  color: #ffff00 !important;
+  font-family: 'Arial', sans-serif !important;
+  font-weight: bold !important;
+  font-size: 1.15rem !important;
+  padding: 8px 22px !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 1px 1px 2px #000000 !important;
+  z-index: 99999999 !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  animation: subFadeIn 0.15s ease-out;
+}
+
+@keyframes subFadeIn {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
