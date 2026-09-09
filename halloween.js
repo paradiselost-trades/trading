@@ -132,7 +132,7 @@ function setupDeathNoteFeatures() {
   const setupRuleRotator = () => {
     if (document.getElementById('dn-rule-ticker')) return;
 
-    // Target and hide ONLY the rulebook text & checkboxes
+    // Target and hide ONLY the rulebook text header if needed
     document.querySelectorAll('h2, div, p').forEach(el => {
       if (el.children.length === 0 && el.innerText?.trim() === 'RULEBOOK INSTRUCTIONS') {
         el.style.display = 'none';
@@ -248,8 +248,6 @@ function setupDeathNoteFeatures() {
       ...fakeRules.map(f => ({ text: f, isFake: true }))
     ];
 
-    const mainContainer = document.querySelector('.container') || document.body;
-
     const fancyBox = document.createElement('div');
     fancyBox.id = 'dn-rule-ticker';
     fancyBox.className = 'gothic-rule-box';
@@ -273,7 +271,18 @@ function setupDeathNoteFeatures() {
       </div>
     `;
 
-    mainContainer.prepend(fancyBox);
+    // Target the main white-bordered instruction box container
+    const rulebookBox = document.querySelector('.container') || 
+                        document.querySelector('[style*="border"]') || 
+                        document.querySelector('.rules-box') ||
+                        document.querySelector('main');
+
+    if (rulebookBox) {
+      // Place directly BELOW the rulebook box element
+      rulebookBox.insertAdjacentElement('afterend', fancyBox);
+    } else {
+      document.body.appendChild(fancyBox);
+    }
 
     setInterval(() => {
       const ruleText = document.getElementById('dn-rule-text');
