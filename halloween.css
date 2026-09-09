@@ -781,3 +781,156 @@ html[data-theme="death-note"] .rules-box .rules-title::after {
   font-size: 0.75rem;
   letter-spacing: 3px;
 }
+/* ==========================================================================
+   HALLOWEEN RESKIN EXTRA STYLES
+   ========================================================================== */
+
+/* MISA MISA POPUP */
+#misa-jumpscare-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  background: #111;
+  border: 3px solid #ff007f;
+  box-shadow: 0 0 25px #ff007f;
+  z-index: 999999;
+  font-family: 'Comic Sans MS', sans-serif;
+  animation: misaBounce 0.4s ease-out;
+}
+.misa-popup-header {
+  background: #ff007f;
+  color: #fff;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+#close-misa-popup {
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-weight: bold;
+}
+.misa-popup-body {
+  padding: 10px;
+  text-align: center;
+}
+.misa-glitch-box {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  animation: pulse 0.5s infinite alternate;
+}
+
+/* POTATO CHIP DRAMATIC ZOOM */
+.potato-chip-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.giant-potato-chip {
+  font-size: 12rem;
+  animation: chipZoom 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.chip-dramatic-text {
+  color: #fff;
+  font-family: 'Impact', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 15px #ff0000;
+  margin-top: 20px;
+}
+.and-eat-it {
+  color: #ff0000;
+  font-size: 3.5rem;
+}
+
+/* DRAMATIC SCREEN SHAKE */
+.dramatic-shake {
+  animation: shake 0.1s infinite;
+}
+
+/* MATSUDA WARNING TOAST */
+.matsuda-warning-toast {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #8b0000;
+  color: #fff;
+  border: 2px solid #ff0000;
+  padding: 10px 20px;
+  font-family: monospace;
+  font-weight: bold;
+  z-index: 999999;
+  box-shadow: 0 0 15px #ff0000;
+}
+
+/* KIRA TRAP BANNER MODAL */
+.kira-trap-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+.kira-banner-content {
+  border: 2px solid #ff0000;
+  padding: 30px;
+  background: #000;
+  color: #ff0000;
+  text-align: center;
+  box-shadow: 0 0 30px #ff0000;
+  font-family: monospace;
+}
+#close-kira-banner {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #ff0000;
+  color: #000;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ANIMATIONS */
+@keyframes shake {
+  0% { transform: translate(2px, 2px) rotate(0deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  40% { transform: translate(1px, -1px) rotate(-1deg); }
+  60% { transform: translate(-2px, 2px) rotate(0deg); }
+  80% { transform: translate(2px, 1px) rotate(1deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+@keyframes chipZoom {
+  0% { transform: scale(0.1) rotate(0deg); }
+  100% { transform: scale(1.5) rotate(15deg); }
+}
+
+@keyframes misaBounce {
+  0% { transform: translate(-50%, -60%) scale(0.8); opacity: 0; }
+  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
