@@ -30,15 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupDeathNoteFeatures() {
   const isDeathNote = () => document.documentElement.getAttribute('data-theme') === 'death-note';
 
-  // AUDIO PLAYBACK HELPERS FOR EXTENSION-LESS MP3 FILES
+  // AUDIO PLAYBACK HELPERS WITH EXPLICIT EXTENSIONS
   function playMisaTheme() {
-    const audio = new Audio('halloween/misa_theme');
+    const audio = new Audio('halloween/misa_theme.mp3');
     audio.volume = 0.5;
     audio.play().catch(e => console.log('Audio playback prevented:', e));
   }
 
   function playPotatoChipSound() {
-    const audio = new Audio('halloween/potato_chip');
+    const audio = new Audio('halloween/potato_chip.mp3');
     audio.volume = 0.7;
     audio.play().catch(e => console.log('Audio playback prevented:', e));
   }
@@ -95,7 +95,7 @@ function setupDeathNoteFeatures() {
     document.getElementById('bait-add-btn')?.addEventListener('click', triggerLTrap);
   };
 
-  // TRAP TRIGGER (LIND L. TAILOR EXECUTION WITH SHINIGAMI EYE EASTER EGG & POTATO CHIP)
+  // TRAP TRIGGER (LIND L. TAILOR EXECUTION WITH MISA POP-UP, SHINIGAMI EYE EASTER EGG & POTATO CHIP)
   function triggerLTrap() {
     const baitCard = document.getElementById('lind-l-tailor-card');
     
@@ -121,13 +121,18 @@ function setupDeathNoteFeatures() {
 
     const banner = document.createElement('div');
     banner.className = 'kira-trap-banner';
+    banner.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
+
     banner.innerHTML = `
-      <div class="kira-banner-content">
+      <div class="kira-banner-content" style="max-width: 500px; padding: 20px; background: #111; border: 2px solid #8b0000; box-shadow: 0 0 20px #ff0000;">
+        <img src="halloween/MISA AMANE.png" alt="Misa Amane" style="max-width: 220px; height: auto; display: block; margin: 0 auto 15px auto; border: 1px solid #333;" />
         ${eyeOverlayHtml}
-        <h1>THAT WAS A TRAP, KIRA.</h1>
-        <p>L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
-        <button id="chip-trap-btn" style="margin-right: 10px; background: #d97706; color: #fff; padding: 8px 12px; border: none; cursor: pointer; font-weight: bold;">🥔 TAKE A POTATO CHIP AND EAT IT</button>
-        <button id="close-kira-banner">ACCEPT JUDGEMENT</button>
+        <h1 style="color: #ff3333; margin-top: 0;">THAT WAS A TRAP, KIRA.</h1>
+        <p style="font-family: monospace;">L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
+        <div style="margin-top: 20px;">
+          <button id="chip-trap-btn" style="margin-right: 10px; background: #d97706; color: #fff; padding: 8px 12px; border: none; cursor: pointer; font-weight: bold;">🥔 TAKE A POTATO CHIP AND EAT IT</button>
+          <button id="close-kira-banner" style="background: #333; color: #fff; padding: 8px 12px; border: 1px solid #666; cursor: pointer;">ACCEPT JUDGEMENT</button>
+        </div>
       </div>
     `;
 
