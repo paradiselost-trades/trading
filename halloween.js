@@ -82,7 +82,7 @@ function setupDeathNoteFeatures() {
     document.getElementById('bait-add-btn')?.addEventListener('click', triggerLTrap);
   };
 
-  // TRAP TRIGGER (LIND L. TAILOR EXECUTION)
+  // TRAP TRIGGER (LIND L. TAILOR EXECUTION WITH SHINIGAMI EYE EASTER EGG)
   function triggerLTrap() {
     const baitCard = document.getElementById('lind-l-tailor-card');
     
@@ -95,18 +95,41 @@ function setupDeathNoteFeatures() {
       setTimeout(() => baitCard.remove(), 800);
     }
 
+    // Check if Shinigami Eyes mode is currently active
+    const eyesActive = document.body.classList.contains('shinigami-eyes-active');
+
+    // Shinigami Eye HUD reveal for L Lawliet
+    const eyeOverlayHtml = eyesActive ? `
+      <div class="shinigami-target-hud" style="color: #ff3333; font-family: monospace; font-size: 1.1rem; margin-bottom: 15px; text-shadow: 0 0 8px #ff0000; border-bottom: 1px red solid; padding-bottom: 8px;">
+        <div>NAME: L Lawliet</div>
+        <div>LIFESPAN: [ UNREADABLE / PROTECTED ]</div>
+      </div>
+    ` : '';
+
     const banner = document.createElement('div');
     banner.className = 'kira-trap-banner';
     banner.innerHTML = `
       <div class="kira-banner-content">
+        ${eyeOverlayHtml}
         <h1>THAT WAS A TRAP, KIRA.</h1>
         <p>L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
         <button id="close-kira-banner">ACCEPT JUDGEMENT</button>
       </div>
     `;
-    document.body.appendChild(banner);
 
-    document.getElementById('close-kira-banner').onclick = () => banner.remove();
+    // Append to <html> directly to escape body-level CSS transforms
+    document.documentElement.appendChild(banner);
+
+    // Lock background scrolling while trap is active
+    document.body.style.overflow = 'hidden';
+
+    // Auto-scroll as a fallback to ensure the view stays locked onto the banner
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    document.getElementById('close-kira-banner').onclick = () => {
+      banner.remove();
+      document.body.style.overflow = ''; // Restore scroll
+    };
   }
 
   // SHINIGAMI EYES CONTRACT BUTTON
