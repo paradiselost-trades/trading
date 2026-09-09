@@ -54,14 +54,13 @@ function setupDeathNoteFeatures() {
 
     const overlay = document.createElement('div');
     overlay.id = 'misa-pop-overlay';
-    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
 
     overlay.innerHTML = `
-      <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 650px; width: 90%; max-height: 85vh; padding: 30px; background: #111; border: 3px solid #ff007f; box-shadow: 0 0 30px #ff007f; box-sizing: border-box; overflow-y: auto;">
-        <img src="halloween/MISA AMANE.png" alt="Misa Amane" style="max-width: 420px; width: 100%; height: auto; display: block; margin: 0 auto 20px auto; border: 2px solid #ff007f; border-radius: 4px;" />
-        <h2 style="color: #ff007f; margin-top: 0; font-family: monospace; font-size: 1.6rem; letter-spacing: 1px;">SHINIGAMI EYES CONTRACT MADE!</h2>
-        <p style="font-family: monospace; font-size: 1.1rem; color: #ddd; margin: 15px 0 20px 0;">You have traded half of your remaining life span.</p>
-        <button id="close-misa-popup" type="button" style="background: #ff007f; color: #fff; padding: 10px 24px; border: none; cursor: pointer; font-weight: bold; font-family: monospace; font-size: 1rem; text-transform: uppercase;">CLOSE</button>
+      <div class="misa-modal-content">
+        <img src="halloween/MISA AMANE.png" alt="Misa Amane" />
+        <h2>SHINIGAMI EYES CONTRACT MADE!</h2>
+        <p>You have traded half of your remaining life span.</p>
+        <button id="close-misa-popup" type="button">CLOSE</button>
       </div>
     `;
 
@@ -71,8 +70,6 @@ function setupDeathNoteFeatures() {
       overlay.remove();
     });
   }
-  }
-
   // SAFE MODE TOGGLE BUTTON
   const injectSafeModeButton = () => {
     if (document.getElementById('dn-safe-mode-btn')) return;
