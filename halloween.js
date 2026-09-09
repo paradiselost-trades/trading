@@ -215,7 +215,7 @@ function setupDeathNoteFeatures() {
     }
   });
 
-  // SHINIGAMI EYES CONTRACT BUTTON
+ // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -234,6 +234,7 @@ function setupDeathNoteFeatures() {
       eyeBtn.innerText = active ? '👁️ Shinigami Eyes Active' : '👁️ Trade Half Your Life for Shinigami Eyes';
       
       if (active) {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // <-- ADDED HERE
         playMisaTheme();
         showMisaPopup();
       } else {
