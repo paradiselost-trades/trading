@@ -772,3 +772,24 @@ div[style*="background-image"],
 #card-container .card[class*="broadcast"] span {
   color: #1a1a1a !important;
 }
+/* RE-ENABLE INTERACTION FOR BROADCAST CARD IN SHINIGAMI MODE */
+[data-theme="death-note"] .broadcast-card,
+[data-theme="death-note"] .card[data-title*="Tailor"],
+[data-theme="death-note"] #lind-l-tailor-card {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+[data-theme="death-note"] .broadcast-card *,
+[data-theme="death-note"] .card[data-title*="Tailor"] * {
+  pointer-events: auto !important;
+}
+
+/* ENSURE MODAL OVERLAYS LAYER ABOVE THE THEME */
+.broadcast-modal,
+#broadcast-video-modal,
+.modal-overlay,
+#gothic-toast {
+  z-index: 9999999 !important;
+  pointer-events: auto !important;
+}
