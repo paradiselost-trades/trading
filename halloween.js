@@ -207,7 +207,7 @@ function setupDeathNoteFeatures() {
     }
   });
 
-  // SHINIGAMI EYES CONTRACT BUTTON
+ // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -219,7 +219,8 @@ function setupDeathNoteFeatures() {
     eyeBtn.innerText = '👁️ Trade Half Your Life for Shinigami Eyes';
     header.appendChild(eyeBtn);
 
-    eyeBtn.addEventListener('click', () => {
+    eyeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       document.body.classList.toggle('shinigami-eyes-active');
       const active = document.body.classList.contains('shinigami-eyes-active');
       eyeBtn.innerText = active ? '👁️ Shinigami Eyes Active' : '👁️ Trade Half Your Life for Shinigami Eyes';
