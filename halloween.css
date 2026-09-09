@@ -934,3 +934,111 @@ html[data-theme="death-note"] .rules-box .rules-title::after {
   from { opacity: 0.6; }
   to { opacity: 1; }
 }
+/* ==========================================
+   MISA AMANE CONTRACT MODAL
+   ========================================== */
+#misa-pop-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+}
+
+.misa-modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 650px;
+  width: 90%;
+  max-height: 85vh;
+  padding: 30px;
+  background: #111111;
+  border: 3px solid #ff007f;
+  box-shadow: 0 0 30px #ff007f;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.misa-modal-content img {
+  max-width: 420px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px auto;
+  border: 2px solid #ff007f;
+  border-radius: 4px;
+}
+
+.misa-modal-content h2 {
+  color: #ff007f;
+  margin-top: 0;
+  font-family: monospace;
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+}
+
+.misa-modal-content p {
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: #dddddd;
+  margin: 15px 0 20px 0;
+}
+
+#close-misa-popup {
+  background: #ff007f;
+  color: #ffffff;
+  padding: 10px 24px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+
+/* ==========================================
+   DEATH NOTE 40s TIMER HUD
+   ========================================== */
+#death-note-timer-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999999;
+  background: #000000;
+  border: 2px solid #ff0000;
+  padding: 12px 20px;
+  color: #ff0000;
+  font-family: monospace;
+  font-size: 1.2rem;
+  box-shadow: 0 0 15px #ff0000;
+  pointer-events: none;
+}
+
+#death-note-timer-box.flatline-active {
+  border-color: #666666;
+  color: #888888;
+  box-shadow: none;
+}
+
+#death-note-timer-box .timer-label {
+  margin-right: 8px;
+}
+
+#death-note-timer-box #death-timer-count {
+  font-weight: bold;
+}
+
+.flatline-text {
+  color: #ff0000;
+  font-weight: bold;
+}
