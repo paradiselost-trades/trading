@@ -352,25 +352,6 @@ html[data-theme="death-note"] :is(.filter-btn.active, .category-btn.active, .cat
 }
 
 /* ==========================================================================
-   KIRA TRAP MODAL & INTERACTIVE TRAPS
-   ========================================================================== */
-body.shinigami-eyes-active {
-  filter: invert(100%) hue-rotate(180deg) contrast(140%) !important;
-}
-
-body.shinigami-eyes-active::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(255, 0, 0, 0.08);
-  pointer-events: none;
-  z-index: 99990;
-}
-
-/* ==========================================================================
    KIRA TRAP MODAL & INTERACTIVE TRAPS (FIXED & CENTERING)
    ========================================================================== */
 body.shinigami-eyes-active {
@@ -389,12 +370,14 @@ body.shinigami-eyes-active::before {
   z-index: 99990;
 }
 
-/* 1. L'S POPUP OVERLAY (Fixed Center Screen & Blue Theme) */
+/* 1. L'S TRAP POPUP (FIXED CENTER SCREEN) */
 #lind-l-tailor-overlay,
 .lind-tailor-modal,
 .kanto-trap-modal,
 div[id*="lind-l-tailor-modal"],
-div[class*="kanto-trap"] {
+div[class*="kanto-trap"],
+body.shinigami-eyes-active #lind-l-tailor-card {
+  display: block !important;
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
@@ -411,29 +394,20 @@ div[class*="kanto-trap"] {
 #lind-l-tailor-overlay button,
 .lind-tailor-modal h2,
 .kanto-trap-modal h2,
-.kanto-trap-modal div {
+.kanto-trap-modal div,
+body.shinigami-eyes-active #lind-l-tailor-card h2,
+body.shinigami-eyes-active #lind-l-tailor-card .card-title,
+body.shinigami-eyes-active #lind-l-tailor-card p,
+body.shinigami-eyes-active #lind-l-tailor-card button {
   color: #00d2ff !important;
   text-shadow: 0 0 10px rgba(0, 210, 255, 0.8) !important;
   border-color: #00d2ff !important;
 }
 
-/* RESTORE IN-GRID ITEM CARD (Stays normal on page) */
-#lind-l-tailor-card,
-.lind-tailor-card {
-  position: relative !important;
-  top: auto !important;
-  left: auto !important;
-  transform: none !important;
-  z-index: 1 !important;
-  border: 1px solid #00d2ff !important;
-  box-shadow: 0 0 12px rgba(0, 210, 255, 0.5) !important;
-  background-color: var(--dn-paper-bg) !important;
-}
-
-/* 2. MISA MODAL & OVERLAY (Fixed Center Screen) */
+/* 2. MISA MODAL & OVERLAY (CONTROLLED VISIBILITY & CENTERED) */
 .shinigami-modal-overlay,
 #misa-pop-overlay {
-  display: none !important;
+  display: none;
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -448,7 +422,9 @@ div[class*="kanto-trap"] {
   pointer-events: auto !important;
 }
 
-/* Force visible when triggered by class, attribute, or style */
+/* Force visible when triggered by JS classes, attributes, or Shinigami Eyes Mode */
+body.shinigami-eyes-active .shinigami-modal-overlay,
+body.shinigami-eyes-active #misa-pop-overlay,
 .shinigami-modal-overlay.active,
 .shinigami-modal-overlay.show,
 #misa-pop-overlay.active,
@@ -461,7 +437,10 @@ div[class*="kanto-trap"] {
 
 .shinigami-modal-card,
 .misa-modal-content {
-  position: relative !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
   max-width: 650px !important;
   width: 90% !important;
   max-height: 85vh !important;
@@ -472,7 +451,7 @@ div[class*="kanto-trap"] {
   box-sizing: border-box !important;
   overflow-y: auto !important;
   pointer-events: auto !important;
-  margin: auto !important;
+  margin: 0 !important;
 }
 
 .misa-modal-content img {
@@ -511,6 +490,7 @@ div[class*="kanto-trap"] {
   font-size: 1rem !important;
   text-transform: uppercase !important;
 }
+
 /* 3. BLACKOUT SCREEN & SAFE MODE OVERRIDES */
 .kira-blackout-screen {
   position: fixed !important;
@@ -531,6 +511,7 @@ body.dn-safe-mode * {
   filter: none !important;
   transition: none !important;
 }
+
 /* ==========================================================================
    REAL VS FAKE RULE COLOR CODING
    ========================================================================== */
