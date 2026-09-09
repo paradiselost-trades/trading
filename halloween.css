@@ -1042,3 +1042,22 @@ html[data-theme="death-note"] .rules-box .rules-title::after {
   color: #ff0000;
   font-weight: bold;
 }
+/* Ensure Bait Card renders correctly when Shinigami Eyes is on */
+body.shinigami-eyes-active #lind-l-tailor-card {
+  display: block !important;
+  border: 2px solid #ff0000 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important;
+}
+
+/* Red eye overlay tint during active contract */
+body.shinigami-eyes-active::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 0, 0, 0.08);
+  pointer-events: none;
+  z-index: 99990;
+}
