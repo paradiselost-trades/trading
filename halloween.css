@@ -793,3 +793,15 @@ div[style*="background-image"],
   z-index: 9999999 !important;
   pointer-events: auto !important;
 }
+/* FORCE MODAL POPUP TO STAY CENTERED IN VIEWPORT */
+#broadcast-video-modal,
+.broadcast-modal,
+.trap-popup,
+div[class*="modal"] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  z-index: 999999 !important;
+}
