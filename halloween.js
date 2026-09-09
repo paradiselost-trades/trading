@@ -48,11 +48,6 @@ function setupDeathNoteFeatures() {
     document.getElementById('misa-pop-overlay')?.remove();
 
     const overlay = document.createElement('div');
-    // MISA AMANE POP-UP FOR SHINIGAMI EYES CONTRACT
-  function showMisaPopup() {
-    document.getElementById('misa-pop-overlay')?.remove();
-
-    const overlay = document.createElement('div');
     overlay.id = 'misa-pop-overlay';
 
     overlay.innerHTML = `
@@ -70,6 +65,7 @@ function setupDeathNoteFeatures() {
       overlay.remove();
     });
   }
+
   // SAFE MODE TOGGLE BUTTON
   const injectSafeModeButton = () => {
     if (document.getElementById('dn-safe-mode-btn')) return;
