@@ -523,13 +523,25 @@ body.dn-safe-mode * {
   0% { opacity: 0.85; }
   100% { opacity: 1; text-shadow: 0 0 14px #ffcc00, 0 0 25px #ff0000; }
 }
-
 body.shinigami-eyes-active #lind-l-tailor-card {
   display: block !important;
-  border: 2px solid #ff0000 !important;
-  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6) !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 99999999 !important;
+  border: 2px solid #00d2ff !important;
+  box-shadow: 0 0 25px #00d2ff, inset 0 0 15px rgba(0, 210, 255, 0.4) !important;
+  background-color: #080808 !important;
+  margin: 0 !important;
 }
 
+body.shinigami-eyes-active #lind-l-tailor-card h2,
+body.shinigami-eyes-active #lind-l-tailor-card .card-title,
+body.shinigami-eyes-active #lind-l-tailor-card div {
+  color: #00d2ff !important;
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.8) !important;
+}
 body.shinigami-eyes-active::before {
   content: "";
   position: fixed;
@@ -540,4 +552,30 @@ body.shinigami-eyes-active::before {
   background: rgba(255, 0, 0, 0.08);
   pointer-events: none;
   z-index: 99990;
+}
+/* ==========================================================================
+   FIX 2: MISA MODAL & OVERLAY (Fixed Viewport Center — No Scrolling)
+   ========================================================================== */
+.shinigami-modal-overlay,
+#misa-pop-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 99999999 !important;
+}
+
+.shinigami-modal-card,
+.misa-modal-content {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
 }
