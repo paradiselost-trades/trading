@@ -662,3 +662,31 @@ li::before {
   visibility: visible !important;
   opacity: 1 !important;
 }
+/* RESET LIND L. TAILOR CARD TO NORMAL INLINE GRID FLOW */
+[data-theme="death-note"] .card[data-title*="Tailor"],
+.shinigami-mode .card[data-title*="Tailor"],
+[data-theme="death-note"] .broadcast-card {
+  position: static !important;
+  transform: none !important;
+  margin: 0 auto 20px auto !important;
+  top: auto !important;
+  left: auto !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* FIX TEXT CONTRAST ON NOTEBOOK BACKGROUND */
+[data-theme="death-note"] .card[data-title*="Tailor"] p,
+[data-theme="death-note"] .card[data-title*="Tailor"] span,
+[data-theme="death-note"] .card[data-title*="Tailor"] div {
+  color: #1a1a1a !important;
+  text-shadow: none !important;
+}
+
+[data-theme="death-note"] .card[data-title*="Tailor"] .infernal-label-cast,
+[data-theme="death-note"] .card[data-title*="Tailor"] .infernal-label-notes {
+  color: #8b0000 !important;
+  font-weight: bold !important;
+}
