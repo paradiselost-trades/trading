@@ -8,13 +8,17 @@ const deathNoteAudio = {
     file: new Audio('audios/keikaku.mp3'),
     text: 'All according to keikaku. *(TL Note: Keikaku means plan)*'
   },
+  hold_it_in: {
+    file: new Audio('audios/hold_it_in.mp3'),
+    text: '*(No, I can’t laugh yet... I’ve got to hold it in...)*'
+  },
   light_laugh: {
     file: new Audio('audios/laugh.mp3'),
-    text: '*(Light cackles evily)*'
+    text: '*(Light cackles evil laugh)*'
   },
   world_without_light: {
     file: new Audio('audios/world_without_light.mp3'),
-    text: '*I’d never dream about being in a world without Light*. Yes, that would be dark. CUT IT OUT—'
+    text: 'I’d never dream about being in a world without Light. Yes, that would be dark. CUT IT OUT—*Misa*!'
   },
   i_am_l: {
     file: new Audio('audios/L.mp3'),
@@ -39,44 +43,49 @@ function showAnimeSubtitle(text) {
   const sub = document.createElement('div');
   sub.id = 'dn-anime-sub';
   
-  // Basic markdown parser for *italics* support
+  // Format *italics*
   const formattedText = text.replace(/\*(.*?)\*/g, '<i>$1</i>');
   sub.innerHTML = formattedText;
   document.body.appendChild(sub);
 
-  // Subtitles stay visible for 5.5 seconds now
   setTimeout(() => {
     if (sub) sub.remove();
-  }, 4000);
+  }, 5500);
 }
 
-// Global Event Delegation for Crisp Interactive Triggers
+// Global Click Delegation
 document.addEventListener('click', (e) => {
-  // 1. Lasagna Approved Badge
+  // 1. Lasagna Approved Badge -> Evil Laugh
   if (e.target.closest('.lasagna-relic-seal')) {
     playSoundByte('light_laugh');
     return;
   }
 
-  // 2. Unveil Nine Circles Button
+  // 2. Unveil Nine Circles Button -> "I wanted to tell you... I'm L."
   if (e.target.closest('#palette-toggle-btn')) {
     playSoundByte('i_am_l');
     return;
   }
 
-  // 3. Clear All Trade Cart Button
+  // 3. Clear All Trade Cart Button -> "MATSUDA, YOU IDIOT!"
   if (e.target.closest('#clear-cart-btn')) {
     playSoundByte('matsuda');
     return;
   }
 
-  // 4. Copy Request or Email Request Buttons
-  if (e.target.closest('#copy-trade-btn') || e.target.closest('#email-trade-btn')) {
+  // 4. Copy Request Button -> "All according to keikaku."
+  if (e.target.closest('#copy-trade-btn')) {
     playSoundByte('keikaku');
     return;
   }
 
-  // 5. Scroll to Top "ASCEND" Button
+  // 5. Email Request Button -> "No, I can't laugh yet..."
+  if (e.target.closest('#email-trade-btn')) {
+    playSoundByte('hold_it_in');
+    return;
+  }
+
+  // 6. Scroll to Top "ASCEND" Button -> "I'd never dream about being in a world without Light..."
   if (e.target.closest('#scroll-top-btn')) {
     playSoundByte('world_without_light');
     return;
