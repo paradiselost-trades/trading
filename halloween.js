@@ -43,6 +43,30 @@ function setupDeathNoteFeatures() {
     audio.play().catch(e => console.log('Audio playback prevented:', e));
   }
 
+  // MISA AMANE POP-UP FOR SHINIGAMI EYES CONTRACT
+  function showMisaPopup() {
+    document.getElementById('misa-pop-overlay')?.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'misa-pop-overlay';
+    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
+
+    overlay.innerHTML = `
+      <div style="max-width: 450px; width: 90%; padding: 20px; background: #111; border: 2px solid #ff007f; box-shadow: 0 0 20px #ff007f; box-sizing: border-box;">
+        <img src="halloween/MISA AMANE.png" alt="Misa Amane" style="max-width: 220px; width: 100%; height: auto; display: block; margin: 0 auto 15px auto; border: 1px solid #ff007f;" />
+        <h2 style="color: #ff007f; margin-top: 0; font-family: monospace;">SHINIGAMI EYES CONTRACT MADE!</h2>
+        <p style="font-family: monospace; font-size: 0.9rem;">You have traded half of your remaining life span.</p>
+        <button id="close-misa-popup" type="button" style="margin-top: 15px; background: #ff007f; color: #fff; padding: 8px 16px; border: none; cursor: pointer; font-weight: bold;">CLOSE</button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    document.getElementById('close-misa-popup')?.addEventListener('click', () => {
+      overlay.remove();
+    });
+  }
+
   // SAFE MODE TOGGLE BUTTON
   const injectSafeModeButton = () => {
     if (document.getElementById('dn-safe-mode-btn')) return;
@@ -61,7 +85,7 @@ function setupDeathNoteFeatures() {
     });
   };
 
-  // INJECT THE LIND L. TAILOR BAIT CARD & MISA AMANE CARD
+  // INJECT THE LIND L. TAILOR BAIT CARD
   const injectBaitCard = () => {
     if (document.getElementById('lind-l-tailor-card')) return;
 
@@ -93,18 +117,9 @@ function setupDeathNoteFeatures() {
     }
   };
 
-  // POP-UP RENDER ENGINE
+  // POP-UP RENDER ENGINE (KIRA TRAP BANNER)
   function showKiraBanner() {
-    // Remove existing banner if present to prevent stacking
     document.getElementById('kira-trap-overlay')?.remove();
-
-    const eyesActive = document.body.classList.contains('shinigami-eyes-active');
-    const eyeOverlayHtml = eyesActive ? `
-      <div class="shinigami-target-hud" style="color: #ff3333; font-family: monospace; font-size: 1.1rem; margin-bottom: 15px; text-shadow: 0 0 8px #ff0000; border-bottom: 1px red solid; padding-bottom: 8px;">
-        <div>NAME: L Lawliet</div>
-        <div>LIFESPAN: [ UNREADABLE / PROTECTED ]</div>
-      </div>
-    ` : '';
 
     const banner = document.createElement('div');
     banner.id = 'kira-trap-overlay';
@@ -112,8 +127,6 @@ function setupDeathNoteFeatures() {
 
     banner.innerHTML = `
       <div class="kira-banner-content" style="max-width: 500px; width: 90%; padding: 20px; background: #111; border: 2px solid #8b0000; box-shadow: 0 0 20px #ff0000; box-sizing: border-box;">
-        <img src="halloween/MISA AMANE.png" alt="Misa Amane" style="max-width: 220px; width: 100%; height: auto; display: block; margin: 0 auto 15px auto; border: 1px solid #333;" />
-        ${eyeOverlayHtml}
         <h1 style="color: #ff3333; margin-top: 0; font-size: 1.5rem;">THAT WAS A TRAP, KIRA.</h1>
         <p style="font-family: monospace; font-size: 0.9rem;">L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
         <div style="margin-top: 20px;">
@@ -195,7 +208,7 @@ function setupDeathNoteFeatures() {
     }
   });
 
-  // SHINIGAMI EYES CONTRACT BUTTON (TRIGGERS MISA THEME MUSIC)
+  // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -214,11 +227,12 @@ function setupDeathNoteFeatures() {
       
       if (active) {
         playMisaTheme();
+        showMisaPopup();
       }
     });
   };
 
-  // DYNAMIC 111 DEATH NOTE RULE ROTATOR (STANDALONE GOTHIC BOX)
+  // DYNAMIC 111 DEATH NOTE RULE ROTATOR
   const setupRuleRotator = () => {
     if (document.getElementById('dn-rule-ticker')) return;
 
