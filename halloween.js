@@ -43,34 +43,19 @@ function setupDeathNoteFeatures() {
     audio.play().catch(e => console.log('Audio playback prevented:', e));
   }
 
-  // TOGGLE CARD NAME BASED ON SHINIGAMI EYE MODE
-  function updateTailorCardName() {
-    const tailorHeader = document.querySelector('.lind-tailor-card .card-title, #lind-l-tailor-card .card-title, .broadcast-card h3');
-    const isShinigamiActive = document.body.classList.contains('shinigami-eyes-active');
-
-    if (tailorHeader) {
-      if (isShinigamiActive) {
-        tailorHeader.textContent = 'L Lawliet — Live Broadcast (2006)';
-      } else {
-        tailorHeader.textContent = 'Lind L. Tailor — Live Broadcast (2006)';
-      }
-    }
-  }
-
   // MISA AMANE POP-UP FOR SHINIGAMI EYES CONTRACT
   function showMisaPopup() {
     document.getElementById('misa-pop-overlay')?.remove();
 
     const overlay = document.createElement('div');
     overlay.id = 'misa-pop-overlay';
-    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 9999999; display: flex; align-items: center; justify-content: center;';
 
     overlay.innerHTML = `
-      <div class="misa-modal-content" style="background: #111; border: 2px solid #8b0000; padding: 25px; text-align: center; color: #fff; max-width: 400px; width: 90%; box-shadow: 0 0 25px #ff0000; box-sizing: border-box;">
-        <img src="halloween/MISA AMANE.png" alt="Misa Amane" style="max-width: 180px; height: auto; display: block; margin: 0 auto 15px auto; border: 1px solid #333;" />
-        <h2 style="color: #ff3333; margin: 0 0 10px 0; font-size: 1.2rem;">SHINIGAMI EYES CONTRACT MADE!</h2>
-        <p style="font-size: 0.9rem; color: #ccc; margin-bottom: 20px;">You have traded half of your remaining life span.</p>
-        <button id="close-misa-popup" type="button" style="background: #8b0000; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-weight: bold;">CLOSE</button>
+      <div class="misa-modal-content">
+        <img src="halloween/MISA AMANE.png" alt="Misa Amane" />
+        <h2>SHINIGAMI EYES CONTRACT MADE!</h2>
+        <p>You have traded half of your remaining life span.</p>
+        <button id="close-misa-popup" type="button">CLOSE</button>
       </div>
     `;
 
@@ -130,9 +115,6 @@ function setupDeathNoteFeatures() {
     } else {
       document.body.appendChild(bait);
     }
-
-    // ENSURE CORRECT TITLE UPON CARD INJECTION
-    updateTailorCardName();
   };
 
   // POP-UP RENDER ENGINE (KIRA TRAP BANNER)
@@ -233,7 +215,7 @@ function setupDeathNoteFeatures() {
     }
   });
 
-  // SHINIGAMI EYES CONTRACT BUTTON
+ // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -251,10 +233,8 @@ function setupDeathNoteFeatures() {
       const active = document.body.classList.contains('shinigami-eyes-active');
       eyeBtn.innerText = active ? '👁️ Shinigami Eyes Active' : '👁️ Trade Half Your Life for Shinigami Eyes';
       
-      // DYNAMICALLY UPDATE THE BAIT CARD TITLE
-      updateTailorCardName();
-
       if (active) {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // <-- ADDED HERE
         playMisaTheme();
         showMisaPopup();
       } else {
@@ -496,6 +476,7 @@ function setupDeathNoteFeatures() {
   injectEyeButton();
   injectSafeModeButton();
   setupRuleRotator();
+
 
   // WATCH FOR DYNAMIC THEME CHANGES
   const themeObserver = new MutationObserver(() => {
