@@ -475,7 +475,7 @@ function setupDeathNoteFeatures() {
   injectEyeButton();
   injectSafeModeButton();
   setupRuleRotator();
-  startDeathTimer();
+
 
   // WATCH FOR DYNAMIC THEME CHANGES
   const themeObserver = new MutationObserver(() => {
