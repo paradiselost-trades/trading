@@ -2,13 +2,15 @@
    DEATH NOTE RESKIN — CONSOLIDATED & SPACING-OPTIMIZED
    ========================================================================== */
 
-/* 1. FONT IMPORT DEFINITIONS */
+/* 1. FONT IMPORT & DEFINITIONS */
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Rock+Salt&family=Reenie+Beanie&family=UnifrakturMaguntia&family=Share+Tech+Mono&display=swap');
 
 @font-face {
   font-family: 'DeathNoteGothic';
-  src: url('font/Death%20Note.ttf') format('truetype'),
-       url('font/Death Note.ttf') format('truetype');
+  src: url('../font/Death%20Note.ttf') format('truetype'),
+       url('./font/Death%20Note.ttf') format('truetype'),
+       url('/trading/font/Death%20Note.ttf') format('truetype'),
+       url('font/Death%20Note.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -16,7 +18,10 @@
 
 @font-face {
   font-family: 'Whizbang';
-  src: url('font/whizbang-roman.ttf') format('truetype');
+  src: url('../font/whizbang-roman.ttf') format('truetype'),
+       url('./font/whizbang-roman.ttf') format('truetype'),
+       url('/trading/font/whizbang-roman.ttf') format('truetype'),
+       url('font/whizbang-roman.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -41,6 +46,22 @@
 /* ==========================================================================
    GLOBAL PURPLE LEAK KILL SWITCH & BASE CONTAINERS
    ========================================================================== */
+html,
+body,
+#app,
+.main-container,
+header,
+main,
+footer,
+.container,
+div[class*="container"] {
+  background-color: #050505 !important;
+  background-image: none !important;
+  background: #050505 !important;
+  min-height: 100vh !important;
+  box-sizing: border-box !important;
+}
+
 html[data-theme="death-note"],
 html[data-theme="death-note"] body,
 html[data-theme="death-note"] #app,
@@ -76,6 +97,28 @@ html[data-theme="death-note"] .scanlines,
 html[data-theme="death-note"] .overlay {
   background-image: none !important;
   box-shadow: none !important;
+}
+
+/* ==========================================================================
+   GLOBAL TYPOGRAPHY ENFORCEMENT
+   ========================================================================== */
+html[data-theme="death-note"] body,
+html[data-theme="death-note"] p,
+html[data-theme="death-note"] span,
+html[data-theme="death-note"] div,
+html[data-theme="death-note"] li,
+html[data-theme="death-note"] a,
+html[data-theme="death-note"] input,
+html[data-theme="death-note"] button {
+  font-family: var(--dn-font-body) !important;
+}
+
+html[data-theme="death-note"] h1,
+html[data-theme="death-note"] h2,
+html[data-theme="death-note"] h3,
+html[data-theme="death-note"] .rule-title,
+html[data-theme="death-note"] .section-header {
+  font-family: var(--dn-font-heading) !important;
 }
 
 /* ==========================================================================
@@ -194,7 +237,7 @@ html[data-theme="death-note"] .cart-toggle-btn {
 }
 
 #death-note-timer-box .timer-label {
-  font-family: 'Share Tech Mono', monospace !important;
+  font-family: var(--dn-font-mono) !important;
   font-size: 0.95rem !important;
   color: #ffffff !important;
   letter-spacing: 1.5px !important;
