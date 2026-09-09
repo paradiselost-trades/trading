@@ -131,6 +131,11 @@ function setupDeathNoteFeatures() {
 // DYNAMIC 111 DEATH NOTE RULE ROTATOR (STANDALONE GOTHIC BOX)
 const setupRuleRotator = () => {
   if (document.getElementById('dn-rule-ticker')) return;
+   // Target and hide ONLY the rulebook text & checkboxes
+  document.querySelectorAll('*').forEach(el => {
+    if (el.children.length === 0 && el.innerText?.trim() === 'RULEBOOK INSTRUCTIONS') {
+      el.style.display = 'none';
+    }
 
   const realRules = [
     "The human whose name is written in this note shall die.",
