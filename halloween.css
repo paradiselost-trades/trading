@@ -430,10 +430,10 @@ div[class*="kanto-trap"] {
   background-color: var(--dn-paper-bg) !important;
 }
 
-/* 2. MISA MODAL & OVERLAY (Fixed Center Screen — Controlled Display) */
+/* 2. MISA MODAL & OVERLAY (Fixed Center Screen) */
 .shinigami-modal-overlay,
 #misa-pop-overlay {
-  display: none;
+  display: none !important;
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
@@ -448,13 +448,14 @@ div[class*="kanto-trap"] {
   pointer-events: auto !important;
 }
 
-/* Display overlay when activated via class or inline style */
+/* Force visible when triggered by class, attribute, or style */
 .shinigami-modal-overlay.active,
 .shinigami-modal-overlay.show,
 #misa-pop-overlay.active,
 #misa-pop-overlay.show,
 #misa-pop-overlay[style*="display: block"],
-#misa-pop-overlay[style*="display: flex"] {
+#misa-pop-overlay[style*="display: flex"],
+#misa-pop-overlay[style*="flex"] {
   display: flex !important;
 }
 
