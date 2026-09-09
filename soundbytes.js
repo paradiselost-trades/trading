@@ -14,11 +14,11 @@ const deathNoteAudio = {
   },
   light_laugh: {
     file: new Audio('audios/laugh.mp3'),
-    text: '*(Light cackles evil laugh)*'
+    text: '*(Light cackles evily)*'
   },
   world_without_light: {
     file: new Audio('audios/world_without_light.mp3'),
-    text: 'I’d never dream about being in a world without Light. Yes, that would be dark. CUT IT OUT—*Misa*!'
+    text: '*I’d never dream about being in a world without Light*. Yes, that would be dark. CUT IT OUT—'
   },
   i_am_l: {
     file: new Audio('audios/L.mp3'),
