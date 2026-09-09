@@ -50,15 +50,43 @@ function setupDeathNoteFeatures() {
     const overlay = document.createElement('div');
     overlay.id = 'misa-pop-overlay';
 
-    overlay.innerHTML = `
-      <div class="misa-modal-content">
-        <img src="halloween/MISA AMANE.png" alt="Misa Amane" />
-        <h2>SHINIGAMI EYES CONTRACT MADE!</h2>
-        <p>You have traded half of your remaining life span.</p>
-        <button id="close-misa-popup" type="button">CLOSE</button>
-      </div>
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+    overlay.style.zIndex = '2147483647';
+    overlay.style.display = 'flex';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+
+    const content = document.createElement('div');
+    content.style.cssText = `
+      background-color: #111111 !important;
+      border: 3px solid #8b0000 !important;
+      padding: 25px !important;
+      text-align: center !important;
+      color: #ffffff !important;
+      max-width: 400px !important;
+      width: 85% !important;
+      box-shadow: 0 0 30px #ff0000 !important;
+      box-sizing: border-box !important;
+      position: relative !important;
+      z-index: 2147483647 !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     `;
 
+    content.innerHTML = `
+      <img src="halloween/MISA%20AMANE.png" alt="Misa Amane" style="max-width: 180px !important; height: auto !important; display: block !important; margin: 0 auto 15px auto !important; border: 1px solid #333 !important;" />
+      <h2 style="color: #ff3333 !important; margin: 0 0 10px 0 !important; font-size: 1.3rem !important; display: block !important;">SHINIGAMI EYES CONTRACT MADE!</h2>
+      <p style="font-size: 0.95rem !important; color: #dddddd !important; margin-bottom: 20px !important; display: block !important;">You have traded half of your remaining life span.</p>
+      <button id="close-misa-popup" type="button" style="background-color: #8b0000 !important; color: #ffffff !important; border: none !important; padding: 10px 20px !important; cursor: pointer !important; font-weight: bold !important; display: inline-block !important;">CLOSE</button>
+    `;
+
+    overlay.appendChild(content);
     document.body.appendChild(overlay);
 
     document.getElementById('close-misa-popup')?.addEventListener('click', (e) => {
@@ -234,7 +262,7 @@ function setupDeathNoteFeatures() {
       eyeBtn.innerText = active ? '👁️ Shinigami Eyes Active' : '👁️ Trade Half Your Life for Shinigami Eyes';
       
       if (active) {
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // <-- ADDED HERE
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         playMisaTheme();
         showMisaPopup();
       } else {
@@ -476,7 +504,6 @@ function setupDeathNoteFeatures() {
   injectEyeButton();
   injectSafeModeButton();
   setupRuleRotator();
-
 
   // WATCH FOR DYNAMIC THEME CHANGES
   const themeObserver = new MutationObserver(() => {
