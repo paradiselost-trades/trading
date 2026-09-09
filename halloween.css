@@ -653,3 +653,13 @@ li::before {
   from { opacity: 0; transform: translate(-50%, 10px); }
   to { opacity: 1; transform: translate(-50%, 0); }
 }
+/* FORCE LIND L. TAILOR CARD VISIBILITY IN DEATH NOTE / SHINIGAMI MODE */
+[data-theme="death-note"] .lind-l-tailor-card,
+[data-theme="death-note"] #lind-l-tailor-card,
+.shinigami-mode .lind-l-tailor-card,
+.shinigami-mode #lind-l-tailor-card {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100 !important;
+}
