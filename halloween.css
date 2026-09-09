@@ -731,3 +731,44 @@ div[style*="background-image"],
   color: #8b0000 !important;
   font-weight: bold !important;
 }
+/* TARGET ONLY CARDS INSIDE THE CONTAINER TO FIX POSITIONING & TEXT */
+#card-container .card,
+#card-container > div:not(#dn-anime-sub):not(#gothic-toast) {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  margin: 0 0 20px 0 !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* KEEP SUBTITLES & TOAST POPUPS FLOATING PROPERLY */
+#dn-anime-sub,
+#gothic-toast,
+.gothic-toast-hidden {
+  position: fixed !important;
+}
+
+/* FIX LIGHT/NOTEBOOK CARD TEXT CONTRAST IN SHINIGAMI MODE */
+#card-container .card p,
+#card-container .card span,
+#card-container .card h3 {
+  text-shadow: none !important;
+}
+
+/* Target dark text on light card backgrounds */
+#card-container .card[style*="background"],
+#card-container .card[class*="broadcast"] {
+  color: #111111 !important;
+}
+
+#card-container .card[style*="background"] p,
+#card-container .card[class*="broadcast"] p,
+#card-container .card[style*="background"] span,
+#card-container .card[class*="broadcast"] span {
+  color: #1a1a1a !important;
+}
