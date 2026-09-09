@@ -1,8 +1,4 @@
-/* ==========================================================================
-   DEATH NOTE RESKIN — CONSOLIDATED & SPACING-OPTIMIZED
-   ========================================================================== */
 
-/* 1. FONT IMPORT & DEFINITIONS */
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Rock+Salt&family=Reenie+Beanie&family=UnifrakturMaguntia&family=Share+Tech+Mono&display=swap');
 
 @font-face {
@@ -42,7 +38,11 @@
   --dn-font-body: 'Whizbang', 'Special Elite', 'Georgia', serif;
   --dn-font-mono: 'Share Tech Mono', 'Courier New', monospace;
 }
+/* ==========================================================================
+   DEATH NOTE RESKIN — CONSOLIDATED & SPACING-OPTIMIZED
+   ========================================================================== */
 
+/* 1. FONT IMPORT & DEFINITIONS */
 /* ==========================================================================
    GLOBAL PURPLE LEAK KILL SWITCH & BASE CONTAINERS
    ========================================================================== */
@@ -421,26 +421,40 @@ body.shinigami-eyes-active #lind-l-tailor-card button {
   color: #ffffff !important;
   pointer-events: auto !important;
 }
+/* 1. OVERLAY (Flexbox centers everything) */
+#misa-pop-overlay,
+.shinigami-modal-overlay {
+  display: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  z-index: 99999999 !important;
+  pointer-events: auto !important;
+}
 
-/* Force visible when triggered by JS classes, attributes, or Shinigami Eyes Mode */
-body.shinigami-eyes-active .shinigami-modal-overlay,
+/* Force show overlay when active or when Shinigami eyes are active */
 body.shinigami-eyes-active #misa-pop-overlay,
+body.shinigami-eyes-active .shinigami-modal-overlay,
 .shinigami-modal-overlay.active,
 .shinigami-modal-overlay.show,
 #misa-pop-overlay.active,
 #misa-pop-overlay.show,
-#misa-pop-overlay[style*="display: block"],
-#misa-pop-overlay[style*="display: flex"],
-#misa-pop-overlay[style*="flex"] {
+#misa-pop-overlay[style*="display"] {
   display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
+/* 2. INNER MODAL CARD (Relative inside Flexbox) */
 .shinigami-modal-card,
 .misa-modal-content {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+  position: relative !important; /* Fixed position breaks inside filtered flex overlays */
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
   max-width: 650px !important;
   width: 90% !important;
   max-height: 85vh !important;
@@ -451,7 +465,7 @@ body.shinigami-eyes-active #misa-pop-overlay,
   box-sizing: border-box !important;
   overflow-y: auto !important;
   pointer-events: auto !important;
-  margin: 0 !important;
+  margin: auto !important;
 }
 
 .misa-modal-content img {
@@ -490,7 +504,6 @@ body.shinigami-eyes-active #misa-pop-overlay,
   font-size: 1rem !important;
   text-transform: uppercase !important;
 }
-
 /* 3. BLACKOUT SCREEN & SAFE MODE OVERRIDES */
 .kira-blackout-screen {
   position: fixed !important;
