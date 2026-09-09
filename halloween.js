@@ -43,6 +43,20 @@ function setupDeathNoteFeatures() {
     audio.play().catch(e => console.log('Audio playback prevented:', e));
   }
 
+  // TOGGLE CARD NAME BASED ON SHINIGAMI EYE MODE
+  function updateTailorCardName() {
+    const tailorHeader = document.querySelector('.lind-tailor-card .card-title, #lind-l-tailor-card .card-title, .broadcast-card h3');
+    const isShinigamiActive = document.body.classList.contains('shinigami-eyes-active');
+
+    if (tailorHeader) {
+      if (isShinigamiActive) {
+        tailorHeader.textContent = 'L Lawliet — Live Broadcast (2006)';
+      } else {
+        tailorHeader.textContent = 'Lind L. Tailor — Live Broadcast (2006)';
+      }
+    }
+  }
+
   // MISA AMANE POP-UP FOR SHINIGAMI EYES CONTRACT
   function showMisaPopup() {
     document.getElementById('misa-pop-overlay')?.remove();
@@ -115,6 +129,9 @@ function setupDeathNoteFeatures() {
     } else {
       document.body.appendChild(bait);
     }
+
+    // ENSURE CORRECT TITLE UPON CARD INJECTION
+    updateTailorCardName();
   };
 
   // POP-UP RENDER ENGINE (KIRA TRAP BANNER)
@@ -215,7 +232,7 @@ function setupDeathNoteFeatures() {
     }
   });
 
- // SHINIGAMI EYES CONTRACT BUTTON
+  // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -233,8 +250,11 @@ function setupDeathNoteFeatures() {
       const active = document.body.classList.contains('shinigami-eyes-active');
       eyeBtn.innerText = active ? '👁️ Shinigami Eyes Active' : '👁️ Trade Half Your Life for Shinigami Eyes';
       
+      // DYNAMICALLY UPDATE THE BAIT CARD TITLE
+      updateTailorCardName();
+
       if (active) {
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // <-- ADDED HERE
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         playMisaTheme();
         showMisaPopup();
       } else {
@@ -476,7 +496,6 @@ function setupDeathNoteFeatures() {
   injectEyeButton();
   injectSafeModeButton();
   setupRuleRotator();
-
 
   // WATCH FOR DYNAMIC THEME CHANGES
   const themeObserver = new MutationObserver(() => {
