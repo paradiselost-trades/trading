@@ -601,3 +601,30 @@ body.dn-safe-mode * {
   0% { opacity: 0.85; }
   100% { opacity: 1; text-shadow: 0 0 14px #ffcc00, 0 0 25px #ff0000; }
 }
+/* Dark Death Note Container Styling */
+.main-container, .rules-box {
+  background: #0d0d0d !important;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px) !important;
+  background-size: 100% 28px !important; /* Rules like notebook paper */
+  border: 1px solid #2a2a2a !important;
+  border-left: 3px solid #8b0000 !important; /* Red notebook margin line */
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(139, 0, 0, 0.2) !important;
+  border-radius: 0px !important; /* Sharp corners feel more like a book */
+}
+
+/* Crimson Gothic Title Override */
+h1, .main-title {
+  color: #ffffff !important;
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #8b0000 !important;
+}
+
+/* Bullet Points to Red Crosses or Death Symbols */
+ul {
+  list-style: none !important;
+}
+
+li::before {
+  content: "✝ " !important;
+  color: #8b0000 !important;
+  font-weight: bold;
+}
