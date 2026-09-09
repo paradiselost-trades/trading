@@ -14,7 +14,7 @@ const deathNoteAudio = {
   },
   world_without_light: {
     file: new Audio('audios/world_without_light.mp3'),
-    text: 'If you die, Light, I’ll be in a world without Light. Yes, that would be dark.'
+    text: 'I’d never dream about being in a world without Light. Yes, that would be dark. CUT IT OUT—*Misa*!'
   },
   i_am_l: {
     file: new Audio('audios/L.mp3'),
@@ -38,17 +38,21 @@ function showAnimeSubtitle(text) {
 
   const sub = document.createElement('div');
   sub.id = 'dn-anime-sub';
-  sub.innerHTML = text;
+  
+  // Basic markdown parser for *italics* support
+  const formattedText = text.replace(/\*(.*?)\*/g, '<i>$1</i>');
+  sub.innerHTML = formattedText;
   document.body.appendChild(sub);
 
+  // Subtitles stay visible for 5.5 seconds now
   setTimeout(() => {
     if (sub) sub.remove();
-  }, 3500);
+  }, 5500);
 }
 
-// Event Delegation (Guarantees clicks work even on dynamic elements)
+// Global Event Delegation for Crisp Interactive Triggers
 document.addEventListener('click', (e) => {
-  // 1. Lasagna Approved Badge (or its inner spans)
+  // 1. Lasagna Approved Badge
   if (e.target.closest('.lasagna-relic-seal')) {
     playSoundByte('light_laugh');
     return;
