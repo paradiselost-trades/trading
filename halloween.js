@@ -91,14 +91,56 @@ function setupDeathNoteFeatures() {
     } else {
       document.body.appendChild(bait);
     }
-
-    document.getElementById('bait-add-btn')?.addEventListener('click', triggerLTrap);
   };
 
-  // TRAP TRIGGER (LIND L. TAILOR EXECUTION WITH MISA POP-UP, SHINIGAMI EYE EASTER EGG & POTATO CHIP)
+  // POP-UP RENDER ENGINE
+  function showKiraBanner() {
+    // Remove existing banner if present to prevent stacking
+    document.getElementById('kira-trap-overlay')?.remove();
+
+    const eyesActive = document.body.classList.contains('shinigami-eyes-active');
+    const eyeOverlayHtml = eyesActive ? `
+      <div class="shinigami-target-hud" style="color: #ff3333; font-family: monospace; font-size: 1.1rem; margin-bottom: 15px; text-shadow: 0 0 8px #ff0000; border-bottom: 1px red solid; padding-bottom: 8px;">
+        <div>NAME: L Lawliet</div>
+        <div>LIFESPAN: [ UNREADABLE / PROTECTED ]</div>
+      </div>
+    ` : '';
+
+    const banner = document.createElement('div');
+    banner.id = 'kira-trap-overlay';
+    banner.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
+
+    banner.innerHTML = `
+      <div class="kira-banner-content" style="max-width: 500px; width: 90%; padding: 20px; background: #111; border: 2px solid #8b0000; box-shadow: 0 0 20px #ff0000; box-sizing: border-box;">
+        <img src="halloween/MISA AMANE.png" alt="Misa Amane" style="max-width: 220px; width: 100%; height: auto; display: block; margin: 0 auto 15px auto; border: 1px solid #333;" />
+        ${eyeOverlayHtml}
+        <h1 style="color: #ff3333; margin-top: 0; font-size: 1.5rem;">THAT WAS A TRAP, KIRA.</h1>
+        <p style="font-family: monospace; font-size: 0.9rem;">L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
+        <div style="margin-top: 20px;">
+          <button id="chip-trap-btn" type="button" style="margin: 5px; background: #d97706; color: #fff; padding: 8px 12px; border: none; cursor: pointer; font-weight: bold;">🥔 TAKE A POTATO CHIP AND EAT IT</button>
+          <button id="close-kira-banner" type="button" style="margin: 5px; background: #333; color: #fff; padding: 8px 12px; border: 1px solid #666; cursor: pointer;">ACCEPT JUDGEMENT</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(banner);
+    document.body.style.overflow = 'hidden';
+
+    document.getElementById('chip-trap-btn')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      playPotatoChipSound();
+    });
+
+    document.getElementById('close-kira-banner')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      banner.remove();
+      document.body.style.overflow = '';
+    });
+  }
+
+  // TRAP TRIGGER (LIND L. TAILOR EXECUTION)
   function triggerLTrap() {
     const baitCard = document.getElementById('lind-l-tailor-card');
-    
     playSinisterChime();
 
     if (baitCard) {
@@ -108,52 +150,50 @@ function setupDeathNoteFeatures() {
       setTimeout(() => baitCard.remove(), 800);
     }
 
-    // Check if Shinigami Eyes mode is currently active
-    const eyesActive = document.body.classList.contains('shinigami-eyes-active');
-
-    // Shinigami Eye HUD reveal for L Lawliet
-    const eyeOverlayHtml = eyesActive ? `
-      <div class="shinigami-target-hud" style="color: #ff3333; font-family: monospace; font-size: 1.1rem; margin-bottom: 15px; text-shadow: 0 0 8px #ff0000; border-bottom: 1px red solid; padding-bottom: 8px;">
-        <div>NAME: L Lawliet</div>
-        <div>LIFESPAN: [ UNREADABLE / PROTECTED ]</div>
-      </div>
-    ` : '';
-
-    const banner = document.createElement('div');
-    banner.className = 'kira-trap-banner';
-    banner.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
-
-    banner.innerHTML = `
-      <div class="kira-banner-content" style="max-width: 500px; padding: 20px; background: #111; border: 2px solid #8b0000; box-shadow: 0 0 20px #ff0000;">
-        <img src="halloween/MISA AMANE.png" alt="Misa Amane" style="max-width: 220px; height: auto; display: block; margin: 0 auto 15px auto; border: 1px solid #333;" />
-        ${eyeOverlayHtml}
-        <h1 style="color: #ff3333; margin-top: 0;">THAT WAS A TRAP, KIRA.</h1>
-        <p style="font-family: monospace;">L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
-        <div style="margin-top: 20px;">
-          <button id="chip-trap-btn" style="margin-right: 10px; background: #d97706; color: #fff; padding: 8px 12px; border: none; cursor: pointer; font-weight: bold;">🥔 TAKE A POTATO CHIP AND EAT IT</button>
-          <button id="close-kira-banner" style="background: #333; color: #fff; padding: 8px 12px; border: 1px solid #666; cursor: pointer;">ACCEPT JUDGEMENT</button>
-        </div>
-      </div>
-    `;
-
-    // Append to <html> directly to escape body-level CSS transforms
-    document.documentElement.appendChild(banner);
-
-    // Lock background scrolling while trap is active
-    document.body.style.overflow = 'hidden';
-
-    // Auto-scroll as a fallback to ensure the view stays locked onto the banner
-    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    document.getElementById('chip-trap-btn')?.addEventListener('click', () => {
-      playPotatoChipSound();
-    });
-
-    document.getElementById('close-kira-banner').onclick = () => {
-      banner.remove();
-      document.body.style.overflow = ''; // Restore scroll
-    };
+    showKiraBanner();
   }
+
+  // GLOBAL EVENT DELEGATION FOR CLICK HANDLERS
+  document.addEventListener('click', (e) => {
+    // 1. Trap Card Trigger
+    if (e.target && e.target.id === 'bait-add-btn') {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerLTrap();
+      return;
+    }
+
+    // 2. 40-Second Timer Trigger on Trade Buttons
+    const tradeTrigger = e.target.closest('#trade-request-btn, .floating-trade-btn');
+    if (tradeTrigger && !document.getElementById('death-note-timer-box')) {
+      const timerBox = document.createElement('div');
+      timerBox.id = 'death-note-timer-box';
+      timerBox.innerHTML = `
+        <span class="timer-label">TIME LEFT:</span>
+        <span id="death-timer-count">40s</span>
+      `;
+      document.body.appendChild(timerBox);
+
+      let timeLeft = 40;
+      const countDisplay = document.getElementById('death-timer-count');
+
+      const interval = setInterval(() => {
+        timeLeft--;
+        if (countDisplay) countDisplay.innerText = `${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          if (timerBox) {
+            timerBox.classList.add('flatlined');
+            timerBox.innerHTML = `<span class="timer-label">STATUS:</span> <span class="flatline-text">💀 FLATLINE</span>`;
+          }
+
+          playFlatlineTone();
+          triggerBlackout();
+        }
+      }, 1000);
+    }
+  });
 
   // SHINIGAMI EYES CONTRACT BUTTON (TRIGGERS MISA THEME MUSIC)
   const injectEyeButton = () => {
@@ -182,7 +222,6 @@ function setupDeathNoteFeatures() {
   const setupRuleRotator = () => {
     if (document.getElementById('dn-rule-ticker')) return;
 
-    // Target and hide ONLY the rulebook text header if needed
     document.querySelectorAll('h2, div, p').forEach(el => {
       if (el.children.length === 0 && el.innerText?.trim() === 'RULEBOOK INSTRUCTIONS') {
         el.style.display = 'none';
@@ -321,14 +360,12 @@ function setupDeathNoteFeatures() {
       </div>
     `;
 
-    // Target the main white-bordered instruction box container
     const rulebookBox = document.querySelector('.container') || 
                         document.querySelector('[style*="border"]') || 
                         document.querySelector('.rules-box') ||
                         document.querySelector('main');
 
     if (rulebookBox) {
-      // Place directly BELOW the rulebook box element
       rulebookBox.insertAdjacentElement('afterend', fancyBox);
     } else {
       document.body.appendChild(fancyBox);
@@ -361,40 +398,6 @@ function setupDeathNoteFeatures() {
       }, 400);
     }, 10000);
   };
-
-  // 40-SECOND COUNTDOWN
-  document.addEventListener('click', (e) => {
-    const tradeTrigger = e.target.closest('#bait-add-btn, #trade-request-btn, .floating-trade-btn');
-    
-    if (tradeTrigger && !document.getElementById('death-note-timer-box')) {
-      const timerBox = document.createElement('div');
-      timerBox.id = 'death-note-timer-box';
-      timerBox.innerHTML = `
-        <span class="timer-label">TIME LEFT:</span>
-        <span id="death-timer-count">40s</span>
-      `;
-      document.body.appendChild(timerBox);
-
-      let timeLeft = 40;
-      const countDisplay = document.getElementById('death-timer-count');
-
-      const interval = setInterval(() => {
-        timeLeft--;
-        if (countDisplay) countDisplay.innerText = `${timeLeft}s`;
-
-        if (timeLeft <= 0) {
-          clearInterval(interval);
-          if (timerBox) {
-            timerBox.classList.add('flatlined');
-            timerBox.innerHTML = `<span class="timer-label">STATUS:</span> <span class="flatline-text">💀 FLATLINE</span>`;
-          }
-
-          playFlatlineTone();
-          triggerBlackout();
-        }
-      }, 1000);
-    }
-  });
 
   // AUDIO SYNTHESIZERS
   function playFlatlineTone() {
