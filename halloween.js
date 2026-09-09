@@ -30,6 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupDeathNoteFeatures() {
   const isDeathNote = () => document.documentElement.getAttribute('data-theme') === 'death-note';
 
+  // AUDIO PLAYBACK HELPERS FOR EXTENSION-LESS MP3 FILES
+  function playMisaTheme() {
+    const audio = new Audio('halloween/misa_theme');
+    audio.volume = 0.5;
+    audio.play().catch(e => console.log('Audio playback prevented:', e));
+  }
+
+  function playPotatoChipSound() {
+    const audio = new Audio('halloween/potato_chip');
+    audio.volume = 0.7;
+    audio.play().catch(e => console.log('Audio playback prevented:', e));
+  }
+
   // SAFE MODE TOGGLE BUTTON
   const injectSafeModeButton = () => {
     if (document.getElementById('dn-safe-mode-btn')) return;
@@ -48,7 +61,7 @@ function setupDeathNoteFeatures() {
     });
   };
 
-  // INJECT THE LIND L. TAILOR BAIT CARD
+  // INJECT THE LIND L. TAILOR BAIT CARD & MISA AMANE CARD
   const injectBaitCard = () => {
     if (document.getElementById('lind-l-tailor-card')) return;
 
@@ -82,7 +95,7 @@ function setupDeathNoteFeatures() {
     document.getElementById('bait-add-btn')?.addEventListener('click', triggerLTrap);
   };
 
-  // TRAP TRIGGER (LIND L. TAILOR EXECUTION WITH SHINIGAMI EYE EASTER EGG)
+  // TRAP TRIGGER (LIND L. TAILOR EXECUTION WITH SHINIGAMI EYE EASTER EGG & POTATO CHIP)
   function triggerLTrap() {
     const baitCard = document.getElementById('lind-l-tailor-card');
     
@@ -113,6 +126,7 @@ function setupDeathNoteFeatures() {
         ${eyeOverlayHtml}
         <h1>THAT WAS A TRAP, KIRA.</h1>
         <p>L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
+        <button id="chip-trap-btn" style="margin-right: 10px; background: #d97706; color: #fff; padding: 8px 12px; border: none; cursor: pointer; font-weight: bold;">🥔 TAKE A POTATO CHIP AND EAT IT</button>
         <button id="close-kira-banner">ACCEPT JUDGEMENT</button>
       </div>
     `;
@@ -126,13 +140,17 @@ function setupDeathNoteFeatures() {
     // Auto-scroll as a fallback to ensure the view stays locked onto the banner
     banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
+    document.getElementById('chip-trap-btn')?.addEventListener('click', () => {
+      playPotatoChipSound();
+    });
+
     document.getElementById('close-kira-banner').onclick = () => {
       banner.remove();
       document.body.style.overflow = ''; // Restore scroll
     };
   }
 
-  // SHINIGAMI EYES CONTRACT BUTTON
+  // SHINIGAMI EYES CONTRACT BUTTON (TRIGGERS MISA THEME MUSIC)
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -148,6 +166,10 @@ function setupDeathNoteFeatures() {
       document.body.classList.toggle('shinigami-eyes-active');
       const active = document.body.classList.contains('shinigami-eyes-active');
       eyeBtn.innerText = active ? '👁️ Shinigami Eyes Active' : '👁️ Trade Half Your Life for Shinigami Eyes';
+      
+      if (active) {
+        playMisaTheme();
+      }
     });
   };
 
