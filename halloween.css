@@ -895,44 +895,72 @@ body.shinigami-eyes-active .broadcast-modal {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
 
-/* Ensure L Lawliet title and text stay crisp inside inverted popup */
-body.shinigami-eyes-active .trap-popup h2,
-body.shinigami-eyes-active .broadcast-modal h2 {
-  color: #ff0000 !important;
-}
+/* ==========================================================================
+   TRAP MODAL VIEWPORT LOCK & L LAWLIET HEADER INJECTION
+   ========================================================================== */
 
-body.shinigami-eyes-active .trap-popup button,
-body.shinigami-eyes-active .broadcast-modal button {
-  background: #8b0000 !important;
-  color: #ffffff !important;
-  border: 1px solid #ff0000 !important;
-}
-/* Lock Trap Modal to active screen viewport */
-.broadcast-modal,
+/* 1. Lock the outer overlay backdrop to the active screen viewport */
 #broadcast-video-modal,
-.trap-popup,
-div[class*="broadcast"] {
+.broadcast-modal,
+.modal-overlay {
   position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  margin: 0 !important;
-  max-height: 90vh !important;
-  overflow-y: auto !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   z-index: 2147483647 !important;
 }
 
-/* Force inner video/header content (L Lawliet block) to display */
-.broadcast-modal iframe,
-.broadcast-modal video,
-.broadcast-modal .video-container,
-#broadcast-video-modal iframe,
-#broadcast-video-modal .video-header,
-.trap-popup img,
-.trap-popup video {
+/* 2. Style the inner popup dialog box */
+.trap-popup,
+#broadcast-video-modal > div,
+.broadcast-modal > div {
+  position: relative !important;
+  background: #ffffff !important;
+  border: 3px solid #ff1493 !important;
+  box-shadow: 0 0 30px #ff1493 !important;
+  padding: 30px !important;
+  text-align: center !important;
+  max-width: 500px !important;
+  width: 90% !important;
+  color: #ff1493 !important;
+  box-sizing: border-box !important;
+}
+
+/* 3. Inject "L LAWLIET" in blue above "THAT WAS A TRAP, KIRA" */
+.trap-popup h2::before,
+#broadcast-video-modal h2::before,
+.broadcast-modal h2::before {
+  content: "L LAWLIET" !important;
   display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  margin: 0 auto 15px auto !important;
-  max-width: 100% !important;
+  font-family: var(--dn-font-heading, sans-serif) !important;
+  font-size: 2rem !important;
+  color: #00bfff !important; /* Electric Blue */
+  letter-spacing: 3px !important;
+  margin-bottom: 12px !important;
+  text-shadow: 0 0 10px rgba(0, 191, 255, 0.6) !important;
+}
+/* 4. Ensure existing title and buttons match Shinigami pink/white theme */
+.trap-popup h2,
+#broadcast-video-modal h2,
+.broadcast-modal h2 {
+  color: #ff1493 !important;
+  font-family: var(--dn-font-heading, sans-serif) !important;
+  margin: 0 0 15px 0 !important;
+}
+
+.trap-popup button,
+#broadcast-video-modal button,
+.broadcast-modal button {
+  background: #ff1493 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  margin: 5px !important;
 }
