@@ -285,7 +285,7 @@
         </div>
         <div class="dn-vn-content">
           <div class="dn-light-frame">
-            <img src="art/light_derpy.webp" alt="Light Panic" class="dn-light-img">
+            <img src="art/Light_derpy.webp" alt="Light Panic" class="dn-light-img">
           </div>
           <p class="dn-vn-text" id="lightQuoteText">"(No, no, NO! I can't request 'Death Note: The Musical' right now! It's too obvious!)"</p>
         </div>
