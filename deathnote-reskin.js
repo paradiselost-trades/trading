@@ -126,7 +126,7 @@
       gap: 12px;
     }
 
-    /* Gothic Profile Frame for Light (Compressed, Full View) */
+    /* Gothic Profile Frame for Light */
     .dn-light-frame {
       width: 65px;
       height: 65px;
@@ -146,7 +146,7 @@
     .dn-light-img {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Compresses image down so the entire picture is visible */
+      object-fit: contain;
       filter: contrast(1.1) brightness(0.95);
     }
 
@@ -233,9 +233,11 @@
     " (Once this trade completes, my collection will be one step closer to absolute perfection!) "
   ];
 
-  // 3. INJECTION & EVENT BINDING LOGIC
+  let lightTimer = null;
+
+  // 3. INJECTION LOGIC
   function initReskin() {
-    // Inject L's Box into the top of your trade drawer
+    // Inject L's Box into top of trade drawer
     const targetDrawerHeader = document.querySelector('.trade-drawer-header') || document.querySelector('.drawer') || document.body;
     
     if (targetDrawerHeader && !document.getElementById('lDeductionBox')) {
@@ -256,11 +258,10 @@
       `;
       targetDrawerHeader.prepend(lContainer);
 
-      // Add click listener to L image
       document.getElementById('lDerpyImg').addEventListener('click', updateLQuote);
     }
 
-    // Inject Light's VN Box to document body
+    // Inject Light's VN Box
     if (!document.getElementById('lightVnBox')) {
       const vnBox = document.createElement('div');
       vnBox.className = 'dn-vn-box';
@@ -279,15 +280,21 @@
       document.body.appendChild(vnBox);
     }
 
-    // Bind hover triggers to action buttons
-    const actionBtns = document.querySelectorAll('.copy-request-btn, .email-request-btn, .trade-action-btn, button[type="submit"]');
-    actionBtns.forEach(btn => {
-      btn.addEventListener('mouseenter', triggerLightMonologue);
-      btn.addEventListener('mouseleave', hideLightMonologue);
+    setupCartTriggers();
+  }
+
+  // 4. TRIGGERS & HELPERS
+  function setupCartTriggers() {
+    // Global listener for opening cart/drawer buttons
+    document.addEventListener('click', (e) => {
+      // Fires if someone clicks a cart button or item
+      const isCartAction = e.target.closest('.open-cart-btn, .cart-btn, .cart-icon, .trade-drawer-toggle, .add-to-cart-btn');
+      if (isCartAction) {
+        triggerLightMonologue();
+      }
     });
   }
 
-  // Helper function to update L's quote & progress bar
   function updateLQuote() {
     const randomL = lQuotes[Math.floor(Math.random() * lQuotes.length)];
     const textEl = document.getElementById('lQuoteText');
@@ -302,7 +309,6 @@
     }
   }
 
-  // Helper functions for Light's VN box
   function triggerLightMonologue() {
     const randomLight = lightQuotes[Math.floor(Math.random() * lightQuotes.length)];
     const textEl = document.getElementById('lightQuoteText');
@@ -310,6 +316,10 @@
 
     if (textEl) textEl.innerText = randomLight;
     if (boxEl) boxEl.classList.add('active');
+
+    // Auto-hide after 6 seconds so it doesn't stay indefinitely
+    clearTimeout(lightTimer);
+    lightTimer = setTimeout(hideLightMonologue, 6000);
   }
 
   function hideLightMonologue() {
@@ -317,7 +327,9 @@
     if (boxEl) boxEl.classList.remove('active');
   }
 
-  // Initialize on page load
+  // Expose function globally so you can trigger it from anywhere
+  window.triggerLightMonologue = triggerLightMonologue;
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initReskin);
   } else {
