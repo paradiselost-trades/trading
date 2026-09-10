@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Rock+Salt&family=Reenie+Beanie&family=UnifrakturMaguntia&family=Share+Tech+Mono&display=swap');
 
 @font-face {
@@ -455,55 +454,60 @@ body.shinigami-eyes-active .shinigami-modal-overlay,
   top: auto !important;
   left: auto !important;
   transform: none !important;
-  max-width: 650px !important;
+  max-width: 600px !important;
   width: 90% !important;
   max-height: 85vh !important;
-  padding: 30px !important;
+  padding: 40px !important;
   background: #111111 !important;
-  border: 3px solid #ff007f !important;
-  box-shadow: 0 0 30px #ff007f !important;
+  border: 3px solid #8b0000 !important;
+  box-shadow: 0 0 30px #ff0000 !important;
   box-sizing: border-box !important;
   overflow-y: auto !important;
   pointer-events: auto !important;
   margin: auto !important;
+  text-align: center !important;
+  color: #ffffff !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .misa-modal-content img {
-  max-width: 420px !important;
+  max-width: 320px !important;
   width: 100% !important;
   height: auto !important;
   display: block !important;
   margin: 0 auto 20px auto !important;
-  border: 2px solid #ff007f !important;
-  border-radius: 4px !important;
+  border: 1px solid #333 !important;
 }
 
 .misa-modal-content h2 {
-  color: #ff007f !important;
-  margin-top: 0 !important;
-  font-family: monospace !important;
-  font-size: 1.6rem !important;
-  letter-spacing: 1px !important;
+  color: #ff3333 !important;
+  margin: 0 0 15px 0 !important;
+  font-size: 1.8rem !important;
+  display: block !important;
 }
 
 .misa-modal-content p {
-  font-family: monospace !important;
-  font-size: 1.1rem !important;
+  font-size: 1.2rem !important;
   color: #dddddd !important;
-  margin: 15px 0 20px 0 !important;
+  margin: 0 0 25px 0 !important;
+  display: block !important;
 }
 
+.misa-modal-content button,
 #close-misa-popup {
-  background: #ff007f !important;
+  background-color: #8b0000 !important;
   color: #ffffff !important;
-  padding: 10px 24px !important;
   border: none !important;
+  padding: 12px 30px !important;
+  font-size: 1.1rem !important;
   cursor: pointer !important;
   font-weight: bold !important;
-  font-family: monospace !important;
-  font-size: 1rem !important;
+  display: inline-block !important;
   text-transform: uppercase !important;
 }
+
 /* 3. BLACKOUT SCREEN & SAFE MODE OVERRIDES */
 .kira-blackout-screen {
   position: fixed !important;
