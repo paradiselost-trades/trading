@@ -829,6 +829,7 @@ body.shinigami-eyes-active #misa-pop-overlay {
    MISA POPUP STYLING
    ========================================================================== */
 
+/* Normal (Dark) State */
 #misa-pop-overlay {
   position: fixed !important;
   top: 0 !important;
@@ -874,4 +875,9 @@ body.shinigami-eyes-active #misa-pop-overlay {
   padding: 10px 24px !important;
   font-weight: bold !important;
   cursor: pointer !important;
+}
+
+/* Inverted State (Forces the popup to invert when Shinigami Eyes is active) */
+body.shinigami-eyes-active #misa-pop-overlay {
+  filter: invert(100%) hue-rotate(180deg) !important;
 }
