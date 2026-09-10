@@ -37,41 +37,38 @@ function setupDeathNoteFeatures() {
     audio.play().catch(e => console.log('Audio playback prevented:', e));
   }
 
-  function playPotatoChipSound() {
-    const audio = new Audio('halloween/potato_chip.mp3');
-    audio.volume = 0.7;
-    audio.play().catch(e => console.log('Audio playback prevented:', e));
-  }
+  window.showMisaPopup = function() {
+    document.getElementById('misa-pop-overlay')?.remove();
 
- window.showMisaPopup = function() {
-  document.getElementById('misa-pop-overlay')?.remove();
+    const overlay = document.createElement('div');
+    overlay.id = 'misa-pop-overlay';
+    // Explicitly lock to viewport center without forced scrolling
+    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 9999999; display: flex; align-items: center; justify-content: center;';
 
-  const overlay = document.createElement('div');
-  overlay.id = 'misa-pop-overlay';
+    const content = document.createElement('div');
+    content.className = 'misa-modal-content';
 
-  const content = document.createElement('div');
-  content.className = 'misa-modal-content';
+    content.innerHTML = `
+      <img src="halloween/MISA%20AMANE.png" alt="Misa Amane" />
+      <h2>SHINIGAMI EYES CONTRACT MADE!</h2>
+      <p>You have traded half of your remaining life span.</p>
+      <button id="close-misa-popup" type="button">Anything for Kira &lt;3!</button>
+    `;
 
-  content.innerHTML = `
-    <img src="halloween/MISA%20AMANE.png" alt="Misa Amane" />
-    <h2>SHINIGAMI EYES CONTRACT MADE!</h2>
-    <p>You have traded half of your remaining life span.</p>
-    <button id="close-misa-popup" type="button">Anything for Kira <3!</button>
-  `;
+    overlay.appendChild(content);
+    document.body.appendChild(overlay);
 
-  overlay.appendChild(content);
-  document.body.appendChild(overlay);
+    // Close handlers
+    document.getElementById('close-misa-popup')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      overlay.remove();
+    });
 
-  // Close handlers
-  document.getElementById('close-misa-popup')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    overlay.remove();
-  });
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+  };
 
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.remove();
-  });
-};
   // SAFE MODE TOGGLE BUTTON
   const injectSafeModeButton = () => {
     if (document.getElementById('dn-safe-mode-btn')) return;
@@ -126,12 +123,15 @@ function setupDeathNoteFeatures() {
   function showKiraBanner() {
     document.getElementById('kira-trap-overlay')?.remove();
 
+    const isShinigamiMode = document.body.classList.contains('shinigami-eyes-active');
+
     const banner = document.createElement('div');
     banner.id = 'kira-trap-overlay';
     banner.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.92); z-index: 9999999; display: flex; align-items: center; justify-content: center; text-align: center; color: white;';
 
     banner.innerHTML = `
       <div class="kira-banner-content" style="max-width: 500px; width: 90%; padding: 20px; background: #111; border: 2px solid #8b0000; box-shadow: 0 0 20px #ff0000; box-sizing: border-box;">
+        ${isShinigamiMode ? '<h2 style="color: #00bfff; font-size: 1.8rem; margin: 0 0 10px 0; letter-spacing: 2px;">L LAWLIET</h2>' : ''}
         <h1 style="color: #ff3333; margin-top: 0; font-size: 1.5rem;">THAT WAS A TRAP, KIRA.</h1>
         <p style="font-family: monospace; font-size: 0.9rem;">L HAS TRACED YOUR IP REGION TO THE KANTO DISTRICT OF JAPAN.</p>
         <div style="margin-top: 20px;">
@@ -146,7 +146,7 @@ function setupDeathNoteFeatures() {
 
     document.getElementById('chip-trap-btn')?.addEventListener('click', (e) => {
       e.stopPropagation();
-      playPotatoChipSound();
+      // Audio removed here for soundbytes.js custom handling
     });
 
     document.getElementById('close-kira-banner')?.addEventListener('click', (e) => {
@@ -220,7 +220,7 @@ function setupDeathNoteFeatures() {
     }
   });
 
- // SHINIGAMI EYES CONTRACT BUTTON
+  // SHINIGAMI EYES CONTRACT BUTTON
   const injectEyeButton = () => {
     if (document.getElementById('shinigami-eyes-btn')) return;
     const header = document.querySelector('header') || document.body;
@@ -239,7 +239,6 @@ function setupDeathNoteFeatures() {
       eyeBtn.innerText = active ? '👁️ Shinigami Eyes Active' : '👁️ Trade Half Your Life for Shinigami Eyes';
       
       if (active) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         playMisaTheme();
         showMisaPopup();
       } else {
