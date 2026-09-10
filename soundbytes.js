@@ -30,7 +30,7 @@ const deathNoteAudio = {
   }
 };
 
-// Force browser to preload all audio files into cache immediately
+// Force browser to cache audio instantly upon script execution
 Object.values(deathNoteAudio).forEach(item => {
   item.file.preload = 'auto';
   item.file.load();
@@ -42,14 +42,14 @@ function playSoundByte(key) {
   const item = deathNoteAudio[key];
   if (!item) return;
 
-  // Clone node for instant playback without interruption errors
+  // Clone node prevents playback interruption and race condition errors
   const soundInstance = item.file.cloneNode();
   soundInstance.currentTime = 0;
 
-  // Play audio immediately from cache
+  // Fire audio playback immediately from local cache
   soundInstance.play().catch(err => console.log('Autoplay or file issue:', err));
 
-  // Determine duration dynamically after metadata is ready
+  // Determine subtitle duration safely after audio metadata loads
   const triggerSubtitle = () => {
     const duration = (soundInstance.duration && !isNaN(soundInstance.duration)) 
       ? soundInstance.duration * 1000 
@@ -77,15 +77,15 @@ function showAnimeSubtitle(text, durationMs) {
   sub.innerHTML = formattedText;
   document.body.appendChild(sub);
 
-  // Automatically remove subtitle matching the audio clip duration
+  // Automatically clear subtitle when track ends
   subtitleTimer = setTimeout(() => {
     if (sub) sub.remove();
   }, durationMs);
 }
 
-// Global Click Delegation
+// Global Click Delegation Listener
 document.addEventListener('click', (e) => {
-  // 1. Potato Chip Trap Button or Image Trigger
+  // 1. Potato Chip Trap Trigger (#chip-trap-btn or .potato-chip-trigger)
   if (e.target.closest('#chip-trap-btn') || e.target.closest('.potato-chip-trigger')) {
     playSoundByte('potato_chip');
     return;
