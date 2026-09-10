@@ -877,7 +877,11 @@ body.shinigami-eyes-active #misa-pop-overlay {
   cursor: pointer !important;
 }
 
-/* Inverted State (Forces the popup to invert when Shinigami Eyes is active) */
-body.shinigami-eyes-active #misa-pop-overlay {
+/* Catch-all: Invert popup if ANY parent/body toggle class is active */
+body[class*="shinigami"] #misa-pop-overlay,
+body[class*="invert"] #misa-pop-overlay,
+body[class*="active"] #misa-pop-overlay,
+.shinigami-eyes-active #misa-pop-overlay,
+[data-theme="shinigami"] #misa-pop-overlay {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
