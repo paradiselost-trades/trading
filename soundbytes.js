@@ -14,7 +14,7 @@ const deathNoteAudio = {
   },
   light_laugh: {
     file: new Audio('audios/laugh.mp3'),
-    text: '*(Light cackles evily)*'
+    text: '*(Light cackles evilily)*'
   },
   world_without_light: {
     file: new Audio('audios/world_without_light.mp3'),
@@ -23,22 +23,40 @@ const deathNoteAudio = {
   i_am_l: {
     file: new Audio('audios/L.mp3'),
     text: 'I wanted to tell you... I’m L.'
+  },
+  potato_chip: {
+    file: new Audio('audios/potato_chip.mp3'),
+    text: 'I’ll take a potato chip... *AND EAT IT!*'
   }
 };
+
+let activeAudio = null;
+let subtitleTimer = null;
 
 function playSoundByte(key) {
   const item = deathNoteAudio[key];
   if (!item) return;
 
+  // Stop current playing audio if another button is clicked
+  if (activeAudio) {
+    activeAudio.pause();
+    activeAudio.currentTime = 0;
+  }
+
+  activeAudio = item.file;
   item.file.currentTime = 0;
+
   item.file.play().catch(err => console.log('Autoplay or file issue:', err));
 
-  showAnimeSubtitle(item.text);
+  // Determine duration dynamically or default to fallback
+  const duration = item.file.duration && !isNaN(item.file.duration) ? item.file.duration * 1000 : 5000;
+  showAnimeSubtitle(item.text, duration);
 }
 
-function showAnimeSubtitle(text) {
+function showAnimeSubtitle(text, durationMs) {
   const existingSub = document.getElementById('dn-anime-sub');
   if (existingSub) existingSub.remove();
+  if (subtitleTimer) clearTimeout(subtitleTimer);
 
   const sub = document.createElement('div');
   sub.id = 'dn-anime-sub';
@@ -48,44 +66,51 @@ function showAnimeSubtitle(text) {
   sub.innerHTML = formattedText;
   document.body.appendChild(sub);
 
-  setTimeout(() => {
+  // Automatically remove subtitle matching the audio clip duration
+  subtitleTimer = setTimeout(() => {
     if (sub) sub.remove();
-  }, 5500);
+  }, durationMs);
 }
 
 // Global Click Delegation
 document.addEventListener('click', (e) => {
-  // 1. Lasagna Approved Badge -> Evil Laugh
+  // 1. Potato Chip Trap Button -> "I'll take a potato chip... AND EAT IT!"
+  if (e.target.closest('#chip-trap-btn')) {
+    playSoundByte('potato_chip');
+    return;
+  }
+
+  // 2. Lasagna Approved Badge -> Evil Laugh
   if (e.target.closest('.lasagna-relic-seal')) {
     playSoundByte('light_laugh');
     return;
   }
 
-  // 2. Unveil Nine Circles Button -> "I wanted to tell you... I'm L."
+  // 3. Unveil Nine Circles Button -> "I wanted to tell you... I'm L."
   if (e.target.closest('#palette-toggle-btn')) {
     playSoundByte('i_am_l');
     return;
   }
 
-  // 3. Clear All Trade Cart Button -> "MATSUDA, YOU IDIOT!"
+  // 4. Clear All Trade Cart Button -> "MATSUDA, YOU IDIOT!"
   if (e.target.closest('#clear-cart-btn')) {
     playSoundByte('matsuda');
     return;
   }
 
-  // 4. Copy Request Button -> "All according to keikaku."
+  // 5. Copy Request Button -> "All according to keikaku."
   if (e.target.closest('#copy-trade-btn')) {
     playSoundByte('keikaku');
     return;
   }
 
-  // 5. Email Request Button -> "No, I can't laugh yet..."
+  // 6. Email Request Button -> "No, I can't laugh yet..."
   if (e.target.closest('#email-trade-btn')) {
     playSoundByte('hold_it_in');
     return;
   }
 
-  // 6. Scroll to Top "ASCEND" Button -> "I'd never dream about being in a world without Light..."
+  // 7. Scroll to Top "ASCEND" Button -> "I'd never dream about being in a world without Light..."
   if (e.target.closest('#scroll-top-btn')) {
     playSoundByte('world_without_light');
     return;
