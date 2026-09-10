@@ -3,6 +3,11 @@
 
   // 1. INJECT RESKIN CSS STYLES
   const reskinStyles = `
+    /* Allow L's speech bubble to extend outside the drawer bounds without clipping */
+    #cart-drawer, .cart-drawer, .trade-drawer, .drawer {
+      overflow: visible !important;
+    }
+
     /* L's Placement: Top Right in Drawer */
     .dn-l-header-box {
       position: absolute;
@@ -11,7 +16,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 12px;
+      gap: 10px;
       z-index: 10000;
       pointer-events: none;
     }
@@ -20,9 +25,9 @@
       pointer-events: auto;
     }
 
-    /* SCALED UP L IMAGE */
+    /* L IMAGE */
     .dn-l-img {
-      width: 120px;
+      width: 110px;
       height: auto;
       cursor: pointer;
       user-select: none;
@@ -35,15 +40,15 @@
       filter: drop-shadow(0 0 10px #00ff66);
     }
 
-    /* SLIMMER AND LONGER SPEECH BUBBLE */
+    /* ULTRA SLIM SPEECH BUBBLE (CAN EXTEND OUTSIDE DRAWER) */
     .dn-l-speech-bubble {
       background: rgba(10, 10, 10, 0.98);
       border: 2px solid #00ff66;
       color: #00ff66;
       padding: 10px 12px;
       border-radius: 8px;
-      width: 210px;
-      font-size: 0.85rem;
+      width: 150px; /* Slimmer width */
+      font-size: 0.8rem;
       font-family: 'Courier New', monospace;
       box-shadow: 0 0 14px rgba(0, 255, 102, 0.3);
       position: relative;
@@ -73,8 +78,9 @@
 
     .dn-quote-text {
       margin: 0;
-      line-height: 1.4;
-      min-height: 4em;
+      line-height: 1.35;
+      min-height: 5em;
+      word-wrap: break-word;
     }
 
     .dn-progress-wrap {
@@ -101,7 +107,7 @@
       bottom: 20px;
       left: 20px;
       right: auto;
-      width: 350px;
+      width: 340px;
       background: rgba(10, 2, 4, 0.98);
       border: 2px solid #ff0033;
       box-shadow: 0 0 20px rgba(255, 0, 51, 0.5);
@@ -112,6 +118,12 @@
       transform: translateX(-15px);
       transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
       z-index: 999999;
+      cursor: pointer; /* Clickable affordance */
+      user-select: none;
+    }
+
+    .dn-vn-box:hover {
+      box-shadow: 0 0 25px rgba(255, 0, 51, 0.8);
     }
 
     .dn-vn-box.active {
@@ -167,7 +179,7 @@
       color: #ffffff;
       font-family: 'Georgia', serif;
       font-style: italic;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       line-height: 1.4;
       margin: 0;
       flex-grow: 1;
@@ -333,6 +345,11 @@
         </div>
       `;
       document.body.appendChild(vnBox);
+
+      // CLICK TO TRIGGER LIGHT QUOTES JUST LIKE L
+      vnBox.addEventListener('click', () => {
+        triggerLightMonologue();
+      });
     }
   }
 
