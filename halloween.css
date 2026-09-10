@@ -825,11 +825,7 @@ body.shinigami-eyes-active #misa-pop-overlay {
   align-items: center !important;
   justify-content: center !important;
 }
-/* ==========================================================================
-   MISA POPUP STYLING
-   ========================================================================== */
-
-/* Normal (Dark) State */
+/* Apply the inversion directly to the modal overlay */
 #misa-pop-overlay {
   position: fixed !important;
   top: 0 !important;
@@ -841,6 +837,8 @@ body.shinigami-eyes-active #misa-pop-overlay {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  /* Direct inversion filter */
+  filter: invert(100%) hue-rotate(180deg) !important;
 }
 
 #misa-pop-overlay .misa-modal-content {
@@ -875,13 +873,4 @@ body.shinigami-eyes-active #misa-pop-overlay {
   padding: 10px 24px !important;
   font-weight: bold !important;
   cursor: pointer !important;
-}
-
-/* Catch-all: Invert popup if ANY parent/body toggle class is active */
-body[class*="shinigami"] #misa-pop-overlay,
-body[class*="invert"] #misa-pop-overlay,
-body[class*="active"] #misa-pop-overlay,
-.shinigami-eyes-active #misa-pop-overlay,
-[data-theme="shinigami"] #misa-pop-overlay {
-  filter: invert(100%) hue-rotate(180deg) !important;
 }
