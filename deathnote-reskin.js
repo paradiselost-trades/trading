@@ -3,27 +3,24 @@
 
   // 1. INJECT RESKIN CSS STYLES
   const reskinStyles = `
-    /* Force drawer header container to fit full-width top layout */
-    .trade-drawer, .drawer, #trade-drawer, [class*="drawer"] {
-      position: relative !important;
-    }
-
-    /* L's Placement: Scaled Up Header Banner in top right of drawer */
     .dn-l-header-box {
       position: absolute;
       top: 10px;
       right: 15px;
-      left: 15px; /* Spans across to fill top area */
       display: flex;
       align-items: center;
       justify-content: flex-end;
       gap: 14px;
       z-index: 10000;
+      pointer-events: none;
+    }
+
+    .dn-l-img, .dn-l-speech-bubble {
       pointer-events: auto;
     }
 
     .dn-l-img {
-      width: 90px; /* BUMPED UP FROM 52px */
+      width: 90px;
       height: auto;
       cursor: pointer;
       user-select: none;
@@ -42,8 +39,8 @@
       color: #00ff66;
       padding: 10px 14px;
       border-radius: 8px;
-      width: 280px; /* EXPANDED BUBBLE WIDTH */
-      font-size: 0.88rem; /* BIGGER FONT */
+      width: 280px;
+      font-size: 0.88rem;
       font-family: 'Courier New', monospace;
       box-shadow: 0 0 14px rgba(0, 255, 102, 0.3);
       position: relative;
@@ -95,12 +92,11 @@
       transition: width 0.3s ease-in-out;
     }
 
-    /* Light's Placement: Large Visual Novel Box Docked Outside Drawer */
     .dn-vn-box {
-      position: absolute;
+      position: fixed;
       bottom: 20px;
-      left: -370px; /* MOVED FURTHER LEFT TO ACCOMMODATE LARGER SIZE */
-      width: 350px; /* EXPANDED FROM 270px */
+      right: 20px;
+      width: 350px;
       background: rgba(10, 2, 4, 0.98);
       border: 2px solid #ff0033;
       box-shadow: 0 0 20px rgba(255, 0, 51, 0.5);
@@ -108,7 +104,7 @@
       padding: 14px;
       opacity: 0;
       pointer-events: none;
-      transform: translateX(12px);
+      transform: translateY(12px);
       transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
       z-index: 999999;
     }
@@ -116,7 +112,7 @@
     .dn-vn-box.active {
       opacity: 1;
       pointer-events: auto;
-      transform: translateX(0);
+      transform: translateY(0);
     }
 
     .dn-vn-header {
@@ -139,9 +135,8 @@
       gap: 14px;
     }
 
-    /* Scaled-up Portrait Frame */
     .dn-light-frame {
-      width: 85px; /* BUMPED UP FROM 58px */
+      width: 85px;
       height: 85px;
       flex-shrink: 0;
       background: #050102;
@@ -167,7 +162,7 @@
       color: #ffffff;
       font-family: 'Georgia', serif;
       font-style: italic;
-      font-size: 0.9rem; /* LARGER READABLE DIALOGUE */
+      font-size: 0.9rem;
       line-height: 1.4;
       margin: 0;
       flex-grow: 1;
@@ -200,13 +195,12 @@
 
   // 3. INJECTION & LOGIC
   function injectWidgets() {
-    const drawerContainer = document.querySelector('.trade-drawer') || 
-                            document.querySelector('.drawer') || 
-                            document.querySelector('#trade-drawer') ||
-                            document.querySelector('aside');
+    const drawerContainer = document.querySelector('#cart-drawer') || 
+                            document.querySelector('.cart-drawer') || 
+                            document.querySelector('.trade-drawer') || 
+                            document.querySelector('.drawer');
 
     if (drawerContainer) {
-      // Inject Scaled L Box
       if (!document.getElementById('lDeductionBox')) {
         const lContainer = document.createElement('div');
         lContainer.className = 'dn-l-header-box';
@@ -226,25 +220,24 @@
         const lImg = document.getElementById('lDerpyImg');
         if (lImg) lImg.addEventListener('click', updateLQuote);
       }
+    }
 
-      // Inject Scaled Light Box directly to drawer
-      if (!document.getElementById('lightVnBox')) {
-        const vnBox = document.createElement('div');
-        vnBox.className = 'dn-vn-box';
-        vnBox.id = 'lightVnBox';
-        vnBox.innerHTML = `
-          <div class="dn-vn-header">
-            <span class="dn-vn-tag">[ 🍎 LIGHT YAGAMI ]</span>
+    if (!document.getElementById('lightVnBox')) {
+      const vnBox = document.createElement('div');
+      vnBox.className = 'dn-vn-box';
+      vnBox.id = 'lightVnBox';
+      vnBox.innerHTML = `
+        <div class="dn-vn-header">
+          <span class="dn-vn-tag">[ 🍎 LIGHT YAGAMI ]</span>
+        </div>
+        <div class="dn-vn-content">
+          <div class="dn-light-frame">
+            <img src="art/Light_derpy.webp" alt="Light Panic" class="dn-light-img">
           </div>
-          <div class="dn-vn-content">
-            <div class="dn-light-frame">
-              <img src="art/Light_derpy.webp" alt="Light Panic" class="dn-light-img">
-            </div>
-            <p class="dn-vn-text" id="lightQuoteText">"(WAIT... IF I TRADE 2 AUDIOS FOR 1 VIDEO, MY EXCHANGE RATIO REMAINS COMPLETELY FLAWLESS! ALL ACCORDING TO PLAN!)"</p>
-          </div>
-        `;
-        drawerContainer.appendChild(vnBox);
-      }
+          <p class="dn-vn-text" id="lightQuoteText">"(WAIT... IF I TRADE 2 AUDIOS FOR 1 VIDEO, MY EXCHANGE RATIO REMAINS COMPLETELY FLAWLESS! ALL ACCORDING TO PLAN!)"</p>
+        </div>
+      `;
+      document.body.appendChild(vnBox);
     }
   }
 
@@ -282,7 +275,7 @@
   observer.observe(document.body, { childList: true, subtree: true });
 
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.open-cart-btn, .cart-btn, .cart-icon, .trade-drawer-toggle, .add-to-trade-btn, [class*="trade"]')) {
+    if (e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn')) {
       triggerLightMonologue();
     }
   });
