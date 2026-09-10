@@ -865,3 +865,45 @@ body.shinigami-eyes-active #misa-pop-overlay {
 #misa-pop-overlay img {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
+/* ==========================================================================
+   LIND L. TAILOR CARD & TRAP POPUP FIXES
+   ========================================================================== */
+
+/* 1. Force Lind L. Tailor card to invert properly in Shinigami Mode */
+body.shinigami-eyes-active .broadcast-card,
+body.shinigami-eyes-active #lind-l-tailor-card,
+body.shinigami-eyes-active .card[data-title*="Tailor"] {
+  background: #000000 !important;
+  color: #ffffff !important;
+  filter: invert(100%) hue-rotate(180deg) !important;
+}
+
+body.shinigami-eyes-active .broadcast-card p,
+body.shinigami-eyes-active .broadcast-card span,
+body.shinigami-eyes-active .broadcast-card h3 {
+  color: #ffffff !important;
+}
+
+/* 2. Fix Trap Popup in Shinigami Mode (White card with Pink accents & top layer) */
+body.shinigami-eyes-active .trap-popup,
+body.shinigami-eyes-active #broadcast-video-modal,
+body.shinigami-eyes-active .broadcast-modal {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 2147483647 !important;
+  filter: invert(100%) hue-rotate(180deg) !important;
+}
+
+/* Ensure L Lawliet title and text stay crisp inside inverted popup */
+body.shinigami-eyes-active .trap-popup h2,
+body.shinigami-eyes-active .broadcast-modal h2 {
+  color: #ff0000 !important;
+}
+
+body.shinigami-eyes-active .trap-popup button,
+body.shinigami-eyes-active .broadcast-modal button {
+  background: #8b0000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ff0000 !important;
+}
