@@ -1,4 +1,4 @@
-// Sound Byte & Subtitle Mapping
+// Sound Byte & Subtitle Mapping with explicit preloading
 const deathNoteAudio = {
   matsuda: {
     file: new Audio('audios/matsuda.mp3'),
@@ -30,27 +30,38 @@ const deathNoteAudio = {
   }
 };
 
-let activeAudio = null;
+// Force browser to preload all audio files into cache immediately
+Object.values(deathNoteAudio).forEach(item => {
+  item.file.preload = 'auto';
+  item.file.load();
+});
+
 let subtitleTimer = null;
 
 function playSoundByte(key) {
   const item = deathNoteAudio[key];
   if (!item) return;
 
-  // Stop current playing audio if another button is clicked
-  if (activeAudio) {
-    activeAudio.pause();
-    activeAudio.currentTime = 0;
+  // Clone node for instant playback without interruption errors
+  const soundInstance = item.file.cloneNode();
+  soundInstance.currentTime = 0;
+
+  // Play audio immediately from cache
+  soundInstance.play().catch(err => console.log('Autoplay or file issue:', err));
+
+  // Determine duration dynamically after metadata is ready
+  const triggerSubtitle = () => {
+    const duration = (soundInstance.duration && !isNaN(soundInstance.duration)) 
+      ? soundInstance.duration * 1000 
+      : 5000;
+    showAnimeSubtitle(item.text, duration);
+  };
+
+  if (soundInstance.readyState >= 1) {
+    triggerSubtitle();
+  } else {
+    soundInstance.addEventListener('loadedmetadata', triggerSubtitle, { once: true });
   }
-
-  activeAudio = item.file;
-  item.file.currentTime = 0;
-
-  item.file.play().catch(err => console.log('Autoplay or file issue:', err));
-
-  // Determine duration dynamically or default to fallback
-  const duration = item.file.duration && !isNaN(item.file.duration) ? item.file.duration * 1000 : 5000;
-  showAnimeSubtitle(item.text, duration);
 }
 
 function showAnimeSubtitle(text, durationMs) {
@@ -74,8 +85,8 @@ function showAnimeSubtitle(text, durationMs) {
 
 // Global Click Delegation
 document.addEventListener('click', (e) => {
-  // 1. Potato Chip Trap Button -> "I'll take a potato chip... AND EAT IT!"
-  if (e.target.closest('#chip-trap-btn')) {
+  // 1. Potato Chip Trap Button or Image Trigger
+  if (e.target.closest('#chip-trap-btn') || e.target.closest('.potato-chip-trigger')) {
     playSoundByte('potato_chip');
     return;
   }
