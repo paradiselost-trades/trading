@@ -43,32 +43,35 @@ function setupDeathNoteFeatures() {
     audio.play().catch(e => console.log('Audio playback prevented:', e));
   }
 
-  // MISA AMANE POP-UP FOR SHINIGAMI EYES CONTRACT
-  function showMisaPopup() {
-    document.getElementById('misa-pop-overlay')?.remove();
+ window.showMisaPopup = function() {
+  document.getElementById('misa-pop-overlay')?.remove();
 
-    const overlay = document.createElement('div');
-    overlay.id = 'misa-pop-overlay';
+  const overlay = document.createElement('div');
+  overlay.id = 'misa-pop-overlay';
 
-    const content = document.createElement('div');
-    content.className = 'misa-modal-content';
+  const content = document.createElement('div');
+  content.className = 'misa-modal-content';
 
-    content.innerHTML = `
-      <img src="halloween/MISA%20AMANE.png" alt="Misa Amane" />
-      <h2>SHINIGAMI EYES CONTRACT MADE!</h2>
-      <p>You have traded half of your remaining life span.</p>
-      <button id="close-misa-popup" type="button">CLOSE</button>
-    `;
+  content.innerHTML = `
+    <img src="halloween/MISA%20AMANE.png" alt="Misa Amane" />
+    <h2>SHINIGAMI EYES CONTRACT MADE!</h2>
+    <p>You have traded half of your remaining life span.</p>
+    <button id="close-misa-popup" type="button">Anything for Kira <3!</button>
+  `;
 
-    overlay.appendChild(content);
-    document.body.appendChild(overlay);
+  overlay.appendChild(content);
+  document.body.appendChild(overlay);
 
-    document.getElementById('close-misa-popup')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      overlay.remove();
-    });
-  }
+  // Close handlers
+  document.getElementById('close-misa-popup')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    overlay.remove();
+  });
 
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+};
   // SAFE MODE TOGGLE BUTTON
   const injectSafeModeButton = () => {
     if (document.getElementById('dn-safe-mode-btn')) return;
