@@ -825,3 +825,59 @@ body.shinigami-eyes-active #misa-pop-overlay {
   align-items: center !important;
   justify-content: center !important;
 }
+/* ==========================================================================
+   MISA POPUP STYLING
+   ========================================================================== */
+
+/* Normal (Dark) State */
+#misa-pop-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#misa-pop-overlay .misa-modal-content {
+  background: #000000 !important;
+  border: 3px solid #8b0000 !important;
+  box-shadow: 0 0 30px #ff0000 !important;
+  padding: 30px !important;
+  text-align: center !important;
+  max-width: 500px !important;
+  width: 90% !important;
+  color: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+#misa-pop-overlay h2 {
+  color: #ff0000 !important;
+  font-family: var(--dn-font-heading, sans-serif) !important;
+  margin: 0 0 10px 0 !important;
+}
+
+#misa-pop-overlay p {
+  color: #ffffff !important;
+  font-family: var(--dn-font-body, sans-serif) !important;
+  margin: 0 0 20px 0 !important;
+  text-transform: uppercase !important;
+}
+
+#close-misa-popup {
+  background: #8b0000 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 24px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+}
+
+/* Inverted State (Triggers when Shinigami Eyes is active) */
+body.shinigami-eyes-active #misa-pop-overlay {
+  filter: invert(100%) hue-rotate(180deg) !important;
+}
