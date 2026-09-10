@@ -9,6 +9,15 @@
   <!-- Transparent PNG Favicon -->
   <link rel="icon" type="image/png" href="snake-apple.png" />
 
+  <!-- Preload Audio Files to Eliminate Latency -->
+  <link rel="preload" href="audios/potato_chip.mp3" as="audio">
+  <link rel="preload" href="audios/matsuda.mp3" as="audio">
+  <link rel="preload" href="audios/keikaku.mp3" as="audio">
+  <link rel="preload" href="audios/hold_it_in.mp3" as="audio">
+  <link rel="preload" href="audios/laugh.mp3" as="audio">
+  <link rel="preload" href="audios/world_without_light.mp3" as="audio">
+  <link rel="preload" href="audios/L.mp3" as="audio">
+
   <!-- Unified Theme Controller (Strict Index Control) -->
   <script>
     (function() {
@@ -74,10 +83,15 @@
 </head>
 <body>
   <header class="container">
-    <div class="header-top-row">
+    <div class="header-top-row" style="display: flex; gap: 10px; align-items: center;">
       <!-- PARADISE LOST GATEWAY TRIGGER -->
       <button id="paradise-btn" type="button" class="abandon-btn" onclick="triggerParadiseLost()">
         ❖ Legacy Model
+      </button>
+
+      <!-- POTATO CHIP TRIGGER BUTTON -->
+      <button id="chip-trap-btn" type="button" class="abandon-btn potato-chip-trigger">
+        🥔 Eat Potato Chip
       </button>
     </div>
 
@@ -284,6 +298,6 @@
       </div>
     </div>
   </div>
- <script src="soundbytes.js"></script>
+  <script src="soundbytes.js"></script>
 </body>
 </html>
