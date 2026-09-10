@@ -3,73 +3,84 @@
 
   // 1. INJECT RESKIN CSS STYLES
   const reskinStyles = `
-    /* L's Deduction Header Box */
-    .dn-l-deduction-box {
-      display: flex;
-      align-items: center;
-      background: rgba(15, 15, 15, 0.95);
-      border: 1px solid #00ff66;
-      box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
-      padding: 10px 14px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      font-family: 'Courier New', monospace;
+    /* Force relative positioning on the main drawer container for absolute anchoring */
+    .trade-drawer, .drawer, #trade-drawer, [class*="drawer"] {
+      position: relative !important;
     }
 
-    .dn-l-avatar-wrap {
+    /* L's Placement: Top Right corner inside the Trade Drawer Header */
+    .dn-l-header-box {
+      position: absolute;
+      top: 10px;
+      right: 14px;
       display: flex;
       align-items: center;
-      width: 100%;
+      gap: 10px;
+      z-index: 10000;
     }
 
     .dn-l-img {
-      width: 65px;
+      width: 52px;
       height: auto;
       cursor: pointer;
       user-select: none;
-      transition: transform 0.2s ease, filter 0.2s ease;
       flex-shrink: 0;
+      transition: transform 0.2s ease, filter 0.2s ease;
     }
 
     .dn-l-img:hover {
       transform: scale(1.1) rotate(-3deg);
-      filter: drop-shadow(0 0 5px #00ff66);
+      filter: drop-shadow(0 0 6px #00ff66);
     }
 
-    .dn-speech-bubble {
-      position: relative;
-      background: #0a0a0a;
-      border: 1px solid #333;
+    .dn-l-speech-bubble {
+      background: rgba(10, 10, 10, 0.96);
+      border: 1px solid #00ff66;
       color: #00ff66;
-      padding: 10px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
-      margin-left: 14px;
-      flex-grow: 1;
-      font-size: 0.85rem;
+      width: 190px;
+      font-size: 0.74rem;
+      font-family: 'Courier New', monospace;
+      box-shadow: 0 0 10px rgba(0, 255, 102, 0.25);
+      position: relative;
+    }
+
+    /* Bubble Tail pointing right to L */
+    .dn-l-speech-bubble::after {
+      content: '';
+      position: absolute;
+      right: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 7px solid #00ff66;
     }
 
     .dn-tag {
       color: #ff3344;
       font-weight: bold;
       display: block;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
+      font-size: 0.65rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
     }
 
     .dn-quote-text {
       margin: 0;
-      line-height: 1.35;
+      line-height: 1.25;
       min-height: 2.4em;
     }
 
-    /* Green Deduction Bar */
     .dn-progress-wrap {
       width: 100%;
-      height: 6px;
-      background: #1a1a1a;
-      border-radius: 3px;
-      margin-top: 8px;
+      height: 4px;
+      background: #111;
+      border-radius: 2px;
+      margin-top: 5px;
       overflow: hidden;
       border: 1px solid #222;
     }
@@ -78,24 +89,24 @@
       height: 100%;
       width: 94.1%;
       background: #00ff66;
-      box-shadow: 0 0 8px #00ff66;
-      transition: width 0.4s ease-in-out;
+      box-shadow: 0 0 6px #00ff66;
+      transition: width 0.3s ease-in-out;
     }
 
-    /* Light's Visual Novel Side Box */
+    /* Light's Placement: Docked directly outside the left edge of the Trade Drawer */
     .dn-vn-box {
-      position: fixed;
-      bottom: 25px;
-      right: 370px;
-      width: 340px;
+      position: absolute;
+      top: 140px; /* Positions Light right alongside added item cards */
+      left: -290px; /* Snaps box outside the left border of the drawer panel */
+      width: 270px;
       background: rgba(10, 2, 4, 0.96);
       border: 2px solid #ff0033;
-      box-shadow: 0 0 18px rgba(255, 0, 51, 0.4);
-      border-radius: 8px;
-      padding: 12px;
+      box-shadow: 0 0 16px rgba(255, 0, 51, 0.4);
+      border-radius: 6px;
+      padding: 10px;
       opacity: 0;
       pointer-events: none;
-      transform: translateY(12px);
+      transform: translateX(10px);
       transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
       z-index: 99999;
     }
@@ -103,38 +114,38 @@
     .dn-vn-box.active {
       opacity: 1;
       pointer-events: auto;
-      transform: translateY(0);
+      transform: translateX(0);
     }
 
     .dn-vn-header {
       border-bottom: 1px dashed #ff0033;
       padding-bottom: 4px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .dn-vn-tag {
       color: #ff0033;
       font-weight: bold;
       font-family: 'Georgia', serif;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       letter-spacing: 1px;
     }
 
     .dn-vn-content {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* Gothic Profile Frame for Light */
+    /* Gothic Compressed Profile Frame */
     .dn-light-frame {
-      width: 65px;
-      height: 65px;
+      width: 58px;
+      height: 58px;
       flex-shrink: 0;
       background: #050102;
       border: 2px solid #ff0033;
       outline: 1px solid #1a0005;
-      box-shadow: inset 0 0 8px rgba(255, 0, 51, 0.6), 0 0 10px rgba(255, 0, 51, 0.4);
+      box-shadow: inset 0 0 8px rgba(255, 0, 51, 0.6), 0 0 8px rgba(255, 0, 51, 0.4);
       border-radius: 4px;
       padding: 2px;
       display: flex;
@@ -154,8 +165,8 @@
       color: #ffffff;
       font-family: 'Georgia', serif;
       font-style: italic;
-      font-size: 0.82rem;
-      line-height: 1.35;
+      font-size: 0.78rem;
+      line-height: 1.3;
       margin: 0;
       flex-grow: 1;
     }
@@ -235,34 +246,36 @@
 
   let lightTimer = null;
 
-  // 3. INJECTION LOGIC
+  // 3. INJECTION & DOM PLACEMENT LOGIC
   function initReskin() {
-    // Inject L's Box into top of trade drawer
-    const targetDrawerHeader = document.querySelector('.trade-drawer-header') || document.querySelector('.drawer') || document.body;
-    
-    if (targetDrawerHeader && !document.getElementById('lDeductionBox')) {
+    // Find drawer container
+    const drawerContainer = document.querySelector('.trade-drawer') 
+                           || document.querySelector('.drawer') 
+                           || document.querySelector('#trade-drawer') 
+                           || document.body;
+
+    // Inject L inside top right header area
+    if (drawerContainer && !document.getElementById('lDeductionBox')) {
       const lContainer = document.createElement('div');
-      lContainer.className = 'dn-l-deduction-box';
+      lContainer.className = 'dn-l-header-box';
       lContainer.id = 'lDeductionBox';
       lContainer.innerHTML = `
-        <div class="dn-l-avatar-wrap">
-          <img src="art/L_derpy.webp" alt="L Derpy" class="dn-l-img" id="lDerpyImg" title="Click L to cycle deduction">
-          <div class="dn-speech-bubble">
-            <span class="dn-tag">🍰 L'S DEDUCTION</span>
-            <p class="dn-quote-text" id="lQuoteText">Eating sweets during trade negotiations increases deduction processing speed by 40%.</p>
-            <div class="dn-progress-wrap">
-              <div class="dn-progress-bar" id="lProgressBar"></div>
-            </div>
+        <div class="dn-l-speech-bubble">
+          <span class="dn-tag">🍰 L'S DEDUCTION</span>
+          <p class="dn-quote-text" id="lQuoteText">Eating sweets during trade negotiations increases deduction processing speed by 40%.</p>
+          <div class="dn-progress-wrap">
+            <div class="dn-progress-bar" id="lProgressBar"></div>
           </div>
         </div>
+        <img src="art/L_derpy.webp" alt="L Derpy" class="dn-l-img" id="lDerpyImg" title="Click L to cycle deduction">
       `;
-      targetDrawerHeader.prepend(lContainer);
+      drawerContainer.appendChild(lContainer);
 
       document.getElementById('lDerpyImg').addEventListener('click', updateLQuote);
     }
 
-    // Inject Light's VN Box
-    if (!document.getElementById('lightVnBox')) {
+    // Inject Light docked outside the left edge
+    if (drawerContainer && !document.getElementById('lightVnBox')) {
       const vnBox = document.createElement('div');
       vnBox.className = 'dn-vn-box';
       vnBox.id = 'lightVnBox';
@@ -277,7 +290,7 @@
           <p class="dn-vn-text" id="lightQuoteText">"(No, no, NO! I can't request 'Death Note: The Musical' right now! It's too obvious!)"</p>
         </div>
       `;
-      document.body.appendChild(vnBox);
+      drawerContainer.appendChild(vnBox);
     }
 
     setupCartTriggers();
@@ -285,10 +298,8 @@
 
   // 4. TRIGGERS & HELPERS
   function setupCartTriggers() {
-    // Global listener for opening cart/drawer buttons
     document.addEventListener('click', (e) => {
-      // Fires if someone clicks a cart button or item
-      const isCartAction = e.target.closest('.open-cart-btn, .cart-btn, .cart-icon, .trade-drawer-toggle, .add-to-cart-btn');
+      const isCartAction = e.target.closest('.open-cart-btn, .cart-btn, .cart-icon, .trade-drawer-toggle, .add-to-trade-btn, .add-to-cart-btn');
       if (isCartAction) {
         triggerLightMonologue();
       }
@@ -317,7 +328,6 @@
     if (textEl) textEl.innerText = randomLight;
     if (boxEl) boxEl.classList.add('active');
 
-    // Auto-hide after 6 seconds so it doesn't stay indefinitely
     clearTimeout(lightTimer);
     lightTimer = setTimeout(hideLightMonologue, 6000);
   }
@@ -327,7 +337,6 @@
     if (boxEl) boxEl.classList.remove('active');
   }
 
-  // Expose function globally so you can trigger it from anywhere
   window.triggerLightMonologue = triggerLightMonologue;
 
   if (document.readyState === 'loading') {
