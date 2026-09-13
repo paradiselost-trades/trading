@@ -8,7 +8,42 @@
       overflow: visible !important;
     }
 
-    /* Completely hide both widgets in Mobile Mode (screens <= 768px) */
+    /* HIDE FLOATING TRADE REQUEST BUTTON AT BOTTOM WHEN DRAWER/CART IS OPEN */
+    body:has(#trade-drawer.active),
+    body:has(#trade-drawer.open),
+    body:has(.trade-drawer.active),
+    body:has(.trade-drawer.open),
+    body:has(#cart-drawer.active),
+    body:has(#cart-drawer.open),
+    body:has(.cart-drawer.active),
+    body:has(.cart-drawer.open) #trade-request-btn,
+    body:has(#trade-drawer.active) .trade-request-btn,
+    body:has(#trade-drawer.open) .trade-request-btn,
+    body:has(.trade-drawer.active) .trade-request-btn,
+    body:has(.trade-drawer.open) .trade-request-btn,
+    body:has(#cart-drawer.active) .trade-request-btn,
+    body:has(#cart-drawer.open) .trade-request-btn,
+    body:has(.cart-drawer.active) .trade-request-btn,
+    body:has(.cart-drawer.open) .trade-request-btn,
+    body:has(#trade-drawer.active) #cart-toggle-btn,
+    body:has(#trade-drawer.open) #cart-toggle-btn,
+    body:has(.trade-drawer.active) #cart-toggle-btn,
+    body:has(.trade-drawer.open) #cart-toggle-btn,
+    body:has(#cart-drawer.active) #cart-toggle-btn,
+    body:has(#cart-drawer.open) #cart-toggle-btn,
+    body:has(.cart-drawer.active) #cart-toggle-btn,
+    body:has(.cart-drawer.open) #cart-toggle-btn,
+    body:has(#trade-drawer.active) button:has(span:contains("TRADE REQUEST")),
+    body:has(#trade-drawer.open) button:has(span:contains("TRADE REQUEST")) {
+      display: none !important;
+    }
+
+    /* FALLBACK CLASS FOR HIDDEN FLOATING BUTTON */
+    .dn-hide-floating-btn {
+      display: none !important;
+    }
+
+    /* Mobile View: Hide all custom overlays */
     @media (max-width: 768px) {
       .dn-l-header-box,
       .dn-vn-box {
@@ -16,14 +51,14 @@
       }
     }
 
-    /* Desktop View Mode (screens > 768px) */
+    /* Desktop View Mode */
     @media (min-width: 769px) {
 
       /* L'S CONTAINER PLACEMENT */
       .dn-l-header-box {
         position: absolute;
         top: -10px;
-        left: -370px; /* Shifted further left to accommodate larger image */
+        left: -370px;
         display: flex;
         align-items: center;
         gap: 14px;
@@ -34,7 +69,7 @@
         transition: opacity 0.3s ease, visibility 0.3s ease;
       }
 
-      /* ONLY SHOW L WHEN THE TRADE DRAWER IS OPEN/ACTIVE */
+      /* SHOW L WHEN DRAWER IS OPEN */
       #trade-drawer.active .dn-l-header-box,
       #trade-drawer.open .dn-l-header-box,
       .trade-drawer.active .dn-l-header-box,
@@ -47,7 +82,7 @@
         visibility: visible;
       }
 
-      /* BLUE SPEECH BUBBLE ACCENT */
+      /* BLUE SPEECH BUBBLE */
       .dn-l-speech-bubble {
         background: rgba(4, 10, 15, 0.98);
         border: 2px solid #00d8ff;
@@ -108,9 +143,9 @@
         transition: width 0.3s ease-in-out;
       }
 
-      /* ENLARGED L IMAGE ONLY */
+      /* ENLARGED L IMAGE */
       .dn-l-img {
-        width: 180px; /* Image enlarged */
+        width: 180px;
         height: auto;
         cursor: pointer;
         user-select: none;
@@ -123,7 +158,7 @@
         filter: drop-shadow(0 0 14px #00d8ff);
       }
 
-      /* LIGHT VISUAL NOVEL BOX FLOATING AT BOTTOM LEFT */
+      /* LIGHT VISUAL NOVEL BOX FLOATING PERMANENTLY AT BOTTOM LEFT */
       .dn-vn-box {
         position: fixed;
         bottom: 20px;
@@ -135,19 +170,11 @@
         box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2);
         border-radius: 8px;
         padding: 12px 14px;
-        opacity: 0;
-        pointer-events: none;
-        transform: translateX(-15px);
-        transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+        opacity: 1; /* PERMANENTLY VISIBLE */
+        pointer-events: auto;
         z-index: 999999;
         cursor: pointer;
         user-select: none;
-      }
-
-      .dn-vn-box.active {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateX(0);
       }
 
       .dn-vn-header {
@@ -321,8 +348,6 @@
     " (I will become the God of Musical Theatre Trading!) "
   ];
 
-  let lightTimer = null;
-
   // 3. INJECTION & LOGIC
   function injectWidgets() {
     const drawerContainer = document.getElementById('trade-drawer') || 
@@ -371,6 +396,30 @@
     }
   }
 
+  function checkDrawerState() {
+    const drawer = document.getElementById('trade-drawer') || 
+                   document.querySelector('.trade-drawer') || 
+                   document.getElementById('cart-drawer') ||
+                   document.querySelector('.cart-drawer');
+
+    // Find the floating button at the bottom right
+    const floatingBtn = Array.from(document.querySelectorAll('button, div')).find(el => {
+      return el.textContent && el.textContent.includes('TRADE REQUEST (') && el.id !== 'trade-drawer' && !el.closest('#trade-drawer');
+    });
+
+    if (drawer && floatingBtn) {
+      const isOpen = drawer.classList.contains('open') || 
+                     drawer.classList.contains('active') || 
+                     window.getComputedStyle(drawer).display !== 'none';
+
+      if (isOpen) {
+        floatingBtn.classList.add('dn-hide-floating-btn');
+      } else {
+        floatingBtn.classList.remove('dn-hide-floating-btn');
+      }
+    }
+  }
+
   function updateLQuote() {
     const randomL = lQuotes[Math.floor(Math.random() * lQuotes.length)];
     const textEl = document.getElementById('lQuoteText');
@@ -385,30 +434,24 @@
   function triggerLightMonologue() {
     const randomLight = lightQuotes[Math.floor(Math.random() * lightQuotes.length)];
     const textEl = document.getElementById('lightQuoteText');
-    const boxEl = document.getElementById('lightVnBox');
     if (textEl) textEl.innerText = randomLight;
-    if (boxEl) boxEl.classList.add('active');
-
-    clearTimeout(lightTimer);
-    lightTimer = setTimeout(hideLightMonologue, 6000);
-  }
-
-  function hideLightMonologue() {
-    const boxEl = document.getElementById('lightVnBox');
-    if (boxEl) boxEl.classList.remove('active');
   }
 
   const observer = new MutationObserver(() => {
     injectWidgets();
+    checkDrawerState();
   });
 
-  observer.observe(document.body, { childList: true, subtree: true });
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 
+  // CLICK EVENT LISTENERS
   document.addEventListener('click', (e) => {
+    // Cycle Light Monologue on Add/Trade Click
     const toggleBtn = e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn, .add-to-trade-btn');
     if (toggleBtn) {
       triggerLightMonologue();
     }
+    setTimeout(checkDrawerState, 100);
   }, true);
 
 })();
