@@ -3,186 +3,194 @@
 
   // 1. INJECT RESKIN CSS STYLES
   const reskinStyles = `
-    /* Allow L's speech bubble to extend outside the drawer bounds without clipping */
-    #cart-drawer, .cart-drawer, .trade-drawer, .drawer {
+    /* Force overflow on drawer container so L's bubble can break out to the left */
+    #cart-drawer, .cart-drawer, .trade-drawer, .drawer, [class*="drawer"] {
+      position: relative !important;
       overflow: visible !important;
     }
 
-    /* L's Placement: Top Right in Drawer */
-    .dn-l-header-box {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
-      z-index: 10000;
-      pointer-events: none;
+    /* Completely hide both widgets in Mobile Mode (screens <= 768px) */
+    @media (max-width: 768px) {
+      .dn-l-header-box,
+      .dn-vn-box {
+        display: none !important;
+      }
     }
 
-    .dn-l-img, .dn-l-speech-bubble {
-      pointer-events: auto;
-    }
+    /* Desktop View Mode (screens > 768px) */
+    @media (min-width: 769px) {
 
-    /* L IMAGE */
-    .dn-l-img {
-      width: 110px;
-      height: auto;
-      cursor: pointer;
-      user-select: none;
-      flex-shrink: 0;
-      transition: transform 0.2s ease, filter 0.2s ease;
-    }
+      /* L'S PLACEMENT: Bigger L image on top-left edge, speech box overflowing left */
+      .dn-l-header-box {
+        position: absolute;
+        top: -10px;
+        left: -320px; /* Shifts speech box outside to the left */
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 999999;
+        pointer-events: auto;
+      }
 
-    .dn-l-img:hover {
-      transform: scale(1.08) rotate(-3deg);
-      filter: drop-shadow(0 0 10px #00ff66);
-    }
+      /* OVERFLOWING GREEN SPEECH BUBBLE */
+      .dn-l-speech-bubble {
+        background: rgba(8, 12, 10, 0.98);
+        border: 2px solid #00ff66;
+        color: #00ff66;
+        padding: 12px 14px;
+        border-radius: 8px;
+        width: 250px;
+        font-size: 0.82rem;
+        font-family: 'Courier New', monospace;
+        box-shadow: 0 0 16px rgba(0, 255, 102, 0.35);
+        position: relative;
+      }
 
-    /* ULTRA SLIM SPEECH BUBBLE (CAN EXTEND OUTSIDE DRAWER) */
-    .dn-l-speech-bubble {
-      background: rgba(10, 10, 10, 0.98);
-      border: 2px solid #00ff66;
-      color: #00ff66;
-      padding: 10px 12px;
-      border-radius: 8px;
-      width: 150px; /* Slimmer width */
-      font-size: 0.8rem;
-      font-family: 'Courier New', monospace;
-      box-shadow: 0 0 14px rgba(0, 255, 102, 0.3);
-      position: relative;
-    }
+      .dn-l-speech-bubble::after {
+        content: '';
+        position: absolute;
+        right: -10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 10px solid #00ff66;
+      }
 
-    .dn-l-speech-bubble::after {
-      content: '';
-      position: absolute;
-      right: -9px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-top: 7px solid transparent;
-      border-bottom: 7px solid transparent;
-      border-left: 9px solid #00ff66;
-    }
+      .dn-tag {
+        color: #ff3344;
+        font-weight: bold;
+        display: block;
+        font-size: 0.72rem;
+        letter-spacing: 0.8px;
+        margin-bottom: 4px;
+      }
 
-    .dn-tag {
-      color: #ff3344;
-      font-weight: bold;
-      display: block;
-      font-size: 0.75rem;
-      letter-spacing: 0.8px;
-      margin-bottom: 6px;
-    }
+      .dn-quote-text {
+        margin: 0;
+        line-height: 1.35;
+        min-height: 3.2em;
+        word-wrap: break-word;
+      }
 
-    .dn-quote-text {
-      margin: 0;
-      line-height: 1.35;
-      min-height: 5em;
-      word-wrap: break-word;
-    }
+      .dn-progress-wrap {
+        width: 100%;
+        height: 5px;
+        background: #111;
+        border-radius: 3px;
+        margin-top: 8px;
+        overflow: hidden;
+        border: 1px solid #222;
+      }
 
-    .dn-progress-wrap {
-      width: 100%;
-      height: 5px;
-      background: #111;
-      border-radius: 3px;
-      margin-top: 8px;
-      overflow: hidden;
-      border: 1px solid #222;
-    }
+      .dn-progress-bar {
+        height: 100%;
+        width: 94.1%;
+        background: #00ff66;
+        box-shadow: 0 0 8px #00ff66;
+        transition: width 0.3s ease-in-out;
+      }
 
-    .dn-progress-bar {
-      height: 100%;
-      width: 94.1%;
-      background: #00ff66;
-      box-shadow: 0 0 8px #00ff66;
-      transition: width 0.3s ease-in-out;
-    }
+      /* BIGGER L IMAGE */
+      .dn-l-img {
+        width: 130px; /* Enlarged L */
+        height: auto;
+        cursor: pointer;
+        user-select: none;
+        flex-shrink: 0;
+        transition: transform 0.2s ease, filter 0.2s ease;
+      }
 
-    /* LIGHT POSITIONED ON BOTTOM-LEFT EDGE */
-    .dn-vn-box {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      right: auto;
-      width: 340px;
-      background: rgba(10, 2, 4, 0.98);
-      border: 2px solid #ff0033;
-      box-shadow: 0 0 20px rgba(255, 0, 51, 0.5);
-      border-radius: 8px;
-      padding: 14px;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateX(-15px);
-      transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
-      z-index: 999999;
-      cursor: pointer; /* Clickable affordance */
-      user-select: none;
-    }
+      .dn-l-img:hover {
+        transform: scale(1.08) rotate(-3deg);
+        filter: drop-shadow(0 0 12px #00ff66);
+      }
 
-    .dn-vn-box:hover {
-      box-shadow: 0 0 25px rgba(255, 0, 51, 0.8);
-    }
+      /* ENHANCED LIGHT VISUAL NOVEL BOX (MATCHES 3RD DRAWING MOCKUP) */
+      .dn-vn-box {
+        position: absolute;
+        bottom: 20px;
+        left: -400px; /* Positioned outside to the bottom-left */
+        width: 370px;
+        background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98));
+        border: 2px solid #ff0033;
+        border-bottom: 3px solid #00ff66; /* Green underline style matching mockup */
+        box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2);
+        border-radius: 8px;
+        padding: 12px 14px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(15px);
+        transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+        z-index: 999999;
+        cursor: pointer;
+        user-select: none;
+      }
 
-    .dn-vn-box.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(0);
-    }
+      .dn-vn-box.active {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+      }
 
-    .dn-vn-header {
-      border-bottom: 1px dashed #ff0033;
-      padding-bottom: 6px;
-      margin-bottom: 10px;
-    }
+      .dn-vn-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed #ff0033;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+      }
 
-    .dn-vn-tag {
-      color: #ff0033;
-      font-weight: bold;
-      font-family: 'Georgia', serif;
-      font-size: 0.85rem;
-      letter-spacing: 1.2px;
-    }
+      .dn-vn-tag {
+        color: #ff0033;
+        font-weight: bold;
+        font-family: 'Georgia', serif;
+        font-size: 0.82rem;
+        letter-spacing: 1.2px;
+        text-shadow: 0 0 6px rgba(255, 0, 51, 0.6);
+      }
 
-    .dn-vn-content {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+      .dn-vn-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-    .dn-light-frame {
-      width: 85px;
-      height: 85px;
-      flex-shrink: 0;
-      background: #050102;
-      border: 2px solid #ff0033;
-      outline: 1px solid #1a0005;
-      box-shadow: inset 0 0 10px rgba(255, 0, 51, 0.6), 0 0 10px rgba(255, 0, 51, 0.4);
-      border-radius: 6px;
-      padding: 3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-    }
+      .dn-light-frame {
+        width: 85px;
+        height: 85px;
+        flex-shrink: 0;
+        background: #050102;
+        border: 2px solid #ff0033;
+        outline: 1px solid #1a0005;
+        box-shadow: inset 0 0 10px rgba(255, 0, 51, 0.6), 0 0 8px rgba(255, 0, 51, 0.4);
+        border-radius: 6px;
+        padding: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+      }
 
-    .dn-light-img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      filter: contrast(1.1) brightness(0.95);
-    }
+      .dn-light-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: contrast(1.1) brightness(0.95);
+      }
 
-    .dn-vn-text {
-      color: #ffffff;
-      font-family: 'Georgia', serif;
-      font-style: italic;
-      font-size: 0.88rem;
-      line-height: 1.4;
-      margin: 0;
-      flex-grow: 1;
+      .dn-vn-text {
+        color: #ffffff;
+        font-family: 'Georgia', serif;
+        font-style: italic;
+        font-size: 0.85rem;
+        line-height: 1.38;
+        margin: 0;
+        flex-grow: 1;
+      }
     }
   `;
 
@@ -278,7 +286,7 @@
     " (He's dangling a rare 1996 workshop demo right in front of me... it's bait, it HAS to be bait!) ",
     " (If I trade for two videos, my storage limit will break... I must sacrifice an audio track!) ",
     " (A dead Mega link... NO! This can't be happening! Not after I waited three days!) ",
-    " (L is testing me. He wants to see if I prefer West End or Broadway understudies!) ",
+    " (L is testing me. He wants to see if I prefer West End or Broadway underunderstudies!) ",
     " (I must copy the link, paste it into an incognito window, AND CLEAR MY BROWSER CACHE IMMEDIATELY!) ",
     " (Everything is going smoothly... too smoothly. What is L planning?) ",
     " (I'll offer them an out-of-print program scan as a gift... it will establish trust without giving away secrets!) ",
@@ -305,7 +313,8 @@
     const drawerContainer = document.querySelector('#cart-drawer') || 
                             document.querySelector('.cart-drawer') || 
                             document.querySelector('.trade-drawer') || 
-                            document.querySelector('.drawer');
+                            document.querySelector('.drawer') ||
+                            document.querySelector('aside');
 
     if (drawerContainer) {
       if (!document.getElementById('lDeductionBox')) {
@@ -320,36 +329,33 @@
               <div class="dn-progress-bar" id="lProgressBar"></div>
             </div>
           </div>
-          <img src="art/L_derpy.webp" alt="L Derpy" class="dn-l-img" id="lDerpyImg">
+          <img src="art/L_derpy.webp" alt="L Derpy" class="dn-l-img" id="lDerpyImg" title="Click L to cycle deduction">
         `;
         drawerContainer.appendChild(lContainer);
 
         const lImg = document.getElementById('lDerpyImg');
         if (lImg) lImg.addEventListener('click', updateLQuote);
       }
-    }
 
-    if (!document.getElementById('lightVnBox')) {
-      const vnBox = document.createElement('div');
-      vnBox.className = 'dn-vn-box';
-      vnBox.id = 'lightVnBox';
-      vnBox.innerHTML = `
-        <div class="dn-vn-header">
-          <span class="dn-vn-tag">[ 🍎 LIGHT YAGAMI ]</span>
-        </div>
-        <div class="dn-vn-content">
-          <div class="dn-light-frame">
-            <img src="art/Light_derpy.webp" alt="Light Panic" class="dn-light-img">
+      if (!document.getElementById('lightVnBox')) {
+        const vnBox = document.createElement('div');
+        vnBox.className = 'dn-vn-box';
+        vnBox.id = 'lightVnBox';
+        vnBox.innerHTML = `
+          <div class="dn-vn-header">
+            <span class="dn-vn-tag">[ 🍎 LIGHT YAGAMI ]</span>
           </div>
-          <p class="dn-vn-text" id="lightQuoteText">"(WAIT... IF I TRADE 2 AUDIOS FOR 1 VIDEO, MY EXCHANGE RATIO REMAINS COMPLETELY FLAWLESS! ALL ACCORDING TO PLAN!)"</p>
-        </div>
-      `;
-      document.body.appendChild(vnBox);
+          <div class="dn-vn-content">
+            <div class="dn-light-frame">
+              <img src="art/Light_derpy.webp" alt="Light Panic" class="dn-light-img">
+            </div>
+            <p class="dn-vn-text" id="lightQuoteText">"(IF I REQUEST THREE FILES AT ONCE, IT CREATES A PATTERN. I MUST REQUEST ONLY ONE TO REMAIN COMPLETELY UNSUSPECTED!)"</p>
+          </div>
+        `;
+        drawerContainer.appendChild(vnBox);
 
-      // CLICK TO TRIGGER LIGHT QUOTES JUST LIKE L
-      vnBox.addEventListener('click', () => {
-        triggerLightMonologue();
-      });
+        vnBox.addEventListener('click', triggerLightMonologue);
+      }
     }
   }
 
@@ -387,7 +393,7 @@
   observer.observe(document.body, { childList: true, subtree: true });
 
   document.addEventListener('click', (e) => {
-    if (e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn')) {
+    if (e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn, .add-to-trade-btn, [class*="trade"]')) {
       triggerLightMonologue();
     }
   });
