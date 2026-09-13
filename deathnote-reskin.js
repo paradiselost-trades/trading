@@ -3,12 +3,6 @@
 
   // 1. INJECT RESKIN CSS STYLES
   const reskinStyles = `
-    /* Force overflow on drawer container so L's bubble can break out to the left */
-    #cart-drawer, .cart-drawer, #trade-drawer, .trade-drawer, .drawer {
-      position: relative !important;
-      overflow: visible !important;
-    }
-
     /* Completely hide both widgets in Mobile Mode (screens <= 768px) */
     @media (max-width: 768px) {
       .dn-l-header-box,
@@ -20,11 +14,11 @@
     /* Desktop View Mode (screens > 768px) */
     @media (min-width: 769px) {
 
-      /* L'S PLACEMENT: Bigger L image on top-left edge, speech box overflowing left */
+      /* L'S PLACEMENT: Fixed on the top right side of the screen */
       .dn-l-header-box {
-        position: absolute;
-        top: -10px;
-        left: -320px; /* Shifts speech box outside to the left */
+        position: fixed;
+        top: 20px;
+        right: 20px;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -95,7 +89,7 @@
 
       /* BIGGER L IMAGE */
       .dn-l-img {
-        width: 130px; /* Enlarged L */
+        width: 130px;
         height: auto;
         cursor: pointer;
         user-select: none;
@@ -116,7 +110,7 @@
         width: 370px;
         background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98));
         border: 2px solid #ff0033;
-        border-bottom: 3px solid #00ff66; /* Green accent line */
+        border-bottom: 3px solid #00ff66;
         box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2);
         border-radius: 8px;
         padding: 12px 14px;
@@ -199,7 +193,7 @@
   styleSheet.innerText = reskinStyles;
   document.head.appendChild(styleSheet);
 
-  // 2. QUOTE LIBRARIES (50 EACH)
+  // QUOTE LIBRARIES
   const lQuotes = [
     "Eating sweets during trade negotiations increases deduction processing speed by 40%.",
     "There is a 98.7% chance this trade request gets ignored for 6 days, followed by a sudden 3 AM reply.",
@@ -308,33 +302,26 @@
 
   let lightTimer = null;
 
-  // 3. INJECTION & LOGIC
+  // INJECT WIDGETS ANCHORED TO DOCUMENT BODY
   function injectWidgets() {
-    const drawerContainer = document.getElementById('trade-drawer') || 
-                            document.querySelector('.trade-drawer') || 
-                            document.querySelector('#cart-drawer') ||
-                            document.querySelector('.cart-drawer');
-
-    if (drawerContainer) {
-      if (!document.getElementById('lDeductionBox')) {
-        const lContainer = document.createElement('div');
-        lContainer.className = 'dn-l-header-box';
-        lContainer.id = 'lDeductionBox';
-        lContainer.innerHTML = `
-          <div class="dn-l-speech-bubble">
-            <span class="dn-tag">🍰 L'S DEDUCTION</span>
-            <p class="dn-quote-text" id="lQuoteText">If I don't get another scoop of vanilla ice cream, I will intentionally misalign your cart items.</p>
-            <div class="dn-progress-wrap">
-              <div class="dn-progress-bar" id="lProgressBar"></div>
-            </div>
+    if (!document.getElementById('lDeductionBox')) {
+      const lContainer = document.createElement('div');
+      lContainer.className = 'dn-l-header-box';
+      lContainer.id = 'lDeductionBox';
+      lContainer.innerHTML = `
+        <div class="dn-l-speech-bubble">
+          <span class="dn-tag">🍰 L'S DEDUCTION</span>
+          <p class="dn-quote-text" id="lQuoteText">If I don't get another scoop of vanilla ice cream, I will intentionally misalign your cart items.</p>
+          <div class="dn-progress-wrap">
+            <div class="dn-progress-bar" id="lProgressBar"></div>
           </div>
-          <img src="art/L_derpy.webp" alt="L Derpy" class="dn-l-img" id="lDerpyImg" title="Click L to cycle deduction">
-        `;
-        drawerContainer.appendChild(lContainer);
+        </div>
+        <img src="art/L_derpy.webp" alt="L Derpy" class="dn-l-img" id="lDerpyImg" title="Click L to cycle deduction">
+      `;
+      document.body.appendChild(lContainer);
 
-        const lImg = document.getElementById('lDerpyImg');
-        if (lImg) lImg.addEventListener('click', updateLQuote);
-      }
+      const lImg = document.getElementById('lDerpyImg');
+      if (lImg) lImg.addEventListener('click', updateLQuote);
     }
 
     if (!document.getElementById('lightVnBox')) {
@@ -391,11 +378,10 @@
 
   observer.observe(document.body, { childList: true, subtree: true });
 
+  // STRICT TOGGLE BUTTON CLICK LISTENER
   document.addEventListener('click', (e) => {
     const toggleBtn = e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn, .add-to-trade-btn');
-    const insideDrawer = e.target.closest('#trade-drawer, .trade-drawer, #cart-drawer, .cart-drawer');
-
-    if (toggleBtn && !insideDrawer) {
+    if (toggleBtn) {
       triggerLightMonologue();
     }
   }, true);
