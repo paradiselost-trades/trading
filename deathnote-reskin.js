@@ -9,22 +9,6 @@
     }
 
     /* HIDE FLOATING TRADE REQUEST BUTTON AT BOTTOM WHEN DRAWER/CART IS OPEN */
-    body:has(#trade-drawer.active),
-    body:has(#trade-drawer.open),
-    body:has(.trade-drawer.active),
-    body:has(.trade-drawer.open),
-    body:has(#cart-drawer.active),
-    body:has(#cart-drawer.open),
-    body:has(.cart-drawer.active),
-    body:has(.cart-drawer.open) #trade-request-btn,
-    body:has(#trade-drawer.active) .trade-request-btn,
-    body:has(#trade-drawer.open) .trade-request-btn,
-    body:has(.trade-drawer.active) .trade-request-btn,
-    body:has(.trade-drawer.open) .trade-request-btn,
-    body:has(#cart-drawer.active) .trade-request-btn,
-    body:has(#cart-drawer.open) .trade-request-btn,
-    body:has(.cart-drawer.active) .trade-request-btn,
-    body:has(.cart-drawer.open) .trade-request-btn,
     body:has(#trade-drawer.active) #cart-toggle-btn,
     body:has(#trade-drawer.open) #cart-toggle-btn,
     body:has(.trade-drawer.active) #cart-toggle-btn,
@@ -33,14 +17,23 @@
     body:has(#cart-drawer.open) #cart-toggle-btn,
     body:has(.cart-drawer.active) #cart-toggle-btn,
     body:has(.cart-drawer.open) #cart-toggle-btn,
-    body:has(#trade-drawer.active) button:has(span:contains("TRADE REQUEST")),
-    body:has(#trade-drawer.open) button:has(span:contains("TRADE REQUEST")) {
-      display: none !important;
-    }
-
-    /* FALLBACK CLASS FOR HIDDEN FLOATING BUTTON */
+    body:has(#trade-drawer.active) .trade-request-btn,
+    body:has(#trade-drawer.open) .trade-request-btn,
+    body:has(.trade-drawer.active) .trade-request-btn,
+    body:has(.trade-drawer.open) .trade-request-btn,
+    body:has(#cart-drawer.active) .trade-request-btn,
+    body:has(#cart-drawer.open) .trade-request-btn,
+    body:has(.cart-drawer.active) .trade-request-btn,
+    body:has(.cart-drawer.open) .trade-request-btn,
+    body:has(#trade-drawer.active) button[class*="toggle"],
+    body:has(#trade-drawer.open) button[class*="toggle"],
+    body:has(#trade-drawer.active) button[class*="trade"],
+    body:has(#trade-drawer.open) button[class*="trade"],
     .dn-hide-floating-btn {
       display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     /* Mobile View: Hide all custom overlays */
@@ -56,17 +49,17 @@
 
       /* L'S CONTAINER PLACEMENT */
       .dn-l-header-box {
-        position: absolute;
-        top: -10px;
-        left: -370px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        z-index: 999999;
-        pointer-events: auto;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        position: absolute !important;
+        top: -10px !important;
+        left: -370px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 14px !important;
+        z-index: 2147483647 !important;
+        pointer-events: auto !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
       }
 
       /* SHOW L WHEN DRAWER IS OPEN */
@@ -78,8 +71,8 @@
       #cart-drawer.open .dn-l-header-box,
       .cart-drawer.active .dn-l-header-box,
       .cart-drawer.open .dn-l-header-box {
-        opacity: 1;
-        visibility: visible;
+        opacity: 1 !important;
+        visibility: visible !important;
       }
 
       /* BLUE SPEECH BUBBLE */
@@ -160,19 +153,21 @@
 
       /* LIGHT VISUAL NOVEL BOX FLOATING PERMANENTLY AT BOTTOM LEFT */
       .dn-vn-box {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        width: 370px;
-        background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98));
-        border: 2px solid #ff0033;
-        border-bottom: 3px solid #00d8ff;
-        box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2);
-        border-radius: 8px;
-        padding: 12px 14px;
-        opacity: 1; /* PERMANENTLY VISIBLE */
-        pointer-events: auto;
-        z-index: 999999;
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        width: 370px !important;
+        background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98)) !important;
+        border: 2px solid #ff0033 !important;
+        border-bottom: 3px solid #00d8ff !important;
+        box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2) !important;
+        border-radius: 8px !important;
+        padding: 12px 14px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+        pointer-events: auto !important;
+        z-index: 2147483647 !important;
         cursor: pointer;
         user-select: none;
       }
@@ -402,22 +397,17 @@
                    document.getElementById('cart-drawer') ||
                    document.querySelector('.cart-drawer');
 
-    // Find the floating button at the bottom right
-    const floatingBtn = Array.from(document.querySelectorAll('button, div')).find(el => {
-      return el.textContent && el.textContent.includes('TRADE REQUEST (') && el.id !== 'trade-drawer' && !el.closest('#trade-drawer');
-    });
-
-    if (drawer && floatingBtn) {
-      const isOpen = drawer.classList.contains('open') || 
-                     drawer.classList.contains('active') || 
-                     window.getComputedStyle(drawer).display !== 'none';
-
-      if (isOpen) {
-        floatingBtn.classList.add('dn-hide-floating-btn');
-      } else {
-        floatingBtn.classList.remove('dn-hide-floating-btn');
+    // Find the floating button bar sitting at bottom right
+    const floatingBtns = document.querySelectorAll('button, div, a');
+    floatingBtns.forEach(el => {
+      if (el.textContent && el.textContent.includes('TRADE REQUEST (') && el.id !== 'trade-drawer' && !el.closest('#trade-drawer') && !el.closest('.trade-drawer')) {
+        if (drawer && (drawer.classList.contains('open') || drawer.classList.contains('active') || window.getComputedStyle(drawer).display !== 'none')) {
+          el.classList.add('dn-hide-floating-btn');
+        } else {
+          el.classList.remove('dn-hide-floating-btn');
+        }
       }
-    }
+    });
   }
 
   function updateLQuote() {
