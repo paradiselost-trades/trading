@@ -4,7 +4,7 @@
   // 1. INJECT RESKIN CSS STYLES
   const reskinStyles = `
     /* Force overflow on drawer container so L's bubble can break out to the left */
-    #cart-drawer, .cart-drawer, .trade-drawer, .drawer, [class*="drawer"] {
+    #cart-drawer, .cart-drawer, #trade-drawer, .trade-drawer, .drawer {
       position: relative !important;
       overflow: visible !important;
     }
@@ -108,21 +108,21 @@
         filter: drop-shadow(0 0 12px #00ff66);
       }
 
-      /* ENHANCED LIGHT VISUAL NOVEL BOX (MATCHES 3RD DRAWING MOCKUP) */
+      /* LIGHT VISUAL NOVEL BOX FLOATING AT BOTTOM LEFT */
       .dn-vn-box {
-        position: absolute;
+        position: fixed;
         bottom: 20px;
-        left: -400px; /* Positioned outside to the bottom-left */
+        left: 20px;
         width: 370px;
         background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98));
         border: 2px solid #ff0033;
-        border-bottom: 3px solid #00ff66; /* Green underline style matching mockup */
+        border-bottom: 3px solid #00ff66; /* Green accent line */
         box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2);
         border-radius: 8px;
         padding: 12px 14px;
         opacity: 0;
         pointer-events: none;
-        transform: translateX(15px);
+        transform: translateX(-15px);
         transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
         z-index: 999999;
         cursor: pointer;
@@ -286,7 +286,7 @@
     " (He's dangling a rare 1996 workshop demo right in front of me... it's bait, it HAS to be bait!) ",
     " (If I trade for two videos, my storage limit will break... I must sacrifice an audio track!) ",
     " (A dead Mega link... NO! This can't be happening! Not after I waited three days!) ",
-    " (L is testing me. He wants to see if I prefer West End or Broadway underunderstudies!) ",
+    " (L is testing me. He wants to see if I prefer West End or Broadway understudies!) ",
     " (I must copy the link, paste it into an incognito window, AND CLEAR MY BROWSER CACHE IMMEDIATELY!) ",
     " (Everything is going smoothly... too smoothly. What is L planning?) ",
     " (I'll offer them an out-of-print program scan as a gift... it will establish trust without giving away secrets!) ",
@@ -310,11 +310,10 @@
 
   // 3. INJECTION & LOGIC
   function injectWidgets() {
-    const drawerContainer = document.querySelector('#cart-drawer') || 
-                            document.querySelector('.cart-drawer') || 
+    const drawerContainer = document.getElementById('trade-drawer') || 
                             document.querySelector('.trade-drawer') || 
-                            document.querySelector('.drawer') ||
-                            document.querySelector('aside');
+                            document.querySelector('#cart-drawer') ||
+                            document.querySelector('.cart-drawer');
 
     if (drawerContainer) {
       if (!document.getElementById('lDeductionBox')) {
@@ -336,26 +335,26 @@
         const lImg = document.getElementById('lDerpyImg');
         if (lImg) lImg.addEventListener('click', updateLQuote);
       }
+    }
 
-      if (!document.getElementById('lightVnBox')) {
-        const vnBox = document.createElement('div');
-        vnBox.className = 'dn-vn-box';
-        vnBox.id = 'lightVnBox';
-        vnBox.innerHTML = `
-          <div class="dn-vn-header">
-            <span class="dn-vn-tag">[ 🍎 LIGHT YAGAMI ]</span>
+    if (!document.getElementById('lightVnBox')) {
+      const vnBox = document.createElement('div');
+      vnBox.className = 'dn-vn-box';
+      vnBox.id = 'lightVnBox';
+      vnBox.innerHTML = `
+        <div class="dn-vn-header">
+          <span class="dn-vn-tag">[ 🍎 LIGHT YAGAMI ]</span>
+        </div>
+        <div class="dn-vn-content">
+          <div class="dn-light-frame">
+            <img src="art/Light_derpy.webp" alt="Light Panic" class="dn-light-img">
           </div>
-          <div class="dn-vn-content">
-            <div class="dn-light-frame">
-              <img src="art/Light_derpy.webp" alt="Light Panic" class="dn-light-img">
-            </div>
-            <p class="dn-vn-text" id="lightQuoteText">"(IF I REQUEST THREE FILES AT ONCE, IT CREATES A PATTERN. I MUST REQUEST ONLY ONE TO REMAIN COMPLETELY UNSUSPECTED!)"</p>
-          </div>
-        `;
-        drawerContainer.appendChild(vnBox);
+          <p class="dn-vn-text" id="lightQuoteText">"(IF I REQUEST THREE FILES AT ONCE, IT CREATES A PATTERN. I MUST REQUEST ONLY ONE TO REMAIN COMPLETELY UNSUSPECTED!)"</p>
+        </div>
+      `;
+      document.body.appendChild(vnBox);
 
-        vnBox.addEventListener('click', triggerLightMonologue);
-      }
+      vnBox.addEventListener('click', triggerLightMonologue);
     }
   }
 
@@ -393,9 +392,12 @@
   observer.observe(document.body, { childList: true, subtree: true });
 
   document.addEventListener('click', (e) => {
-    if (e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn, .add-to-trade-btn, [class*="trade"]')) {
+    const toggleBtn = e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn, .add-to-trade-btn');
+    const insideDrawer = e.target.closest('#trade-drawer, .trade-drawer, #cart-drawer, .cart-drawer');
+
+    if (toggleBtn && !insideDrawer) {
       triggerLightMonologue();
     }
-  });
+  }, true);
 
 })();
