@@ -3,6 +3,11 @@
 
   // 1. INJECT RESKIN CSS STYLES
   const reskinStyles = `
+    /* Force overflow on drawer container so L's bubble can break out to the left */
+    #trade-drawer, .trade-drawer, #cart-drawer, .cart-drawer {
+      overflow: visible !important;
+    }
+
     /* Completely hide both widgets in Mobile Mode (screens <= 768px) */
     @media (max-width: 768px) {
       .dn-l-header-box,
@@ -14,29 +19,45 @@
     /* Desktop View Mode (screens > 768px) */
     @media (min-width: 769px) {
 
-      /* L'S PLACEMENT: Fixed on the top right side of the screen */
+      /* L'S CONTAINER PLACEMENT */
       .dn-l-header-box {
-        position: fixed;
-        top: 20px;
-        right: 20px;
+        position: absolute;
+        top: -10px;
+        left: -370px; /* Shifted further left to accommodate larger image */
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
         z-index: 999999;
         pointer-events: auto;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
       }
 
-      /* OVERFLOWING GREEN SPEECH BUBBLE */
+      /* ONLY SHOW L WHEN THE TRADE DRAWER IS OPEN/ACTIVE */
+      #trade-drawer.active .dn-l-header-box,
+      #trade-drawer.open .dn-l-header-box,
+      .trade-drawer.active .dn-l-header-box,
+      .trade-drawer.open .dn-l-header-box,
+      #cart-drawer.active .dn-l-header-box,
+      #cart-drawer.open .dn-l-header-box,
+      .cart-drawer.active .dn-l-header-box,
+      .cart-drawer.open .dn-l-header-box {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* BLUE SPEECH BUBBLE ACCENT */
       .dn-l-speech-bubble {
-        background: rgba(8, 12, 10, 0.98);
-        border: 2px solid #00ff66;
-        color: #00ff66;
+        background: rgba(4, 10, 15, 0.98);
+        border: 2px solid #00d8ff;
+        color: #00d8ff;
         padding: 12px 14px;
         border-radius: 8px;
         width: 250px;
         font-size: 0.82rem;
         font-family: 'Courier New', monospace;
-        box-shadow: 0 0 16px rgba(0, 255, 102, 0.35);
+        box-shadow: 0 0 16px rgba(0, 216, 255, 0.35);
         position: relative;
       }
 
@@ -50,7 +71,7 @@
         height: 0;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
-        border-left: 10px solid #00ff66;
+        border-left: 10px solid #00d8ff;
       }
 
       .dn-tag {
@@ -72,24 +93,24 @@
       .dn-progress-wrap {
         width: 100%;
         height: 5px;
-        background: #111;
+        background: #08121a;
         border-radius: 3px;
         margin-top: 8px;
         overflow: hidden;
-        border: 1px solid #222;
+        border: 1px solid #004d66;
       }
 
       .dn-progress-bar {
         height: 100%;
         width: 94.1%;
-        background: #00ff66;
-        box-shadow: 0 0 8px #00ff66;
+        background: #00d8ff;
+        box-shadow: 0 0 8px #00d8ff;
         transition: width 0.3s ease-in-out;
       }
 
-      /* BIGGER L IMAGE */
+      /* ENLARGED L IMAGE ONLY */
       .dn-l-img {
-        width: 130px;
+        width: 180px; /* Image enlarged */
         height: auto;
         cursor: pointer;
         user-select: none;
@@ -98,8 +119,8 @@
       }
 
       .dn-l-img:hover {
-        transform: scale(1.08) rotate(-3deg);
-        filter: drop-shadow(0 0 12px #00ff66);
+        transform: scale(1.06) rotate(-2deg);
+        filter: drop-shadow(0 0 14px #00d8ff);
       }
 
       /* LIGHT VISUAL NOVEL BOX FLOATING AT BOTTOM LEFT */
@@ -110,7 +131,7 @@
         width: 370px;
         background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98));
         border: 2px solid #ff0033;
-        border-bottom: 3px solid #00ff66;
+        border-bottom: 3px solid #00d8ff;
         box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2);
         border-radius: 8px;
         padding: 12px 14px;
@@ -193,7 +214,7 @@
   styleSheet.innerText = reskinStyles;
   document.head.appendChild(styleSheet);
 
-  // QUOTE LIBRARIES
+  // 2. QUOTE LIBRARIES
   const lQuotes = [
     "Eating sweets during trade negotiations increases deduction processing speed by 40%.",
     "There is a 98.7% chance this trade request gets ignored for 6 days, followed by a sudden 3 AM reply.",
@@ -302,9 +323,14 @@
 
   let lightTimer = null;
 
-  // INJECT WIDGETS ANCHORED TO DOCUMENT BODY
+  // 3. INJECTION & LOGIC
   function injectWidgets() {
-    if (!document.getElementById('lDeductionBox')) {
+    const drawerContainer = document.getElementById('trade-drawer') || 
+                            document.querySelector('.trade-drawer') || 
+                            document.querySelector('#cart-drawer') ||
+                            document.querySelector('.cart-drawer');
+
+    if (drawerContainer && !document.getElementById('lDeductionBox')) {
       const lContainer = document.createElement('div');
       lContainer.className = 'dn-l-header-box';
       lContainer.id = 'lDeductionBox';
@@ -318,7 +344,7 @@
         </div>
         <img src="art/L_derpy.webp" alt="L Derpy" class="dn-l-img" id="lDerpyImg" title="Click L to cycle deduction">
       `;
-      document.body.appendChild(lContainer);
+      drawerContainer.appendChild(lContainer);
 
       const lImg = document.getElementById('lDerpyImg');
       if (lImg) lImg.addEventListener('click', updateLQuote);
@@ -378,7 +404,6 @@
 
   observer.observe(document.body, { childList: true, subtree: true });
 
-  // STRICT TOGGLE BUTTON CLICK LISTENER
   document.addEventListener('click', (e) => {
     const toggleBtn = e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn, .add-to-trade-btn');
     if (toggleBtn) {
