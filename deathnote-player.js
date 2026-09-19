@@ -28,14 +28,15 @@
   let isPlaying = false;
   const audio = new Audio();
 
-  // 2. COMPACT FIXED STYLES
+  // 2. COMPACT FIXED STYLES WITH HARD-CAPPED DIMENSIONS
   const playerStyles = `
-    /* COMPACT MINI PLAYER (TOP LEFT ANCHOR) */
-    .dn-player-widget {
+    /* MAIN WIDGET CONTAINER */
+    #dnPlayerWidget, .dn-player-widget {
       position: fixed !important;
       top: 15px !important;
       left: 15px !important;
       height: 48px !important;
+      max-height: 48px !important;
       width: auto !important;
       max-width: 340px !important;
       background: rgba(6, 10, 14, 0.95) !important;
@@ -51,9 +52,16 @@
       font-family: 'Courier New', monospace !important;
       box-sizing: border-box !important;
       user-select: none !important;
+      overflow: hidden !important;
     }
 
-    /* CD VINYL DISC CONTAINER */
+    /* HARD STOP ANY UNRULY IMAGES INSIDE PLAYER */
+    #dnPlayerWidget img, .dn-player-widget img {
+      max-width: 36px !important;
+      max-height: 36px !important;
+    }
+
+    /* CD DISC CONTAINER */
     .dn-cd-container {
       position: relative !important;
       width: 36px !important;
@@ -72,12 +80,10 @@
       flex-shrink: 0 !important;
     }
 
-    /* REVOLVING CD ARTWORK (STRICT CAPPED DIMENSIONS) */
+    /* REVOLVING CD ARTWORK */
     .dn-cd-art {
       width: 36px !important;
       height: 36px !important;
-      max-width: 36px !important;
-      max-height: 36px !important;
       object-fit: cover !important;
       border-radius: 50% !important;
       display: block !important;
@@ -136,7 +142,7 @@
       line-height: 1.2 !important;
     }
 
-    /* PLAYER CONTROLS */
+    /* CONTROLS */
     .dn-player-controls {
       display: flex !important;
       align-items: center !important;
@@ -177,7 +183,7 @@
     }
 
     @media (max-width: 768px) {
-      .dn-player-widget {
+      #dnPlayerWidget, .dn-player-widget {
         display: none !important;
       }
     }
