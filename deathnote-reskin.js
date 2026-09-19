@@ -8,11 +8,7 @@
       overflow: visible !important;
     }
 
-    /* HIDE FLOATING TRADE REQUEST BUTTON AT BOTTOM WHEN DRAWER IS OPEN */
-    body.dn-drawer-open #cart-toggle-btn,
-    body.dn-drawer-open .trade-request-btn,
-    body.dn-drawer-open button[id*="trade"],
-    body.dn-drawer-open button[class*="trade"],
+    /* ONLY HIDE THE BOTTOM FLOATING TOGGLE BUTTON WHEN DRAWER IS OPEN */
     .dn-hide-floating-btn {
       display: none !important;
       visibility: hidden !important;
@@ -402,10 +398,15 @@
       }
     }
 
-    // Toggle bottom floating trade button visibility based on drawer state
+    // Safely hide only the bottom floating button bar when drawer is open
     const floatingBtns = document.querySelectorAll('button, div, a');
     floatingBtns.forEach(el => {
-      if (el.textContent && el.textContent.includes('TRADE REQUEST (') && el.id !== 'trade-drawer' && !el.closest('#trade-drawer') && !el.closest('.trade-drawer')) {
+      // Exclude actual drawer panels from being hidden
+      if (el.id === 'trade-drawer' || el.classList.contains('trade-drawer') || el.closest('#trade-drawer') || el.closest('.trade-drawer')) {
+        return;
+      }
+
+      if (el.textContent && el.textContent.includes('TRADE REQUEST (')) {
         if (document.body.classList.contains('dn-drawer-open')) {
           el.classList.add('dn-hide-floating-btn');
         } else {
@@ -432,7 +433,6 @@
     if (textEl) textEl.innerText = randomLight;
   }
 
-  // Safe MutationObserver without attribute tracking to prevent loops
   const observer = new MutationObserver(() => {
     injectWidgets();
     checkDrawerState();
