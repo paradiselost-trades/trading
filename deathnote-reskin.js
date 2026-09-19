@@ -8,7 +8,19 @@
       overflow: visible !important;
     }
 
-    /* Hide widgets on mobile screens <= 768px */
+    /* HIDE FLOATING TRADE REQUEST BUTTON AT BOTTOM WHEN DRAWER IS OPEN */
+    body.dn-drawer-open #cart-toggle-btn,
+    body.dn-drawer-open .trade-request-btn,
+    body.dn-drawer-open button[id*="trade"],
+    body.dn-drawer-open button[class*="trade"],
+    .dn-hide-floating-btn {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* Mobile View: Hide all custom overlays */
     @media (max-width: 768px) {
       .dn-l-header-box,
       .dn-vn-box {
@@ -42,7 +54,8 @@
       #cart-drawer.active .dn-l-header-box,
       #cart-drawer.open .dn-l-header-box,
       .cart-drawer.active .dn-l-header-box,
-      .cart-drawer.open .dn-l-header-box {
+      .cart-drawer.open .dn-l-header-box,
+      body.dn-drawer-open .dn-l-header-box {
         opacity: 1 !important;
         visibility: visible !important;
       }
@@ -144,7 +157,7 @@
         transition: opacity 0.3s ease, visibility 0.3s ease !important;
       }
 
-      /* SHOW LIGHT WHEN DRAWER IS OPEN VIA JS CLASS */
+      /* SHOW LIGHT ONLY WHEN TRADE DRAWER IS OPEN */
       body.dn-drawer-open .dn-vn-box {
         opacity: 1 !important;
         visibility: visible !important;
@@ -379,7 +392,7 @@
     if (drawer) {
       const isOpen = drawer.classList.contains('active') || 
                      drawer.classList.contains('open') || 
-                     window.getComputedStyle(drawer).display !== 'none';
+                     (window.getComputedStyle(drawer).display !== 'none' && window.getComputedStyle(drawer).visibility !== 'hidden');
 
       if (isOpen) {
         document.body.classList.add('dn-drawer-open');
