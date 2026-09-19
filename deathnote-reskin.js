@@ -8,7 +8,7 @@
       overflow: visible !important;
     }
 
-    /* Mobile View: Hide all custom overlays */
+    /* Hide widgets on mobile screens <= 768px */
     @media (max-width: 768px) {
       .dn-l-header-box,
       .dn-vn-box {
@@ -34,28 +34,7 @@
         transition: opacity 0.3s ease, visibility 0.3s ease !important;
       }
 
-      /* LIGHT VISUAL NOVEL BOX (BOTTOM LEFT - ONLY SHOWN WHEN DRAWER IS OPEN) */
-      .dn-vn-box {
-        position: fixed !important;
-        bottom: 20px !important;
-        left: 20px !important;
-        width: 370px !important;
-        background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98)) !important;
-        border: 2px solid #ff0033 !important;
-        border-bottom: 3px solid #00d8ff !important;
-        box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2) !important;
-        border-radius: 8px !important;
-        padding: 12px 14px !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-        z-index: 2147483647 !important;
-        cursor: pointer;
-        user-select: none;
-        transition: opacity 0.3s ease, visibility 0.3s ease !important;
-      }
-
-      /* ONLY SHOW L & LIGHT WHEN THE TRADE DRAWER IS OPEN/ACTIVE */
+      /* SHOW L WHEN DRAWER IS OPEN */
       #trade-drawer.active .dn-l-header-box,
       #trade-drawer.open .dn-l-header-box,
       .trade-drawer.active .dn-l-header-box,
@@ -63,20 +42,9 @@
       #cart-drawer.active .dn-l-header-box,
       #cart-drawer.open .dn-l-header-box,
       .cart-drawer.active .dn-l-header-box,
-      .cart-drawer.open .dn-l-header-box,
-      body.drawer-open .dn-vn-box,
-      body:has(#trade-drawer.active) .dn-vn-box,
-      body:has(#trade-drawer.open) .dn-vn-box,
-      body:has(.trade-drawer.active) .dn-vn-box,
-      body:has(.trade-drawer.open) .dn-vn-box,
-      body:has(#cart-drawer.active) .dn-vn-box,
-      body:has(#cart-drawer.open) .dn-vn-box,
-      body:has(.cart-drawer.active) .dn-vn-box,
-      body:has(.cart-drawer.open) .dn-vn-box,
-      .dn-vn-box.active-drawer {
+      .cart-drawer.open .dn-l-header-box {
         opacity: 1 !important;
         visibility: visible !important;
-        pointer-events: auto !important;
       }
 
       /* BLUE SPEECH BUBBLE FOR L */
@@ -140,7 +108,7 @@
         transition: width 0.3s ease-in-out;
       }
 
-      /* ENLARGED L IMAGE (180px) */
+      /* ENLARGED L IMAGE */
       .dn-l-img {
         width: 180px;
         height: auto;
@@ -153,6 +121,34 @@
       .dn-l-img:hover {
         transform: scale(1.06) rotate(-2deg);
         filter: drop-shadow(0 0 14px #00d8ff);
+      }
+
+      /* LIGHT VISUAL NOVEL BOX (HIDDEN BY DEFAULT, SHOWN ONLY WHEN DRAWER IS OPEN) */
+      .dn-vn-box {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        width: 370px !important;
+        background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98)) !important;
+        border: 2px solid #ff0033 !important;
+        border-bottom: 3px solid #00d8ff !important;
+        box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2) !important;
+        border-radius: 8px !important;
+        padding: 12px 14px !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        z-index: 2147483647 !important;
+        cursor: pointer;
+        user-select: none;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
+      }
+
+      /* SHOW LIGHT WHEN DRAWER IS OPEN VIA JS CLASS */
+      body.dn-drawer-open .dn-vn-box {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
       }
 
       .dn-vn-header {
@@ -380,17 +376,15 @@
                    document.getElementById('cart-drawer') ||
                    document.querySelector('.cart-drawer');
 
-    const lightBox = document.getElementById('lightVnBox');
+    if (drawer) {
+      const isOpen = drawer.classList.contains('active') || 
+                     drawer.classList.contains('open') || 
+                     window.getComputedStyle(drawer).display !== 'none';
 
-    if (drawer && lightBox) {
-      const isDrawerOpen = drawer.classList.contains('open') || 
-                           drawer.classList.contains('active') || 
-                           window.getComputedStyle(drawer).display !== 'none';
-
-      if (isDrawerOpen) {
-        lightBox.classList.add('active-drawer');
+      if (isOpen) {
+        document.body.classList.add('dn-drawer-open');
       } else {
-        lightBox.classList.remove('active-drawer');
+        document.body.classList.remove('dn-drawer-open');
       }
     }
   }
@@ -419,9 +413,8 @@
 
   observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 
-  // CLICK EVENT LISTENERS
+  // CLICK LISTENERS
   document.addEventListener('click', (e) => {
-    // Cycle Light Monologue on Add/Trade Click
     const toggleBtn = e.target.closest('#cart-toggle-btn, .cart-toggle-btn, .open-cart-btn, .cart-btn, .add-to-trade-btn');
     if (toggleBtn) {
       triggerLightMonologue();
