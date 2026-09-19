@@ -1,159 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="death-note">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Beyond Birthday Archive — Off-Encora Korean Masters</title>
+  
+  <link rel="icon" type="image/png" href="snake-apple.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  
+  <!-- Base & Reskin Styles (Matches Main Page Exactly) -->
+  <link rel="stylesheet" href="style.css?v=8.0" />
+  <link rel="stylesheet" href="halloween.css?v=1.0" />
+
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      background-color: #040102;
-      color: #ffffff;
-      font-family: 'Courier New', monospace;
-      margin: 0;
-      padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
+      background-color: #040102 !important;
+      color: #ffffff !important;
+      font-family: monospace, 'Courier New', sans-serif !important;
+      min-height: 100vh !important;
+      padding: 30px 15px !important;
     }
 
-    .header-card {
-      text-align: center;
-      margin-bottom: 30px;
-      max-width: 800px;
+    .bb-page-container {
+      max-width: 1000px !important;
+      margin: 0 auto !important;
+    }
+
+    .bb-header {
+      text-align: center !important;
+      margin-bottom: 30px !important;
     }
 
     .bb-eye-logo {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 12px rgba(255, 0, 51, 0.85));
-      margin-bottom: 12px;
-      transition: transform 0.3s ease;
+      width: 75px !important;
+      height: 75px !important;
+      object-fit: contain !important;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 51, 0.85)) !important;
+      margin-bottom: 12px !important;
+      transition: transform 0.3s ease !important;
     }
 
     .bb-eye-logo:hover {
-      transform: scale(1.1) rotate(5deg);
+      transform: scale(1.1) rotate(5deg) !important;
     }
 
-    h1 {
-      color: #ff3344;
-      font-size: 1.8rem;
-      margin: 0 0 8px 0;
-      letter-spacing: 1.5px;
-      text-shadow: 0 0 10px rgba(255, 0, 51, 0.6);
+    .bb-title {
+      color: #ff3344 !important;
+      font-family: 'Cinzel', serif !important;
+      font-size: 1.8rem !important;
+      letter-spacing: 2px !important;
+      margin: 0 0 8px 0 !important;
+      text-shadow: 0 0 12px rgba(255, 0, 51, 0.7) !important;
     }
 
-    p.subtitle {
-      color: #00d8ff;
-      font-size: 0.88rem;
-      font-style: italic;
-      margin: 0 0 24px 0;
+    .bb-subtitle {
+      color: #00d8ff !important;
+      font-style: italic !important;
+      font-size: 0.88rem !important;
+      margin-bottom: 20px !important;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 25px;
+    .return-btn {
+      display: inline-block !important;
+      background: rgba(255, 0, 51, 0.12) !important;
+      border: 1px solid #ff0033 !important;
+      color: #ff3344 !important;
+      padding: 8px 18px !important;
+      border-radius: 4px !important;
+      text-decoration: none !important;
+      font-size: 0.82rem !important;
+      font-weight: bold !important;
+      letter-spacing: 1px !important;
+      transition: all 0.25s ease !important;
+      margin-bottom: 25px !important;
     }
 
-    .nav-btn {
-      background: rgba(255, 0, 51, 0.1);
-      border: 1px solid #ff0033;
-      color: #ff3344;
-      padding: 8px 16px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: bold;
-      transition: all 0.2s ease;
-      letter-spacing: 0.5px;
+    .return-btn:hover {
+      background: #ff0033 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 16px rgba(255, 0, 51, 0.9) !important;
     }
 
-    .nav-btn:hover {
-      background: #ff0033;
-      color: #ffffff;
-      box-shadow: 0 0 14px rgba(255, 0, 51, 0.8);
-    }
-
-    .archive-container {
-      width: 100%;
-      max-width: 1000px;
-      background: #080204;
-      border: 1px solid #ff0033;
-      border-bottom: 3px solid #00d8ff;
-      box-shadow: 0 0 30px rgba(255, 0, 51, 0.35);
-      border-radius: 8px;
-      padding: 20px;
-      overflow-x: auto;
+    .bb-table-card {
+      background: #080204 !important;
+      border: 1px solid #ff0033 !important;
+      border-bottom: 3px solid #00d8ff !important;
+      box-shadow: 0 0 30px rgba(255, 0, 51, 0.35) !important;
+      border-radius: 8px !important;
+      padding: 20px !important;
+      overflow-x: auto !important;
     }
 
     table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-      text-align: left;
+      width: 100% !important;
+      border-collapse: collapse !important;
+      font-size: 0.82rem !important;
+      text-align: left !important;
     }
 
     th {
-      background: rgba(255, 0, 51, 0.25);
-      color: #00d8ff;
-      border-bottom: 2px solid #ff0033;
-      padding: 12px 10px;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
+      background: rgba(255, 0, 51, 0.25) !important;
+      color: #00d8ff !important;
+      border-bottom: 2px solid #ff0033 !important;
+      padding: 12px 10px !important;
+      letter-spacing: 0.8px !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
     }
 
     td {
-      border-bottom: 1px solid rgba(255, 0, 51, 0.15);
-      padding: 12px 10px;
-      color: #dddddd;
-      line-height: 1.4;
+      border-bottom: 1px solid rgba(255, 0, 51, 0.18) !important;
+      padding: 12px 10px !important;
+      color: #dddddd !important;
+      line-height: 1.4 !important;
+      vertical-align: top !important;
     }
 
     tr:hover td {
-      background: rgba(255, 0, 51, 0.08);
-      color: #ffffff;
-    }
-
-    .footer-note {
-      margin-top: 30px;
-      color: #666;
-      font-size: 0.72rem;
-      text-align: center;
+      background: rgba(255, 0, 51, 0.08) !important;
+      color: #ffffff !important;
     }
   </style>
 </head>
 <body>
 
-  <div class="header-card">
-    <img src="art/B_cover_eye-removebackgrounds-ai.png" alt="Beyond Birthday Eye" class="bb-eye-logo">
-    <h1>BEYOND BIRTHDAY ARCHIVE</h1>
-    <p class="subtitle">"Records kept beyond Encora's database..." — Off-Encora Korean Masters</p>
-
-    <div class="nav-links">
-      <a href="index.html" class="nav-btn">← RETURN TO MAIN TRADING LIST</a>
+  <div class="bb-page-container">
+    <div class="bb-header">
+      <img src="art/B_cover_eye-removebackgrounds-ai.png" alt="Beyond Birthday Eye" class="bb-eye-logo">
+      <h1 class="bb-title">BEYOND BIRTHDAY ARCHIVE</h1>
+      <div class="bb-subtitle">"Records kept beyond Encora's database..." — Off-Encora Korean Masters</div>
+      <a href="index.html" class="return-btn">← RETURN TO MAIN TRADING COLLECTION</a>
     </div>
-  </div>
 
-  <div class="archive-container">
-    <table id="koreanTable">
-      <thead>
-        <tr id="tableHeader"></tr>
-      </thead>
-      <tbody id="tableBody">
-        <tr><td colspan="5">Accessing Beyond Birthday archive...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="footer-note">
-    [ Off-Encora Master Collection ]
+    <div class="bb-table-card">
+      <table>
+        <thead>
+          <tr id="tableHeader"></tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="5">Accessing archive...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
@@ -166,8 +156,7 @@
         if (lines.length < 2) return;
 
         const headers = parseCSVLine(lines[0]);
-        const headerRow = document.getElementById('tableHeader');
-        headerRow.innerHTML = headers.map(h => `<th>${h.trim()}</th>`).join('');
+        document.getElementById('tableHeader').innerHTML = headers.map(h => `<th>${h.trim()}</th>`).join('');
 
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
@@ -180,8 +169,8 @@
           tbody.appendChild(tr);
         }
       } catch (err) {
-        console.error('Error reading CSV archive:', err);
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="5">Failed to read korean.csv file.</td></tr>';
+        console.error('CSV load error:', err);
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="5">Failed to load korean.csv</td></tr>';
       }
     }
 
