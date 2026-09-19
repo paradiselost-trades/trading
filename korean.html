@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beyond Birthday Archive — Off-Encora Korean Masters</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #040102;
+      color: #ffffff;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .header-card {
+      text-align: center;
+      margin-bottom: 30px;
+      max-width: 800px;
+    }
+
+    .bb-eye-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 51, 0.85));
+      margin-bottom: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .bb-eye-logo:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    h1 {
+      color: #ff3344;
+      font-size: 1.8rem;
+      margin: 0 0 8px 0;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 10px rgba(255, 0, 51, 0.6);
+    }
+
+    p.subtitle {
+      color: #00d8ff;
+      font-size: 0.88rem;
+      font-style: italic;
+      margin: 0 0 24px 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+
+    .nav-btn {
+      background: rgba(255, 0, 51, 0.1);
+      border: 1px solid #ff0033;
+      color: #ff3344;
+      padding: 8px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: bold;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-btn:hover {
+      background: #ff0033;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(255, 0, 51, 0.8);
+    }
+
+    .archive-container {
+      width: 100%;
+      max-width: 1000px;
+      background: #080204;
+      border: 1px solid #ff0033;
+      border-bottom: 3px solid #00d8ff;
+      box-shadow: 0 0 30px rgba(255, 0, 51, 0.35);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255, 0, 51, 0.25);
+      color: #00d8ff;
+      border-bottom: 2px solid #ff0033;
+      padding: 12px 10px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(255, 0, 51, 0.15);
+      padding: 12px 10px;
+      color: #dddddd;
+      line-height: 1.4;
+    }
+
+    tr:hover td {
+      background: rgba(255, 0, 51, 0.08);
+      color: #ffffff;
+    }
+
+    .footer-note {
+      margin-top: 30px;
+      color: #666;
+      font-size: 0.72rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-card">
+    <img src="art/B_cover_eye-removebackgrounds-ai.png" alt="Beyond Birthday Eye" class="bb-eye-logo">
+    <h1>BEYOND BIRTHDAY ARCHIVE</h1>
+    <p class="subtitle">"Records kept beyond Encora's database..." — Off-Encora Korean Masters</p>
+
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">← RETURN TO MAIN TRADING LIST</a>
+    </div>
+  </div>
+
+  <div class="archive-container">
+    <table id="koreanTable">
+      <thead>
+        <tr id="tableHeader"></tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="5">Accessing Beyond Birthday archive...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-note">
+    [ Off-Encora Master Collection ]
+  </div>
+
+  <script>
+    async function loadKoreanCSV() {
+      try {
+        const response = await fetch('korean.csv');
+        const csvText = await response.text();
+        const lines = csvText.trim().split('\n');
+
+        if (lines.length < 2) return;
+
+        const headers = parseCSVLine(lines[0]);
+        const headerRow = document.getElementById('tableHeader');
+        headerRow.innerHTML = headers.map(h => `<th>${h.trim()}</th>`).join('');
+
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        for (let i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue;
+          const cols = parseCSVLine(lines[i]);
+          const tr = document.createElement('tr');
+          tr.innerHTML = cols.map(c => `<td>${c.trim()}</td>`).join('');
+          tbody.appendChild(tr);
+        }
+      } catch (err) {
+        console.error('Error reading CSV archive:', err);
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="5">Failed to read korean.csv file.</td></tr>';
+      }
+    }
+
+    function parseCSVLine(line) {
+      const values = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') inQuotes = !inQuotes;
+        else if (char === ',' && !inQuotes) {
+          values.push(current);
+          current = '';
+        } else current += char;
+      }
+      values.push(current);
+      return values;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadKoreanCSV);
+  </script>
+</body>
+</html>
