@@ -8,34 +8,6 @@
       overflow: visible !important;
     }
 
-    /* HIDE FLOATING TRADE REQUEST BUTTON AT BOTTOM WHEN DRAWER/CART IS OPEN */
-    body:has(#trade-drawer.active) #cart-toggle-btn,
-    body:has(#trade-drawer.open) #cart-toggle-btn,
-    body:has(.trade-drawer.active) #cart-toggle-btn,
-    body:has(.trade-drawer.open) #cart-toggle-btn,
-    body:has(#cart-drawer.active) #cart-toggle-btn,
-    body:has(#cart-drawer.open) #cart-toggle-btn,
-    body:has(.cart-drawer.active) #cart-toggle-btn,
-    body:has(.cart-drawer.open) #cart-toggle-btn,
-    body:has(#trade-drawer.active) .trade-request-btn,
-    body:has(#trade-drawer.open) .trade-request-btn,
-    body:has(.trade-drawer.active) .trade-request-btn,
-    body:has(.trade-drawer.open) .trade-request-btn,
-    body:has(#cart-drawer.active) .trade-request-btn,
-    body:has(#cart-drawer.open) .trade-request-btn,
-    body:has(.cart-drawer.active) .trade-request-btn,
-    body:has(.cart-drawer.open) .trade-request-btn,
-    body:has(#trade-drawer.active) button[class*="toggle"],
-    body:has(#trade-drawer.open) button[class*="toggle"],
-    body:has(#trade-drawer.active) button[class*="trade"],
-    body:has(#trade-drawer.open) button[class*="trade"],
-    .dn-hide-floating-btn {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-
     /* Mobile View: Hide all custom overlays */
     @media (max-width: 768px) {
       .dn-l-header-box,
@@ -47,7 +19,7 @@
     /* Desktop View Mode */
     @media (min-width: 769px) {
 
-      /* L'S CONTAINER PLACEMENT */
+      /* L'S CONTAINER PLACEMENT (TOP RIGHT OF DRAWER) */
       .dn-l-header-box {
         position: absolute !important;
         top: -10px !important;
@@ -62,7 +34,28 @@
         transition: opacity 0.3s ease, visibility 0.3s ease !important;
       }
 
-      /* SHOW L WHEN DRAWER IS OPEN */
+      /* LIGHT VISUAL NOVEL BOX (BOTTOM LEFT - ONLY SHOWN WHEN DRAWER IS OPEN) */
+      .dn-vn-box {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        width: 370px !important;
+        background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98)) !important;
+        border: 2px solid #ff0033 !important;
+        border-bottom: 3px solid #00d8ff !important;
+        box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2) !important;
+        border-radius: 8px !important;
+        padding: 12px 14px !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        z-index: 2147483647 !important;
+        cursor: pointer;
+        user-select: none;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
+      }
+
+      /* ONLY SHOW L & LIGHT WHEN THE TRADE DRAWER IS OPEN/ACTIVE */
       #trade-drawer.active .dn-l-header-box,
       #trade-drawer.open .dn-l-header-box,
       .trade-drawer.active .dn-l-header-box,
@@ -70,12 +63,23 @@
       #cart-drawer.active .dn-l-header-box,
       #cart-drawer.open .dn-l-header-box,
       .cart-drawer.active .dn-l-header-box,
-      .cart-drawer.open .dn-l-header-box {
+      .cart-drawer.open .dn-l-header-box,
+      body.drawer-open .dn-vn-box,
+      body:has(#trade-drawer.active) .dn-vn-box,
+      body:has(#trade-drawer.open) .dn-vn-box,
+      body:has(.trade-drawer.active) .dn-vn-box,
+      body:has(.trade-drawer.open) .dn-vn-box,
+      body:has(#cart-drawer.active) .dn-vn-box,
+      body:has(#cart-drawer.open) .dn-vn-box,
+      body:has(.cart-drawer.active) .dn-vn-box,
+      body:has(.cart-drawer.open) .dn-vn-box,
+      .dn-vn-box.active-drawer {
         opacity: 1 !important;
         visibility: visible !important;
+        pointer-events: auto !important;
       }
 
-      /* BLUE SPEECH BUBBLE */
+      /* BLUE SPEECH BUBBLE FOR L */
       .dn-l-speech-bubble {
         background: rgba(4, 10, 15, 0.98);
         border: 2px solid #00d8ff;
@@ -136,7 +140,7 @@
         transition: width 0.3s ease-in-out;
       }
 
-      /* ENLARGED L IMAGE */
+      /* ENLARGED L IMAGE (180px) */
       .dn-l-img {
         width: 180px;
         height: auto;
@@ -149,27 +153,6 @@
       .dn-l-img:hover {
         transform: scale(1.06) rotate(-2deg);
         filter: drop-shadow(0 0 14px #00d8ff);
-      }
-
-      /* LIGHT VISUAL NOVEL BOX FLOATING PERMANENTLY AT BOTTOM LEFT */
-      .dn-vn-box {
-        position: fixed !important;
-        bottom: 20px !important;
-        left: 20px !important;
-        width: 370px !important;
-        background: linear-gradient(135deg, rgba(15, 2, 5, 0.98), rgba(5, 1, 3, 0.98)) !important;
-        border: 2px solid #ff0033 !important;
-        border-bottom: 3px solid #00d8ff !important;
-        box-shadow: 0 0 22px rgba(255, 0, 51, 0.5), inset 0 0 10px rgba(255, 0, 51, 0.2) !important;
-        border-radius: 8px !important;
-        padding: 12px 14px !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: block !important;
-        pointer-events: auto !important;
-        z-index: 2147483647 !important;
-        cursor: pointer;
-        user-select: none;
       }
 
       .dn-vn-header {
@@ -397,17 +380,19 @@
                    document.getElementById('cart-drawer') ||
                    document.querySelector('.cart-drawer');
 
-    // Find the floating button bar sitting at bottom right
-    const floatingBtns = document.querySelectorAll('button, div, a');
-    floatingBtns.forEach(el => {
-      if (el.textContent && el.textContent.includes('TRADE REQUEST (') && el.id !== 'trade-drawer' && !el.closest('#trade-drawer') && !el.closest('.trade-drawer')) {
-        if (drawer && (drawer.classList.contains('open') || drawer.classList.contains('active') || window.getComputedStyle(drawer).display !== 'none')) {
-          el.classList.add('dn-hide-floating-btn');
-        } else {
-          el.classList.remove('dn-hide-floating-btn');
-        }
+    const lightBox = document.getElementById('lightVnBox');
+
+    if (drawer && lightBox) {
+      const isDrawerOpen = drawer.classList.contains('open') || 
+                           drawer.classList.contains('active') || 
+                           window.getComputedStyle(drawer).display !== 'none';
+
+      if (isDrawerOpen) {
+        lightBox.classList.add('active-drawer');
+      } else {
+        lightBox.classList.remove('active-drawer');
       }
-    });
+    }
   }
 
   function updateLQuote() {
